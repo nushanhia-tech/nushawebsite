@@ -8,18 +8,17 @@ body { background-color: #050810; color: #ffffff; overflow-x: hidden; scroll-beh
 .side-glow {
     position: absolute; top: 0; left: -15vw; width: 35vw; height: 100vh;
     background: radial-gradient(ellipse at center, rgba(230, 168, 15, 0.25) 0%, rgba(230, 168, 15, 0.05) 50%, transparent 70%);
-    filter: blur(80px); z-index: 2; pointer-events: none; animation: glowingEffect 4s infinite alternate ease-in-out;
+    z-index: 2; pointer-events: none;
 }
 
 header { 
     position: fixed; 
     top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; 
-    padding: 35px 8vw; z-index: 1000; transition: all 0.4s ease; 
+    padding: 35px 8vw; z-index: 1000; transition: background-color 180ms ease;
 }
 
 header.scrolled {
     background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     padding: 20px 8vw; 
 }
@@ -48,7 +47,7 @@ nav ul li a:hover, nav ul li a.active { color: #ffffff; }
 /* ------------------------------------------------ */
 .hero {
     height: 100vh; width: 100%; padding-left: 8vw; padding-top: 32vh; position: relative;
-    background: linear-gradient(90deg, #050810 0%, rgba(5, 8, 16, 0.9) 35%, rgba(5, 8, 16, 0.5) 60%, transparent 100%), url('bg-image.jpg') center right/cover no-repeat;
+    background: linear-gradient(90deg, #050810 0%, rgba(5, 8, 16, 0.9) 35%, rgba(5, 8, 16, 0.5) 60%, transparent 100%), var(--campus-background, none) center right/cover no-repeat;
 }
 .hero-content { position: relative; z-index: 5; max-width: 800px; }
 .title-wrapper { display: inline-block; margin-bottom: 25px; }
@@ -68,18 +67,13 @@ nav ul li a:hover, nav ul li a.active { color: #ffffff; }
 .scroll-indicator:hover { opacity: 1; }
 .scroll-indicator p { color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; margin-top: 5px; text-transform: uppercase; }
 .chevron-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
-.chevron { width: 16px; height: 16px; border-right: 3px solid #fbbc05; border-bottom: 3px solid #fbbc05; transform: rotate(45deg); animation: cascadeArrow 1.5s infinite; margin-top: -8px; }
-.chevron:nth-child(1) { animation-delay: 0s; }
-.chevron:nth-child(2) { animation-delay: 0.15s; }
-.chevron:nth-child(3) { animation-delay: 0.3s; }
+.chevron { width: 16px; height: 16px; border-right: 3px solid #fbbc05; border-bottom: 3px solid #fbbc05; transform: rotate(45deg); margin-top: -8px; }
 
-@keyframes cascadeArrow { 0% { opacity: 0; transform: rotate(45deg) translate(-5px, -5px); } 50% { opacity: 1; } 100% { opacity: 0; transform: rotate(45deg) translate(5px, 5px); } }
-@keyframes glowingEffect { 0% { transform: scale(0.95); opacity: 0.7; } 100% { transform: scale(1.1); opacity: 1; } }
 @keyframes fadeUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
-.fade-in { animation: fadeIn 1.5s ease forwards; }
-.animate-up { opacity: 0; animation: fadeUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-.delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.3s; } .delay-3 { animation-delay: 0.5s; }
+.fade-in { animation: fadeIn 200ms ease-out; }
+.animate-up { animation: fadeUp 240ms ease-out both; }
+
 
 
 /* ------------------------------------------------ */
@@ -264,19 +258,19 @@ nav ul li a:hover, nav ul li a.active { color: #ffffff; }
 /* ------------------------------------------------ */
 /* 7. സ്ക്രോൾ അനിമേഷൻസ് (Scroll Reveal)            */
 /* ------------------------------------------------ */
-.reveal-up { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-.reveal-left { opacity: 0; transform: translateX(-50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-.reveal-right { opacity: 0; transform: translateX(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
-.reveal-scale { opacity: 0; transform: scale(0.9); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+.reveal-up { opacity: 0; transform: translateY(12px); transition: opacity 180ms ease-out, transform 180ms ease-out; }
+.reveal-left { opacity: 0; transform: translateX(-12px); transition: opacity 180ms ease-out, transform 180ms ease-out; }
+.reveal-right { opacity: 0; transform: translateX(12px); transition: opacity 180ms ease-out, transform 180ms ease-out; }
+.reveal-scale { opacity: 0; transform: scale(0.9); transition: opacity 180ms ease-out, transform 180ms ease-out; }
 
 .reveal-up.active { opacity: 1; transform: translateY(0); }
 .reveal-left.active { opacity: 1; transform: translateX(0); }
 .reveal-right.active { opacity: 1; transform: translateX(0); }
 .reveal-scale.active { opacity: 1; transform: scale(1); }
 
-.delay-100 { transition-delay: 0.1s; }
-.delay-200 { transition-delay: 0.2s; }
-.delay-300 { transition-delay: 0.3s; }
+.delay-100 { transition-delay: 50ms; }
+.delay-200 { transition-delay: 100ms; }
+.delay-300 { transition-delay: 150ms; }
 /* --- Login Tabs Styling (index.html) --- */
 .login-tabs { display: flex; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; }
 .tab-btn { flex: 1; padding: 12px; background: none; border: none; font-size: 14px; font-weight: 700; color: #64748b; cursor: pointer; transition: 0.3s; border-bottom: 3px solid transparent; }
@@ -407,3 +401,14 @@ nav ul li a:hover, nav ul li a.active { color: #ffffff; }
 .id-details h4 { font-size: 16px; font-weight: 800; margin-bottom: 6px; color: white; }
 .id-details p { font-size: 12px; color: #cbd5e1; margin-bottom: 3px; font-weight: 500; }
 .id-details p strong { color: white; }
+@media (prefers-reduced-motion: reduce) {
+    html, body { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+    }
+    .scroll-anim { opacity: 1 !important; transform: none !important; }
+}

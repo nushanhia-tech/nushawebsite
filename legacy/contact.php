@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'db.php'; // ഡാറ്റാബേസ് കണക്ഷൻ
 
 // അഡ്മിൻ പാനലിൽ നിന്ന് Outreach സ്റ്റാറ്റസ് എടുക്കുന്നു
@@ -16,6 +15,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Contact Us - NUS'HA</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/brand.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -200,7 +200,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
     <!-- നാവിഗേഷൻ ബാർ -->
     <header id="main-header" class="scrolled fade-in">
         <a href="index.php" class="logo">
-            <img src="logo.png" alt="Icon" class="logo-icon" onerror="this.hidden=true">
+            <span class="nusha-mark" aria-hidden="true">NH</span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>
@@ -362,7 +362,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
             // Scroll Reveal Observer
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) { entry.target.classList.add('active'); }
+                    if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); }
                 });
             }, { threshold: 0.1 });
             document.querySelectorAll('.scroll-anim').forEach((el) => observer.observe(el));

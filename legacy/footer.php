@@ -7,7 +7,7 @@
         <div class="nf-grid">
             <div class="nf-brand-col">
                 <a href="index.php" class="nf-brand" aria-label="NUS'HA home">
-                    <span class="nf-logo"><img src="logoblack.png" alt="" loading="lazy" onerror="this.hidden=true"></span>
+                    <span class="nusha-mark" aria-hidden="true">NH</span>
                     <span><strong>NUS'HA</strong><small>Noorul Hidaya<br>Students' Union</small></span>
                 </a>
                 <p class="nf-description">A community inspired by knowledge, united by purpose, and committed to growing together.</p>

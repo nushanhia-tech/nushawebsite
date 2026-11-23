@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'db.php';
 date_default_timezone_set('Asia/Kolkata');
 
@@ -48,11 +47,12 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Calendar - NUS'HA</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/brand.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Reliable PDF generator: reports are drawn page-by-page, not as one long HTML screenshot. -->
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@4.2.1/dist/jspdf.umd.min.js"></script>
+    <script src="/load-pdf.js" defer></script>
     <link rel="stylesheet" href="footer.css">
 
     <style>
@@ -276,7 +276,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
     <!-- Header -->
     <header id="main-header" class="scrolled fade-in">
         <div class="logo">
-            <img src="logo.png" alt="Icon" class="logo-icon" onerror="this.hidden=true">
+            <span class="nusha-mark" aria-hidden="true">NH</span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>
@@ -520,7 +520,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
             
             // Scroll Animations
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('active'); } });
+                entries.forEach((entry) => { if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); } });
             }, { threshold: 0.1 });
             document.querySelectorAll('.scroll-anim').forEach((el) => observer.observe(el));
 
@@ -582,6 +582,6 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
         });
     </script>
     <script>window.calendarReportEvents = <?php echo $report_events_json; ?>;</script>
-    <script src="calendar-pdf.js"></script>
+    <script src="calendar-pdf.js" defer></script>
 </body>
 </html>

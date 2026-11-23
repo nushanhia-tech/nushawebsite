@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'db.php';
 
 // Optional: set an existing DATE/DATETIME/TIMESTAMP column here.
@@ -202,12 +201,13 @@ $ranking_payload = [
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Monthly &amp; Overall Rankings - NUS'HA</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/brand.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- ഗ്രാഫ് വരയ്ക്കാൻ Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jspdf@4.2.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js" defer></script>
+    <script src="/load-pdf.js" defer></script>
     <link rel="stylesheet" href="footer.css">
 
     <style>
@@ -496,7 +496,7 @@ $ranking_payload = [
     <!-- നാവിഗേഷൻ ബാർ -->
     <header id="main-header" class="scrolled fade-in">
         <a href="index.php" class="logo">
-            <img src="logo.png" alt="Icon" class="logo-icon" onerror="this.hidden=true">
+            <span class="nusha-mark" aria-hidden="true">NH</span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>
@@ -663,7 +663,7 @@ $ranking_payload = [
             // സ്ക്രോൾ അനിമേഷൻസ്
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {
-                    if (entry.isIntersecting) { entry.target.classList.add('active'); }
+                    if (entry.isIntersecting) { entry.target.classList.add('active'); observer.unobserve(entry.target); }
                 });
             }, { threshold: 0.1 });
             document.querySelectorAll('.scroll-anim').forEach((el) => observer.observe(el));
@@ -883,7 +883,8 @@ $ranking_payload = [
             else monthSelect.form.submit();
         });
     }
-    render();
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render, { once: true });
+    else render();
 
     // PDF pages are drawn directly to canvas. Browser fonts preserve Malayalam
     // names, and every row is paginated without clipping a table screenshot.
@@ -1008,13 +1009,10 @@ $ranking_payload = [
     if (download) {
         download.addEventListener('click', async function () {
             if (data.totalError) return;
-            if (!window.jspdf || typeof window.jspdf.jsPDF !== 'function') {
-                setText('rk-download-status', 'PDF tools could not load. Check your internet connection and reload this page.');
-                return;
-            }
             download.disabled = true;
             setText('rk-download-status', 'Preparing the report with graphs and all ranking points…');
             try {
+                await window.loadNushaPdf();
                 if (document.fonts && document.fonts.ready) await document.fonts.ready;
                 await new Promise(function (resolve) { requestAnimationFrame(resolve); });
                 var pdf = new window.jspdf.jsPDF({orientation: 'portrait', unit: 'mm', format: 'a4', compress: true});

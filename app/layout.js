@@ -1,3 +1,4 @@
+import "../public/brand.css";
 import "./style.css";
 
 export const metadata = {

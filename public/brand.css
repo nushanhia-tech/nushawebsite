@@ -1,0 +1,30 @@
+.nusha-mark {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  font-weight: 850;
+  line-height: 1;
+  letter-spacing: -0.08em;
+}
+
+.logo .nusha-mark {
+  color: #fbbc05;
+}
+
+header.scrolled .nusha-mark,
+body:not(:has(.hero)) header .nusha-mark {
+  color: #0b1c3c;
+}
+
+@media (max-width: 992px) {
+  .logo .nusha-mark {
+    color: #0b1c3c;
+  }
+}

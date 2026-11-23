@@ -155,16 +155,13 @@
         var button = document.querySelector('.pdf-btn');
         var status = document.getElementById('pdf-download-status');
         var events = Array.isArray(window.calendarReportEvents) ? window.calendarReportEvents : [];
-        if (!window.jspdf || typeof window.jspdf.jsPDF !== 'function') {
-            if (status) status.textContent = 'PDF tool could not load. Check your internet connection and reload the page.';
-            return;
-        }
         if (button) {
             button.disabled = true;
             button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing report…';
         }
         if (status) status.textContent = 'Preparing all programme details with date, time, wing, category, and status…';
         try {
+            await window.loadNushaPdf();
             if (document.fonts && document.fonts.ready) await document.fonts.ready;
             var conducted = events.filter(function (event) { return event.status === 'Conducted'; }).length;
             var approved = events.filter(function (event) { return event.status === 'Approved'; }).length;

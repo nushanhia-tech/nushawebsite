@@ -1,5 +1,4 @@
 <?php
-session_start();
 include 'db.php'; // ഡാറ്റാബേസ് കണക്ഷൻ
 
 $status = $_GET['submission'] ?? '';
@@ -20,6 +19,7 @@ if ($posts_query && $posts_query->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arabic Outreach - NUS'HA</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/brand.css">
     <!-- Google Fonts: Montserrat & Arabic Fonts (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -196,7 +196,7 @@ if ($posts_query && $posts_query->num_rows > 0) {
     <!-- നാവിഗേഷൻ ബാർ -->
     <header id="main-header" class="scrolled fade-in">
         <a href="index.php" class="logo">
-            <img src="logo.png" alt="Icon" class="logo-icon" onerror="this.hidden=true">
+            <span class="nusha-mark" aria-hidden="true">NH</span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>
