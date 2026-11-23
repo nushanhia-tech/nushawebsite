@@ -12,10 +12,15 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@php-wasm/node-8-3": "^3.1.66",
+    "@php-wasm/universal": "^3.1.66",
     "@supabase/supabase-js": "^2.119.2",
     "lucide-react": "^1.78.0",
     "next": "^16.4.6",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
+  },
+  "engines": {
+    "node": "24.x"
   }
 }

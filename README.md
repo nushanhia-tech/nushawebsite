@@ -15,4 +15,10 @@ Run `npm ci` and `npm run dev`. Open http://localhost:3000. With no Supabase env
 
 ## Legacy scope
 
-This repository implements the five portal dashboards and a fresh Supabase schema. The uploaded PHP website did not include a MySQL data export. The public PHP pages, historical records, class leaderboards, legacy file uploads, and website content management beyond announcements and outreach review are outside this implementation. To import existing records, first export the MySQL data, provision Supabase Auth accounts, and resolve IDs and roles. Invite existing users to set new passwords through Supabase.
+This repository implements the five portal dashboards and a fresh Supabase schema. The uploaded PHP website did not include a MySQL data export. Historical records and legacy file uploads need to be imported separately. Class and wing rankings use evaluations recorded in the new workspace. To import existing records, first export the MySQL data, provision Supabase Auth accounts, and resolve IDs and roles. Invite existing users to set new passwords through Supabase.
+
+## Public website
+
+The original public page templates and styles are in `legacy/` and `public/`. Next.js serves them at the original PHP URLs using an embedded PHP runtime. The public homepage is at `/` and the redesigned workspace is at `/portals`. Apply both Supabase migrations in order. The second exposes the data for the public calendar, rankings, outreach and content pages. Use **Public website content** in the signed-in Admin portal to add and edit the homepage updates, programmes and leadership entries. Public outreach submissions are held in the Admin outreach queue until approved.
+
+Place the original `bg-image.jpg`, `logo.png`, and `logoblack.png` in `public/` to restore the original image assets. These files and the historical MySQL data were absent from the supplied source. This implementation uses Node.js 24 on Vercel.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import SiteContent from "./site-content";
 import { createClient } from "@supabase/supabase-js";
 import {
   ArrowDownToLine,
@@ -25,7 +26,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { demoItems, kinds, nextStatuses, portals, stages } from "./data";
+import { demoItems, kinds, nextStatuses, portals, stages } from "../data";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
@@ -72,6 +73,11 @@ export default function Home() {
     if (result.error) setNotice(result.error.message);
     else setRecords(result.data);
   }
+
+  useEffect(() => {
+    const requested = new URLSearchParams(window.location.search).get("role");
+    if (requested && Object.hasOwn(portals, requested)) setRole(requested);
+  }, []);
 
   useEffect(() => {
     if (!db) return;
@@ -258,6 +264,9 @@ export default function Home() {
         <section className="panel">
           <Brand />
           <h1>{session ? "Portal access" : "Sign in"}</h1>
+          <p>
+            <a href="/">Back to the website</a>
+          </p>
           {session ? (
             <button
               className="primary"
@@ -566,8 +575,9 @@ export default function Home() {
             </div>
           )}
         </section>
+        {role === "admin" && db && <SiteContent db={db} />}
         <footer>
-          <span>Noorul Hidaya Union for Heterogeneous Activities</span>
+          <a href="/">NUS’HA public website</a>
           <button onClick={() => open({ type: "help" })}>
             <CircleHelp size={15} /> Workspace help
           </button>

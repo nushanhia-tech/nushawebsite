@@ -725,3 +725,30 @@ form .secondary {
     background: white;
   }
 }
+
+.site-content {
+  margin-top: 22px;
+  display: grid;
+  gap: 12px;
+}
+.site-content > button {
+  justify-self: start;
+}
+.site-content > label {
+  max-width: 280px;
+}
+.site-content select {
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 9px;
+  background: white;
+}
+.content-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow-wrap: anywhere;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
