@@ -196,7 +196,7 @@ if ($posts_query && $posts_query->num_rows > 0) {
     <!-- നാവിഗേഷൻ ബാർ -->
     <header id="main-header" class="scrolled fade-in">
         <a href="index.php" class="logo">
-            <span class="nusha-mark" aria-hidden="true">NH</span>
+            <span class="nusha-mark" aria-hidden="true"></span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>

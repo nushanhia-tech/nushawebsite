@@ -276,7 +276,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
     <!-- Header -->
     <header id="main-header" class="scrolled fade-in">
         <div class="logo">
-            <span class="nusha-mark" aria-hidden="true">NH</span>
+            <span class="nusha-mark" aria-hidden="true"></span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>

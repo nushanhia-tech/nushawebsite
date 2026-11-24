@@ -305,7 +305,7 @@ try {
     <header id="main-header" class="fade-in">
         <!-- Logo -->
         <div class="logo">
-            <span class="nusha-mark" aria-hidden="true">NH</span>
+            <span class="nusha-mark" aria-hidden="true"></span>
             <div class="logo-text">
                 <span class="logo-title">NUS'HA</span>
                 <span class="logo-sub">Noorul hidaya union for<br>heterogeneous activities</span>

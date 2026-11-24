@@ -311,9 +311,7 @@ export default function Home() {
     <div className="shell">
       <aside className="rail" aria-label="Portal navigation">
         <a className="mark" href="/" aria-label="NUS’HA home">
-          <span className="nusha-mark" aria-hidden="true">
-            NH
-          </span>
+          <span className="nusha-mark" aria-hidden="true" />
         </a>
         <div className="rail-links">
           {Object.entries(portals)
@@ -767,9 +765,7 @@ export default function Home() {
 function Brand() {
   return (
     <strong className="brand">
-      <span className="nusha-mark" aria-hidden="true">
-        NH
-      </span>
+      <span className="nusha-mark" aria-hidden="true" />
       <span className="brand-name">
         NUS’HA<span className="brand-caption"> Union Workspace</span>
       </span>

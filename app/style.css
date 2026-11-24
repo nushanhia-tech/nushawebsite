@@ -71,6 +71,10 @@ p {
   background: #182f55;
   color: #fff;
 }
+.mark .nusha-mark {
+  width: 25px;
+  height: 31px;
+}
 .rail-links {
   width: 100%;
   display: grid;
@@ -129,8 +133,6 @@ p {
   width: 30px;
   height: 30px;
   flex-basis: 30px;
-  border-radius: 8px;
-  font-size: 12px;
 }
 .brand-caption {
   font-size: 12px;

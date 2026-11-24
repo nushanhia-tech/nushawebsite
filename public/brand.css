@@ -4,18 +4,19 @@
   flex: 0 0 42px;
   display: inline-grid;
   place-items: center;
-  border: 1px solid currentColor;
-  border-radius: 12px;
-  background: transparent;
   color: inherit;
-  font-size: 16px;
-  font-weight: 850;
-  line-height: 1;
-  letter-spacing: -0.08em;
+}
+
+.nusha-mark::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background: currentColor;
+  mask: url("/nusha-logo.svg") center / contain no-repeat;
 }
 
 .logo .nusha-mark {
-  color: #fbbc05;
+  color: #fff;
 }
 
 header.scrolled .nusha-mark,
@@ -26,5 +27,12 @@ body:not(:has(.hero)) header .nusha-mark {
 @media (max-width: 992px) {
   .logo .nusha-mark {
     color: #0b1c3c;
+  }
+}
+
+@media (forced-colors: active) {
+  .nusha-mark::before {
+    forced-color-adjust: none;
+    background: CanvasText;
   }
 }
