@@ -1280,7 +1280,7 @@ form .secondary {
   .portal-mobile-indicator {
     position: absolute;
     z-index: 2;
-    top: -8px;
+    top: 4px;
     left: calc(10% + var(--active-shift, 0%));
     width: 54px;
     height: 54px;
