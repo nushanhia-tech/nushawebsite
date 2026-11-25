@@ -13,6 +13,7 @@ import { supabaseProjectUrl } from "../../lib/supabase-url";
 const SiteContent = dynamic(() => import("./site-content"), {
   loading: () => <p role="status">Loading website editor…</p>,
 });
+const PageVisibility = dynamic(() => import("./page-visibility"));
 const Accounts = dynamic(() => import("./accounts"), {
   loading: () => <p role="status">Loading accounts…</p>,
 });
@@ -946,6 +947,7 @@ export default function Home() {
                   Website editing uses a connected Supabase project.
                 </p>
               ))}
+            {adminSection === "website" && db && <PageVisibility db={db} />}
             {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
         ) : (role === "class" || role === "wing") && portalSection === "performance" ? (

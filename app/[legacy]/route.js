@@ -1,4 +1,4 @@
-import { publicDb, publicPages, renderPublicPage } from "../../lib/public-site";
+import { publicDb, publicPages, renderPublicPage, readPageVisibility } from "../../lib/public-site";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +15,8 @@ export async function POST(request, { params }) {
   const { legacy } = await params;
   if (legacy !== "outreach.php")
     return new Response("Method not allowed", { status: 405 });
+  const visibility = await readPageVisibility().catch(() => ({}));
+  if (visibility.outreach === false) return new Response("Page not found", { status: 404 });
   if (!publicDb)
     return Response.redirect(
       new URL("/outreach.php?submission=unavailable", request.url),
