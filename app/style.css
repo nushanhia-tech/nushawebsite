@@ -1,11 +1,11 @@
 :root {
   color-scheme: light;
-  --ink: #19263b;
-  --muted: #53637a;
-  --blue: #194cc1;
+  --ink: #1c3025;
+  --muted: #64776a;
+  --blue: #14734f;
   --paper: #fff;
-  --canvas: #f4f7fb;
-  --line: #dce4ef;
+  --canvas: #f1f6f2;
+  --line: #dce9df;
   font-family: Inter, "Segoe UI", system-ui, sans-serif;
   color: var(--ink);
   background: var(--canvas);
@@ -68,7 +68,7 @@ p {
   width: 43px;
   height: 43px;
   border-radius: 15px;
-  background: #182f55;
+  background: #154b35;
   color: #fff;
 }
 .mark .nusha-mark {
@@ -94,8 +94,8 @@ p {
 }
 .rail button:hover,
 .rail .rail-active {
-  color: #1644aa;
-  background: #e8efff;
+  color: #14734f;
+  background: #e7f4eb;
 }
 .signout {
   margin-top: auto;
@@ -157,8 +157,8 @@ p {
   flex: none;
 }
 .avatar {
-  background: #dde9ff;
-  color: #183e94;
+  background: #e1f2e7;
+  color: #145f3f;
   font-weight: 750;
 }
 .icon-button {
@@ -169,13 +169,13 @@ p {
 .hero {
   min-height: 236px;
   border-radius: 28px;
-  background: linear-gradient(110deg, #e9effe 0%, #e0ebfa 62%, #dceaf6 100%);
+  background: linear-gradient(110deg, #ecf7ef 0%, #e2f2e7 62%, #d9efe0 100%);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   padding: 34px 40px;
-  border: 1px solid #dce7f8;
+  border: 1px solid #d6eadd;
 }
 .hero-content {
   position: relative;
@@ -185,7 +185,7 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #244a9d;
+  color: #176c48;
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 10px;
@@ -197,7 +197,7 @@ h1 {
 }
 .hero p {
   margin-top: 12px;
-  color: #3d5270;
+  color: #496457;
 }
 .primary,
 .secondary {
@@ -219,10 +219,10 @@ h1 {
   margin-top: 22px;
 }
 .primary:hover {
-  background: #113b9c;
+  background: #0d5a3c;
 }
 .secondary {
-  background: #f3f5fa;
+  background: #f2f7f3;
   color: var(--ink);
 }
 .hero-art {
@@ -234,11 +234,11 @@ h1 {
   transform: translateY(-50%);
   display: grid;
   place-items: center;
-  color: #2e5cbd;
+  color: #217b52;
 }
 .orb {
   position: absolute;
-  border: 1px solid #afc4eb;
+  border: 1px solid #b4d8bf;
   border-radius: 50%;
   width: 170px;
   height: 170px;
@@ -254,7 +254,7 @@ h1 {
   opacity: 0.5;
 }
 .emblem {
-  background: #f4f8ff;
+  background: #f4faf6;
   border: 1px solid #fff;
   border-radius: 30px;
   width: 105px;
@@ -340,8 +340,8 @@ small {
 }
 .segmented button[aria-pressed="true"],
 .filters button[aria-pressed="true"] {
-  background: #e5eeff;
-  color: #19459e;
+  background: #e5f4e9;
+  color: #126544;
   font-weight: 700;
 }
 .filter-row {
@@ -375,17 +375,17 @@ small {
   align-items: start;
 }
 .lane {
-  background: #ebf0f8;
-  border: 1px solid #e0e7f2;
+  background: #edf5ef;
+  border: 1px solid #dfece2;
   border-radius: 20px;
   padding: 13px;
   min-height: 155px;
 }
 .lane-1 {
-  background: #e9effb;
+  background: #e8f4ec;
 }
 .lane-2 {
-  background: #e8f1ef;
+  background: #e5f2e9;
 }
 .lane h3 {
   display: flex;
@@ -408,13 +408,13 @@ small {
   width: 100%;
   background: white;
   color: var(--ink);
-  border: 1px solid #dce4ef;
+  border: 1px solid #dce9df;
   border-radius: 15px;
   padding: 12px;
   margin: 0 0 8px;
 }
 .item:hover {
-  border-color: #7497dc;
+  border-color: #71b68b;
 }
 .item:last-child {
   margin: 0;
@@ -449,8 +449,8 @@ small {
   gap: 4px;
 }
 .tag {
-  background: #edf2ff;
-  color: #234990;
+  background: #eaf6ed;
+  color: #206542;
   border-radius: 7px;
   font-size: 11px;
   font-weight: 700;
@@ -464,8 +464,8 @@ small {
 }
 .tag-activity,
 .tag-print {
-  background: #f1ebff;
-  color: #57369a;
+  background: #eaf5ec;
+  color: #256b46;
 }
 .tag-notice,
 .tag-outreach {
@@ -507,11 +507,11 @@ small {
   display: flex;
   gap: 16px;
   align-items: center;
-  background: #243b63;
+  background: #154b35;
   color: white;
 }
 .member small {
-  color: #dae7fa;
+  color: #def2e5;
 }
 .text-button,
 footer button,
@@ -1466,20 +1466,20 @@ form .secondary {
   display: flex;
   flex-direction: column;
   padding: 18px 12px 12px;
-  color: #f5f8ff;
-  background: #122341;
+  color: #f2faf4;
+  background: #123c2b;
 }
 .admin-sidebar-brand {
   display: flex;
   align-items: center;
   gap: 11px;
   padding: 0 7px 14px;
-  border-bottom: 1px solid #30425f;
+  border-bottom: 1px solid #315c45;
 }
 .admin-sidebar-brand .mark {
   flex: 0 0 40px;
   height: 40px;
-  background: #263e62;
+  background: #25573d;
   border-radius: 12px;
 }
 .admin-sidebar-brand > div {
@@ -1491,7 +1491,7 @@ form .secondary {
 }
 .admin-sidebar-brand small,
 .admin-nav-group p {
-  color: #b9c8e0;
+  color: #c6dfce;
   font-size: 11px;
 }
 .admin-sidebar-content {
@@ -1525,7 +1525,7 @@ form .secondary {
   padding: 7px 9px;
   border: 1px solid transparent;
   border-radius: 8px;
-  color: #e3ebf9;
+  color: #e5f3e9;
   background: transparent;
   text-decoration: none;
   text-align: left;
@@ -1539,32 +1539,32 @@ form .secondary {
 .admin-sidebar-nav button:hover,
 .admin-sidebar-footer button:hover,
 .admin-sidebar-footer a:hover {
-  background: #243d62;
+  background: #255d40;
 }
 .admin-sidebar-nav button[aria-current="page"] {
-  background: #e7efff;
-  color: #132f58;
+  background: #e6f4e9;
+  color: #155539;
   font-weight: 750;
 }
 .admin-sidebar :focus-visible {
-  outline-color: #bfd7ff;
+  outline-color: #bde8c9;
   outline-offset: 1px;
 }
 .admin-sidebar-footer {
   display: grid;
   gap: 3px;
-  border-top: 1px solid #30425f;
+  border-top: 1px solid #315c45;
   padding: 8px 4px 0;
 }
 .admin-sidebar-footer label {
-  color: #b9c8e0;
+  color: #c6dfce;
   font-size: 12px;
 }
 .admin-sidebar-footer select {
   padding: 4px 8px;
-  color: #f5f8ff;
-  background: #263e62;
-  border: 1px solid #596f91;
+  color: #f2faf4;
+  background: #25573d;
+  border: 1px solid #709782;
   border-radius: 7px;
 }
 .admin-menu-toggle {
@@ -1701,7 +1701,7 @@ form .secondary {
   cursor: pointer;
 }
 .admin-queue-list button:hover {
-  background: #f5f8ff;
+  background: #f2faf4;
 }
 .admin-item-title {
   display: grid;
@@ -1745,10 +1745,10 @@ form .secondary {
     width: 40px;
     height: 40px;
     margin-left: auto;
-    border: 1px solid #596f91;
+    border: 1px solid #709782;
     border-radius: 9px;
-    color: #f5f8ff;
-    background: #263e62;
+    color: #f2faf4;
+    background: #25573d;
   }
   .admin-sidebar-content {
     display: none;
@@ -1807,7 +1807,7 @@ form .secondary {
   position: relative;
   overflow: hidden;
   max-width: 100%;
-  background: #14274b center / cover no-repeat;
+  background: #174731 center / cover no-repeat;
   border-radius: 12px;
   container-type: inline-size;
 }
@@ -1820,7 +1820,7 @@ form .secondary {
   place-items: center;
   aspect-ratio: 1;
   overflow: hidden;
-  color: #14274b;
+  color: #174731;
   background: #dbeafe;
   font-weight: 750;
 }

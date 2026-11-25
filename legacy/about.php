@@ -36,7 +36,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
         .header-right { display: flex; align-items: center; gap: 15px; }
         
         /* Mobile Menu Button (Hidden on Desktop) */
-        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #0b1c3c; padding: 5px; transition: 0.3s; outline: none; }
+        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #123c2b; padding: 5px; transition: 0.3s; outline: none; }
         .mobile-portal-li { display: none; }
 
         /* Footer portal link fix */
@@ -87,7 +87,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #fbbc05;
+                border-top: 2px solid #2fa76d;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 margin-top: 0 !important;
@@ -121,13 +121,13 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 padding: 15px 0;
                 font-size: 16px;
                 font-weight: 700;
-                color: #0b1c3c !important;
+                color: #123c2b !important;
                 text-decoration: none;
             }
             
             /* Styled Portal Button in Mobile Menu */
             .mobile-portal-btn {
-                background: #0b1c3c !important;
+                background: #123c2b !important;
                 color: #fff !important;
                 border-radius: 10px;
                 margin-top: 10px;
@@ -136,8 +136,8 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 padding: 12px 30px !important;
             }
             .mobile-portal-btn:hover {
-                background: #fbbc05 !important;
-                color: #0b1c3c !important;
+                background: #2fa76d !important;
+                color: #123c2b !important;
             }
 
             /* Page Title Box Padding */
@@ -160,22 +160,22 @@ if ($settings_q && $settings_q->num_rows > 0) {
         /* =========================================================
            PORTAL LOGIN MODAL
            ========================================================= */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; transform: rotate(90deg); }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
-        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
+        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #2fa76d; color: #123c2b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,167,109, 0.3); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -238,7 +238,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
             <!-- Who We Are Section -->
             <div class="who-we-are-grid">
                 <div class="scroll-anim reveal-left">
-                    <h2 style="color: #0b1c3c; font-size: 32px; margin-bottom: 20px; font-weight: 800;">Who We Are</h2>
+                    <h2 style="color: #123c2b; font-size: 32px; margin-bottom: 20px; font-weight: 800;">Who We Are</h2>
                     <p style="color: #475569; font-size: 15px; line-height: 1.8; margin-bottom: 15px;">
                         <strong>NUS'HA (Noorul Hidaya Union for Heterogeneous Activities)</strong> is the premier student organization of Noorul Hidaya Islamic Academy, Pattambi, affiliated with Darul Huda Islamic University.
                     </p>
@@ -247,30 +247,30 @@ if ($settings_q && $settings_q->num_rows > 0) {
                     </p>
                 </div>
                 <div class="scroll-anim reveal-right">
-                    <img src="https://via.placeholder.com/600x400" alt="About NUSHA" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 4px solid #fbbc05;">
+                    <img src="https://via.placeholder.com/600x400" alt="About NUSHA" style="width: 100%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 4px solid #2fa76d;">
                 </div>
             </div>
 
             <!-- Core Values Section -->
             <div style="margin-bottom: 80px;">
-                <h2 style="text-align: center; color: #0b1c3c; font-size: 32px; margin-bottom: 40px; font-weight: 800;">Our Core Values</h2>
+                <h2 style="text-align: center; color: #123c2b; font-size: 32px; margin-bottom: 40px; font-weight: 800;">Our Core Values</h2>
                 
                 <div class="values-grid">
                     <!-- Value 1 -->
                     <div class="dash-card scroll-anim reveal-up delay-100" style="text-align: center; padding: 40px 30px; border-radius: 16px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
-                        <div style="width: 80px; height: 80px; background: #fffbeb; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
-                            <i class="fa-solid fa-book-open-reader" style="font-size: 35px; color: #fbbc05;"></i>
+                        <div style="width: 80px; height: 80px; background: #eff8f2; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
+                            <i class="fa-solid fa-book-open-reader" style="font-size: 35px; color: #2fa76d;"></i>
                         </div>
-                        <h3 style="color: #0b1c3c; font-size: 18px; margin-bottom: 15px; font-weight: 700;">Academic Excellence</h3>
+                        <h3 style="color: #123c2b; font-size: 18px; margin-bottom: 15px; font-weight: 700;">Academic Excellence</h3>
                         <p style="color: #64748b; font-size: 13.5px; line-height: 1.6;">Promoting continuous learning, extensive research, and intellectual development among our student community.</p>
                     </div>
 
                     <!-- Value 2 -->
                     <div class="dash-card scroll-anim reveal-up delay-200" style="text-align: center; padding: 40px 30px; border-radius: 16px; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.03);">
-                        <div style="width: 80px; height: 80px; background: #eff6ff; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
-                            <i class="fa-solid fa-users-rays" style="font-size: 35px; color: #3b82f6;"></i>
+                        <div style="width: 80px; height: 80px; background: #edf8f0; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
+                            <i class="fa-solid fa-users-rays" style="font-size: 35px; color: #218457;"></i>
                         </div>
-                        <h3 style="color: #0b1c3c; font-size: 18px; margin-bottom: 15px; font-weight: 700;">Leadership & Unity</h3>
+                        <h3 style="color: #123c2b; font-size: 18px; margin-bottom: 15px; font-weight: 700;">Leadership & Unity</h3>
                         <p style="color: #64748b; font-size: 13.5px; line-height: 1.6;">Building strong, capable leaders who can guide the society forward with wisdom, unity, and a clear vision.</p>
                     </div>
 
@@ -279,7 +279,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
                         <div style="width: 80px; height: 80px; background: #f0fdf4; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 20px;">
                             <i class="fa-solid fa-hand-holding-heart" style="font-size: 35px; color: #10b981;"></i>
                         </div>
-                        <h3 style="color: #0b1c3c; font-size: 18px; margin-bottom: 15px; font-weight: 700;">Social Responsibility</h3>
+                        <h3 style="color: #123c2b; font-size: 18px; margin-bottom: 15px; font-weight: 700;">Social Responsibility</h3>
                         <p style="color: #64748b; font-size: 13.5px; line-height: 1.6;">Actively engaging in outreach programs and community services to create a meaningful and positive impact.</p>
                     </div>
                 </div>

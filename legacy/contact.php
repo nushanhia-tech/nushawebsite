@@ -34,7 +34,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
         .header-right { display: flex; align-items: center; gap: 15px; }
         
         /* Mobile Menu Button (Hidden on Desktop) */
-        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #0b1c3c; padding: 5px; transition: 0.3s; outline: none; }
+        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #123c2b; padding: 5px; transition: 0.3s; outline: none; }
         .mobile-portal-li { display: none; }
 
         /* Footer portal link fix */
@@ -52,17 +52,17 @@ if ($settings_q && $settings_q->num_rows > 0) {
         .info-col { display: flex; flex-direction: column; gap: 20px; }
         .info-card { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid #f1f5f9; display: flex; align-items: flex-start; gap: 20px; transition: 0.3s; }
         .info-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.06); border-color: #e2e8f0; }
-        .i-icon { width: 60px; height: 60px; background: #fffbeb; color: #fbbc05; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0; }
-        .i-details h4 { font-size: 18px; color: #0b1c3c; margin-bottom: 8px; font-weight: 800; }
+        .i-icon { width: 60px; height: 60px; background: #eff8f2; color: #2fa76d; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 24px; flex-shrink: 0; }
+        .i-details h4 { font-size: 18px; color: #123c2b; margin-bottom: 8px; font-weight: 800; }
         .i-details p { font-size: 14px; color: #64748b; line-height: 1.6; font-weight: 500; }
         
         /* Contact Form */
         .form-col { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
-        .form-col h3 { font-size: 24px; color: #0b1c3c; margin-bottom: 25px; font-weight: 800; }
+        .form-col h3 { font-size: 24px; color: #123c2b; margin-bottom: 25px; font-weight: 800; }
         
         .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .c-input { width: 100%; padding: 15px 20px; border: 2px solid #f1f5f9; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #334155; transition: 0.3s; background: #f8fafc; outline: none; box-sizing: border-box; }
-        .c-input:focus { border-color: #fbbc05; background: #fff; box-shadow: 0 0 0 4px rgba(251, 188, 5, 0.1); }
+        .c-input:focus { border-color: #2fa76d; background: #fff; box-shadow: 0 0 0 4px rgba(47,167,109, 0.1); }
         textarea.c-input { min-height: 150px; resize: vertical; margin-bottom: 25px; }
 
         /* -------------------------------------------
@@ -101,7 +101,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #fbbc05;
+                border-top: 2px solid #2fa76d;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 margin-top: 0 !important;
@@ -135,13 +135,13 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 padding: 15px 0;
                 font-size: 16px;
                 font-weight: 700;
-                color: #0b1c3c !important;
+                color: #123c2b !important;
                 text-decoration: none;
             }
             
             /* Styled Portal Button in Mobile Menu */
             .mobile-portal-btn {
-                background: #0b1c3c !important;
+                background: #123c2b !important;
                 color: #fff !important;
                 border-radius: 10px;
                 margin-top: 10px;
@@ -150,8 +150,8 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 padding: 12px 30px !important;
             }
             .mobile-portal-btn:hover {
-                background: #fbbc05 !important;
-                color: #0b1c3c !important;
+                background: #2fa76d !important;
+                color: #123c2b !important;
             }
 
             /* Page Title Box Padding */
@@ -175,22 +175,22 @@ if ($settings_q && $settings_q->num_rows > 0) {
         /* =========================================================
            PORTAL LOGIN MODAL
            ========================================================= */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; transform: rotate(90deg); }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
-        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
+        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #2fa76d; color: #123c2b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,167,109, 0.3); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -264,7 +264,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
                     </div>
                     
                     <div class="info-card">
-                        <div class="i-icon" style="background: #eff6ff; color: #3b82f6;"><i class="fa-solid fa-phone"></i></div>
+                        <div class="i-icon" style="background: #edf8f0; color: #218457;"><i class="fa-solid fa-phone"></i></div>
                         <div class="i-details">
                             <h4>Phone Number</h4>
                             <p>+91 494 2463129<br>+91 98765 43210 (Union Sec)</p>
@@ -281,16 +281,16 @@ if ($settings_q && $settings_q->num_rows > 0) {
 
                     <!-- Social Media Links -->
                     <div style="margin-top: 10px; display: flex; gap: 15px; flex-wrap: wrap;">
-                        <a href="#" style="width: 45px; height: 45px; background: #0b1c3c; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" style="width: 45px; height: 45px; background: #0b1c3c; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" style="width: 45px; height: 45px; background: #0b1c3c; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-twitter"></i></a>
-                        <a href="#" style="width: 45px; height: 45px; background: #0b1c3c; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="#" style="width: 45px; height: 45px; background: #123c2b; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" style="width: 45px; height: 45px; background: #123c2b; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" style="width: 45px; height: 45px; background: #123c2b; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#" style="width: 45px; height: 45px; background: #123c2b; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-size: 18px; transition: 0.3s;"><i class="fa-brands fa-youtube"></i></a>
                     </div>
                 </div>
 
                 <!-- Right Side: Contact Form -->
                 <div class="form-col scroll-anim reveal-right">
-                    <h3>Send us a Message <i class="fa-regular fa-paper-plane" style="color: #fbbc05; margin-left: 10px;"></i></h3>
+                    <h3>Send us a Message <i class="fa-regular fa-paper-plane" style="color: #2fa76d; margin-left: 10px;"></i></h3>
                     
                     <form action="#" method="POST">
                         <div class="input-row">

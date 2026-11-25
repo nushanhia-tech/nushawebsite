@@ -92,7 +92,7 @@ try {
         .header-right { display: flex; align-items: center; gap: 15px; }
         
         /* Mobile Menu Button (Hidden on Desktop) */
-        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #0b1c3c; padding: 5px; transition: 0.3s; }
+        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #123c2b; padding: 5px; transition: 0.3s; }
         .mobile-portal-li { display: none; }
 
         /* Footer portal link fix */
@@ -141,7 +141,7 @@ try {
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #fbbc05;
+                border-top: 2px solid #2fa76d;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 margin-top: 0 !important;
@@ -175,13 +175,13 @@ try {
                 padding: 15px 0;
                 font-size: 16px;
                 font-weight: 700;
-                color: #0b1c3c !important;
+                color: #123c2b !important;
                 text-decoration: none;
             }
             
             /* Styled Portal Button in Mobile Menu */
             .mobile-portal-btn {
-                background: #0b1c3c !important;
+                background: #123c2b !important;
                 color: #fff !important;
                 border-radius: 10px;
                 margin-top: 10px;
@@ -190,8 +190,8 @@ try {
                 padding: 12px 30px !important;
             }
             .mobile-portal-btn:hover {
-                background: #fbbc05 !important;
-                color: #0b1c3c !important;
+                background: #2fa76d !important;
+                color: #123c2b !important;
             }
             
             /* 3. Hero Text Cut-off Fix */
@@ -210,22 +210,22 @@ try {
         }
 
         /* Modal Styles (നിങ്ങളുടെ ഒറിജിനൽ കോഡ്) */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; transform: rotate(90deg); }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
-        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
+        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #2fa76d; color: #123c2b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,167,109, 0.3); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -234,8 +234,8 @@ try {
         .nus-footer, .nus-footer * { box-sizing:border-box; }
         .nus-footer {
             position:relative; width:100%; margin:0; padding:0;
-            background:#0b1c3c; color:#c0cada;
-            font-family:'Montserrat',sans-serif; border-top:3px solid #fbbc05;
+            background:#123c2b; color:#c0cada;
+            font-family:'Montserrat',sans-serif; border-top:3px solid #2fa76d;
         }
         .nus-footer .nus-footer-wrap { width:100%; max-width:1200px; margin:0 auto; padding:56px 28px 0; }
         .nus-footer .nus-footer-grid { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,.75fr) minmax(0,.85fr) minmax(0,1.25fr); gap:36px; align-items:start; padding-bottom:40px; }
@@ -249,26 +249,26 @@ try {
         .nus-footer .nus-footer-description strong { color:#e9edf5; font-weight:600; }
         .nus-footer .nus-footer-socials { display:flex; flex-wrap:wrap; justify-content:flex-start; gap:9px; margin:0; }
         .nus-footer .nus-footer-socials a { display:flex; align-items:center; justify-content:center; width:36px; height:36px; color:#e9edf5; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); border-radius:10px; font-size:14px; text-decoration:none; transition:background .2s,color .2s; }
-        .nus-footer .nus-footer-socials a:hover { background:#fbbc05; border-color:#fbbc05; color:#0b1c3c; }
+        .nus-footer .nus-footer-socials a:hover { background:#2fa76d; border-color:#2fa76d; color:#123c2b; }
         .nus-footer .nus-footer-heading { margin:0 0 20px; padding:0; color:#fff; font-size:14px; font-weight:700; line-height:1.5; letter-spacing:.2px; }
-        .nus-footer .nus-footer-heading::after { content:''; display:block; width:24px; height:3px; margin-top:11px; background:#fbbc05; border-radius:3px; }
+        .nus-footer .nus-footer-heading::after { content:''; display:block; width:24px; height:3px; margin-top:11px; background:#2fa76d; border-radius:3px; }
         .nus-footer .nus-footer-links { display:grid; gap:10px; list-style:none; margin:0; padding:0; }
         .nus-footer .nus-footer-links li { margin:0; padding:0; }
         .nus-footer .nus-footer-links a { display:inline-block; padding:3px 0; margin:0; color:#c0cada; background:none; border:0; box-shadow:none; border-radius:0; font-size:12px; font-weight:500; line-height:1.65; text-decoration:none; transition:color .2s; }
-        .nus-footer .nus-footer-links a:hover { color:#fbbc05; }
+        .nus-footer .nus-footer-links a:hover { color:#2fa76d; }
         .nus-footer .nus-footer-contact-list { display:grid; gap:16px; list-style:none; margin:0; padding:0; }
         .nus-footer .nus-footer-contact { display:flex; align-items:flex-start; gap:11px; min-width:0; margin:0; padding:0; }
-        .nus-footer .nus-footer-contact-icon { display:flex; align-items:center; justify-content:center; flex:0 0 32px; width:32px; height:32px; border-radius:9px; background:rgba(251,188,5,.1); color:#fbbc05; font-size:12px; }
+        .nus-footer .nus-footer-contact-icon { display:flex; align-items:center; justify-content:center; flex:0 0 32px; width:32px; height:32px; border-radius:9px; background:rgba(47,167,109,.1); color:#2fa76d; font-size:12px; }
         .nus-footer .nus-footer-contact-text { min-width:0; padding-top:3px; }
         .nus-footer .nus-footer-contact-label { display:block; margin:0 0 3px; color:#8fa1bb; font-size:9px; line-height:1.4; font-weight:600; text-transform:uppercase; letter-spacing:.8px; }
         .nus-footer .nus-footer-contact p, .nus-footer .nus-footer-contact a { display:block; margin:0; color:#d8e0ed; font-size:12px; font-weight:500; line-height:1.7; text-decoration:none; overflow-wrap:anywhere; }
-        .nus-footer .nus-footer-contact a:hover { color:#fbbc05; }
+        .nus-footer .nus-footer-contact a:hover { color:#2fa76d; }
         .nus-footer .nus-footer-bottom { display:flex; align-items:center; justify-content:space-between; gap:16px 24px; border-top:1px solid rgba(255,255,255,.12); padding:20px 0; }
         .nus-footer .nus-footer-copyright { margin:0; color:#96a7be; font-size:10px; line-height:1.8; font-weight:500; }
         .nus-footer .nus-footer-legal { display:flex; flex-wrap:wrap; align-items:center; gap:18px; margin:0; }
         .nus-footer .nus-footer-legal a { color:#96a7be; font-size:10px; line-height:1.8; font-weight:500; text-decoration:none; }
-        .nus-footer .nus-footer-legal a:hover { color:#fbbc05; }
-        .nus-footer a:focus-visible { outline:2px solid #fbbc05; outline-offset:5px; border-radius:3px; }
+        .nus-footer .nus-footer-legal a:hover { color:#2fa76d; }
+        .nus-footer a:focus-visible { outline:2px solid #2fa76d; outline-offset:5px; border-radius:3px; }
         @media (max-width:1050px) {
             .nus-footer .nus-footer-grid { grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:34px 42px; }
             .nus-footer .nus-footer-description { max-width:380px; }
@@ -403,8 +403,8 @@ try {
                     
                     <!-- Section Header -->
                     <div class="scroll-anim reveal-up" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px;">
-                        <h2 style="font-size: 32px; color: #0b1c3c; font-weight: 900; margin: 0;">Recent Programmes</h2>
-                        <a href="events.php" style="color: #fbbc05; font-weight: 700; text-decoration: none; font-size: 14px;">View All <i class="fa-solid fa-arrow-right"></i></a>
+                        <h2 style="font-size: 32px; color: #123c2b; font-weight: 900; margin: 0;">Recent Programmes</h2>
+                        <a href="events.php" style="color: #2fa76d; font-weight: 700; text-decoration: none; font-size: 14px;">View All <i class="fa-solid fa-arrow-right"></i></a>
                     </div>
 
                     <!-- Cards Grid -->
@@ -422,14 +422,14 @@ try {
                                     <div style="height: 180px; background-image: url(\''.$row['image'].'\'); background-size: cover; background-position: center; position: relative;">
                                         <!-- തീയതി ഫോട്ടോയ്ക്ക് മുകളിൽ വരാൻ -->
                                         <div style="position: absolute; top: 15px; left: 15px;">
-                                            <span style="background: #fbbc05; color: #0b1c3c; font-size: 11px; font-weight: 800; padding: 6px 16px; border-radius: 20px;">'.$row['event_date'].'</span>
+                                            <span style="background: #2fa76d; color: #123c2b; font-size: 11px; font-weight: 800; padding: 6px 16px; border-radius: 20px;">'.$row['event_date'].'</span>
                                         </div>
                                     </div>
                                     
                                     <!-- പേരും വിവരണവും -->
                                     <div style="padding: 20px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
                                         <div>
-                                            <h4 style="color: #0b1c3c; font-size: 18px; margin-bottom: 8px; font-weight: 800; line-height: 1.4;">'.$row['title'].'</h4>
+                                            <h4 style="color: #123c2b; font-size: 18px; margin-bottom: 8px; font-weight: 800; line-height: 1.4;">'.$row['title'].'</h4>
                                             <p style="color: #94a3b8; font-size: 13px; line-height: 1.6; font-weight: 500; margin: 0;">'.substr($row['description'], 0, 80).'...'.'</p>
                                         </div>
                                     </div>
@@ -448,7 +448,7 @@ try {
                     
                     <!-- Section Header -->
                     <div class="scroll-anim reveal-up delay-200" style="margin-bottom: 25px; height: 38px; display: flex; align-items: flex-end;">
-                        <h2 style="font-size: 32px; color: #0b1c3c; font-weight: 900; margin: 0;">Latest Updates</h2>
+                        <h2 style="font-size: 32px; color: #123c2b; font-weight: 900; margin: 0;">Latest Updates</h2>
                     </div>
 
                     <!-- Updates Container with White Background -->
@@ -466,7 +466,7 @@ try {
                                 } elseif ($tag == 'ALERT') {
                                     $icon = 'fa-file-lines'; $icon_bg = '#fef3c7'; $icon_col = '#f59e0b'; $tag_bg = '#f59e0b';
                                 } else {
-                                    $icon = 'fa-users'; $icon_bg = '#eff6ff'; $icon_col = '#3b82f6'; $tag_bg = '#3b82f6';
+                                    $icon = 'fa-users'; $icon_bg = '#edf8f0'; $icon_col = '#218457'; $tag_bg = '#218457';
                                 }
 
                                 echo '
@@ -502,7 +502,7 @@ try {
                 <h2>Our Leadership</h2>
                 <div class="yellow-line-center"></div>
                 <p>Guided by Vision, Driven by Passion</p>
-                <span style="display:inline-block; margin-top:12px; padding:7px 16px; border-radius:20px; background:#fff4cc; color:#0b1c3c; font-size:12px; font-weight:800;">
+                <span style="display:inline-block; margin-top:12px; padding:7px 16px; border-radius:20px; background:#fff4cc; color:#123c2b; font-size:12px; font-weight:800;">
                     <?= home_committee_escape($home_committee_year) ?> Committee
                 </span>
             </div>

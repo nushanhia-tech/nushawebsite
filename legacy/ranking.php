@@ -218,16 +218,16 @@ $ranking_payload = [
         .podium-box { width: 140px; text-align: center; border-radius: 16px 16px 0 0; box-shadow: 0 -10px 25px rgba(0,0,0,0.06); display: flex; flex-direction: column; justify-content: flex-start; padding-top: 35px; position: relative; transition: 0.3s; }
         .podium-box:hover { transform: translateY(-5px); }
         
-        .podium-1 { height: 100%; border: 3px solid #fbbc05; border-bottom: none; background: linear-gradient(to top, #fffbeb, #fff); z-index: 3; }
+        .podium-1 { height: 100%; border: 3px solid #2fa76d; border-bottom: none; background: linear-gradient(to top, #eff8f2, #fff); z-index: 3; }
         .podium-2 { height: 75%; border: 3px solid #94a3b8; border-bottom: none; background: linear-gradient(to top, #f8fafc, #fff); z-index: 2; }
         .podium-3 { height: 60%; border: 3px solid #b45309; border-bottom: none; background: linear-gradient(to top, #fff7ed, #fff); z-index: 1; }
         
-        .p-rank { width: 45px; height: 45px; border-radius: 50%; background: #0b1c3c; color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); box-shadow: 0 5px 15px rgba(0,0,0,0.15); border: 3px solid #fff; }
-        .podium-1 .p-rank { background: #fbbc05; color: #0b1c3c; width: 60px; height: 60px; top: -30px; font-size: 26px; }
+        .p-rank { width: 45px; height: 45px; border-radius: 50%; background: #123c2b; color: white; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; position: absolute; top: -22px; left: 50%; transform: translateX(-50%); box-shadow: 0 5px 15px rgba(0,0,0,0.15); border: 3px solid #fff; }
+        .podium-1 .p-rank { background: #2fa76d; color: #123c2b; width: 60px; height: 60px; top: -30px; font-size: 26px; }
         .podium-2 .p-rank { background: #94a3b8; }
         .podium-3 .p-rank { background: #b45309; }
         
-        .p-class { font-weight: 800; color: #0b1c3c; font-size: 18px; margin-bottom: 5px; }
+        .p-class { font-weight: 800; color: #123c2b; font-size: 18px; margin-bottom: 5px; }
         .p-pts { font-weight: 800; color: #10b981; font-size: 15px; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 20px; display: inline-block; }
 
         /* Two Column Grid for Wing and Class tables */
@@ -237,40 +237,40 @@ $ranking_payload = [
         .ranking-wrapper { background: #fff; padding: 35px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.04); border: 1px solid #f1f5f9; }
         .table-responsive { overflow-x: auto; }
         .rank-table { width: 100%; border-collapse: collapse; }
-        .rank-table th { background: #0b1c3c; color: #fff; padding: 15px; text-align: left; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .rank-table th { background: #123c2b; color: #fff; padding: 15px; text-align: left; font-weight: 700; font-size: 13px; letter-spacing: 0.5px; text-transform: uppercase; }
         .rank-table th:first-child { border-radius: 12px 0 0 0; text-align: center; }
         .rank-table th:last-child { border-radius: 0 12px 0 0; }
         .rank-table td { padding: 15px; border-bottom: 1px solid #f1f5f9; color: #475569; font-weight: 600; font-size: 14px; transition: 0.2s; }
         .rank-table tr:hover td { background: #f8fafc; }
         .rank-table td:first-child { text-align: center; font-weight: 900; font-size: 16px; }
         
-        .rank-1 td { background: #fffdf0; } .rank-1 td:first-child { color: #f59e0b; font-size: 20px; }
+        .rank-1 td { background: #f3faf5; } .rank-1 td:first-child { color: #f59e0b; font-size: 20px; }
         .rank-2 td { background: #f8fafc; } .rank-2 td:first-child { color: #94a3b8; font-size: 18px; }
         .rank-3 td { background: #fff7ed; } .rank-3 td:first-child { color: #b45309; font-size: 18px; }
         
-        .total-pts { font-weight: 900; color: #3b82f6; font-size: 16px; }
+        .total-pts { font-weight: 900; color: #218457; font-size: 16px; }
         .rank-1 .total-pts { color: #059669; font-size: 18px; }
 
         /* Chart container */
         .chart-container { position: relative; height: 250px; width: 100%; margin-bottom: 20px; }
 
         /* Portal Modal Styles */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
-        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
+        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #2fa76d; color: #123c2b; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -287,7 +287,7 @@ $ranking_payload = [
         .header-right { display: flex; align-items: center; gap: 15px; }
         
         /* Mobile Menu Button (Hidden on Desktop) */
-        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #0b1c3c; padding: 5px; transition: 0.3s; outline: none; }
+        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #123c2b; padding: 5px; transition: 0.3s; outline: none; }
         .mobile-portal-li { display: none; }
 
         /* Footer portal link fix */
@@ -334,7 +334,7 @@ $ranking_payload = [
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #fbbc05;
+                border-top: 2px solid #2fa76d;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 margin-top: 0 !important;
@@ -368,13 +368,13 @@ $ranking_payload = [
                 padding: 15px 0;
                 font-size: 16px;
                 font-weight: 700;
-                color: #0b1c3c !important;
+                color: #123c2b !important;
                 text-decoration: none;
             }
             
             /* Styled Portal Button in Mobile Menu */
             .mobile-portal-btn {
-                background: #0b1c3c !important;
+                background: #123c2b !important;
                 color: #fff !important;
                 border-radius: 10px;
                 margin-top: 10px;
@@ -383,8 +383,8 @@ $ranking_payload = [
                 padding: 12px 30px !important;
             }
             .mobile-portal-btn:hover {
-                background: #fbbc05 !important;
-                color: #0b1c3c !important;
+                background: #2fa76d !important;
+                color: #123c2b !important;
             }
 
             /* Page Specific Content Padding */
@@ -412,35 +412,35 @@ $ranking_payload = [
 .rk-toolbar { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px; margin-bottom:22px; }
 .rk-tabs { display:inline-flex; gap:4px; background:#e9eef4; border:1px solid #e0e7ef; border-radius:12px; padding:5px; }
 .rk-tabs button { display:flex; align-items:center; justify-content:center; gap:9px; padding:11px 19px; border:0; background:transparent; color:#586d86; border-radius:8px; font:inherit; font-size:12px; font-weight:700; cursor:pointer; }
-.rk-tabs button[aria-pressed="true"] { color:#0b1c3c; background:#fff; box-shadow:0 2px 6px rgba(11,28,60,.07); }
+.rk-tabs button[aria-pressed="true"] { color:#123c2b; background:#fff; box-shadow:0 2px 6px rgba(18,60,43,.07); }
 .rk-report-actions { display:flex; flex-direction:column; align-items:flex-end; gap:5px; }
 .rk-download { display:flex; align-items:center; justify-content:center; gap:8px; padding:9px 12px; border:1px solid #dce3ec; border-radius:8px; color:#5c6d84; background:transparent; font:inherit; font-size:11px; font-weight:600; cursor:pointer; }
-.rk-download:hover { background:#fff; color:#0b1c3c; }
+.rk-download:hover { background:#fff; color:#123c2b; }
 .rk-download:disabled { opacity:.5; cursor:wait; }
 .rk-report-hint { color:#75859a; font-size:9px; padding-right:2px; }
 .rk-status { margin:0 0 14px; color:#586d86; font-size:11px; line-height:1.7; }
 .rk-status:empty { display:none; }
 .rk-layout { display:grid; grid-template-columns:minmax(0,.85fr) minmax(0,1.6fr); gap:24px; align-items:start; }
-.rk-panel { background:#fff; border:1px solid #e5ebf2; border-radius:20px; padding:25px; min-width:0; box-shadow:0 8px 28px rgba(11,28,60,.035); }
-.rk-overall { padding:30px; border-top:3px solid #fbbc05; }
+.rk-panel { background:#fff; border:1px solid #e5ebf2; border-radius:20px; padding:25px; min-width:0; box-shadow:0 8px 28px rgba(18,60,43,.035); }
+.rk-overall { padding:30px; border-top:3px solid #2fa76d; }
 .rk-panel-heading { display:flex; align-items:center; justify-content:space-between; gap:14px; }
 .rk-eyebrow { display:block; color:#77869b; font-size:9px; text-transform:uppercase; letter-spacing:1.2px; line-height:1.7; font-weight:700; margin-bottom:7px; }
-.rk-panel-heading h2 { color:#0b1c3c; font-size:21px; line-height:1.3; font-weight:800; margin:0; letter-spacing:-.5px; }
+.rk-panel-heading h2 { color:#123c2b; font-size:21px; line-height:1.3; font-weight:800; margin:0; letter-spacing:-.5px; }
 .rk-overall .rk-panel-heading h2 { font-size:27px; }
 .rk-icon { display:flex; align-items:center; justify-content:center; width:36px; height:36px; flex:0 0 36px; background:#f0f4f8; color:#586d86; border-radius:10px; font-size:15px; }
 .rk-all-time { padding:6px 10px; border:1px solid #f2dfa5; border-radius:30px; color:#796017; background:#fff8e1; font-size:10px; font-weight:700; flex-shrink:0; }
 .rk-month-form { margin:23px 0 16px; }
 .rk-month-form label { display:block; margin-bottom:8px; color:#64748b; font-size:10px; font-weight:600; }
 .rk-month-controls { display:flex; gap:8px; }
-.rk-month-controls select { min-width:0; flex:1; border:1px solid #dce3ec; border-radius:9px; padding:12px; background:#f8fafc; color:#0b1c3c; font:inherit; font-size:12px; font-weight:600; }
-.rk-month-controls button { width:42px; flex:0 0 42px; border:0; border-radius:9px; background:#0b1c3c; color:#fff; cursor:pointer; }
-.rk-month-caption { display:flex; justify-content:space-between; gap:12px; margin-bottom:14px; color:#0b1c3c; font-size:11px; font-weight:700; line-height:1.6; }
+.rk-month-controls select { min-width:0; flex:1; border:1px solid #dce3ec; border-radius:9px; padding:12px; background:#f8fafc; color:#123c2b; font:inherit; font-size:12px; font-weight:600; }
+.rk-month-controls button { width:42px; flex:0 0 42px; border:0; border-radius:9px; background:#123c2b; color:#fff; cursor:pointer; }
+.rk-month-caption { display:flex; justify-content:space-between; gap:12px; margin-bottom:14px; color:#123c2b; font-size:11px; font-weight:700; line-height:1.6; }
 .rk-month-caption span:last-child { color:#75859a; font-size:10px; font-weight:500; }
 .rk-panel-description { color:#64748b; margin:12px 0 20px; font-size:12px; line-height:1.8; }
 .rk-stat-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:20px 0 25px; }
 .rk-stat-grid > div { border:1px solid #e8edf3; background:#f8fafc; border-radius:12px; padding:15px 12px; min-width:0; }
 .rk-stat-grid span { display:block; color:#75859a; font-size:9px; font-weight:600; line-height:1.6; }
-.rk-stat-grid strong { display:block; margin-top:7px; color:#0b1c3c; font-size:24px; font-weight:800; line-height:1.3; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
+.rk-stat-grid strong { display:block; margin-top:7px; color:#123c2b; font-size:24px; font-weight:800; line-height:1.3; overflow-wrap:anywhere; font-variant-numeric:tabular-nums; }
 .rk-chart-scroll { overflow:auto; max-height:420px; padding-bottom:8px; }
 .rk-overall-scroll { max-height:610px; }
 .rk-chart { position:relative; width:100%; }
@@ -452,10 +452,10 @@ $ranking_payload = [
 .rk-table td { padding:14px 8px; border-bottom:1px solid #edf1f5; color:#354a66; font-size:11px; line-height:1.7; font-weight:600; overflow-wrap:anywhere; }
 .rk-table th:first-child, .rk-table td:first-child { width:46px; text-align:center; }
 .rk-table th:last-child, .rk-table td:last-child { text-align:right; white-space:nowrap; }
-.rk-table td:last-child { color:#0b1c3c; font-weight:800; font-variant-numeric:tabular-nums; }
+.rk-table td:last-child { color:#123c2b; font-weight:800; font-variant-numeric:tabular-nums; }
 .rk-table .rk-first { background:#fffbef; }
 .rk-rank-badge { display:inline-flex; align-items:center; justify-content:center; min-width:25px; height:25px; padding:0 5px; border-radius:8px; background:#edf2f7; color:#586d86; font-size:10px; font-weight:800; }
-.rk-first .rk-rank-badge { background:#fbbc05; color:#0b1c3c; }
+.rk-first .rk-rank-badge { background:#2fa76d; color:#123c2b; }
 .rk-total-table td { padding-top:16px; padding-bottom:16px; font-size:13px; }
 .rk-footnote { margin:18px 0 0; color:#8a97a9; font-size:9px; line-height:1.8; }
 .rk-inline-note { margin:10px 0; color:#75859a; font-size:11px; line-height:1.8; }
@@ -468,7 +468,7 @@ $ranking_payload = [
 .rk-data-note i { margin-right:6px; }
 .rk-updated { margin:20px 0 0; color:#8a97a9; font-size:9px; text-align:right; line-height:1.8; }
 .rk-sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-.rk-dashboard button:focus-visible, .rk-dashboard select:focus-visible { outline:3px solid #fbbc05; outline-offset:3px; }
+.rk-dashboard button:focus-visible, .rk-dashboard select:focus-visible { outline:3px solid #2fa76d; outline-offset:3px; }
 @media(max-width:1000px) {
     .rk-layout { grid-template-columns:minmax(0,1fr); }
     .rk-monthly { order:2; }
@@ -768,7 +768,7 @@ $ranking_payload = [
                 labels: labels,
                 datasets: [{
                     label: 'Evaluated points', data: scores,
-                    backgroundColor: rows.map(function (row) { return row.rank === 1 && sum(rows, 'entries') > 0 ? '#fbbc05' : (monthly ? '#7d94b1' : '#0b1c3c'); }),
+                    backgroundColor: rows.map(function (row) { return row.rank === 1 && sum(rows, 'entries') > 0 ? '#2fa76d' : (monthly ? '#7d94b1' : '#123c2b'); }),
                     borderRadius: 5, maxBarThickness: monthly ? 17 : 25
                 }]
             },
@@ -858,9 +858,9 @@ $ranking_payload = [
             var context = canvas.getContext('2d');
             context.fillStyle = '#fff';
             context.fillRect(0, 0, width, height);
-            context.fillStyle = '#0b1c3c';
+            context.fillStyle = '#123c2b';
             context.fillRect(0, 0, width, 170);
-            context.fillStyle = '#fbbc05';
+            context.fillStyle = '#2fa76d';
             context.fillRect(0, 170, width, 6);
             context.fillStyle = '#fff';
             context.font = '800 34px Montserrat, sans-serif';
@@ -868,7 +868,7 @@ $ranking_payload = [
             context.font = '400 17px Montserrat, sans-serif';
             context.fillText('Generated ' + data.generated, 60, 112);
             context.fillText('Monthly report: ' + data.monthLabel + ' | Evaluated activities only', 60, 143);
-            context.fillStyle = '#0b1c3c';
+            context.fillStyle = '#123c2b';
             context.font = '800 29px Montserrat, sans-serif';
             context.fillText(title + (continuation ? ' (continued)' : ''), 60, 235);
             context.fillStyle = '#64748b';
@@ -902,7 +902,7 @@ $ranking_payload = [
                     context.fillStyle = '#fffbef';
                     context.fillRect(60, y, 1120, rowHeight);
                 }
-                context.fillStyle = '#0b1c3c';
+                context.fillStyle = '#123c2b';
                 context.font = '700 20px Montserrat, sans-serif';
                 context.fillText(String(row.rank), 85, y + 34);
                 context.font = '500 20px Montserrat, sans-serif';
@@ -916,9 +916,9 @@ $ranking_payload = [
                 }
                 var zeroX = plotLeft + plotWidth * (0 - low) / (high - low);
                 var scoreX = plotLeft + plotWidth * (row.points - low) / (high - low);
-                context.fillStyle = row.rank === 1 && sum(rows, 'entries') > 0 ? '#fbbc05' : '#0b1c3c';
+                context.fillStyle = row.rank === 1 && sum(rows, 'entries') > 0 ? '#2fa76d' : '#123c2b';
                 context.fillRect(Math.min(zeroX, scoreX), barY - 9, Math.max(0, Math.abs(scoreX - zeroX)), 18);
-                context.fillStyle = '#0b1c3c';
+                context.fillStyle = '#123c2b';
                 context.font = '700 20px Montserrat, sans-serif';
                 context.textAlign = 'right';
                 context.fillText(points(row.points), 1160, barY + 7);
