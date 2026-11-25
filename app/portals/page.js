@@ -877,6 +877,15 @@ export default function Home() {
               <article className="portal-metric portal-metric-primary"><span>Total points</span><strong>{recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").reduce((sum, item) => sum + (Number(item.score) || 0), 0)}</strong><small>Evaluated programmes</small></article>
               <article className="portal-metric"><span>Reports submitted</span><strong>{recordsForRole.filter((item) => item.kind === "activity").length}</strong><small>Programme submissions</small></article>
             </div>
+            <h3 style={{ marginTop: 24 }}>Monthly points</h3>
+            {(() => {
+              const months = new Map();
+              for (const item of recordsForRole.filter((row) => row.kind === "activity" && row.status === "Evaluated")) {
+                const month = item.admin_details?.month || item.scheduled_on?.slice(0, 7) || item.created_at?.slice(0, 7);
+                if (month) months.set(month, (months.get(month) || 0) + (Number(item.score) || 0));
+              }
+              return months.size ? <div className="list" style={{ marginTop: 12 }}>{[...months.entries()].sort(([a], [b]) => b.localeCompare(a)).map(([month, points]) => <div className="content-row" key={month}><strong>{month}</strong><span>{points} points</span></div>)}</div> : <p className="empty">No monthly scores yet.</p>;
+            })()}
             <h3 style={{ marginTop: 24 }}>Recently evaluated</h3>
             <div className="list" style={{ marginTop: 12 }}>
               {recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").length ? recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").map((item) => <Item key={item.id} item={item} onClick={() => open({ type: "detail", item })} />) : <p className="empty">No evaluated programmes yet.</p>}
