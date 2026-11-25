@@ -37,7 +37,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
         .header-right { display: flex; align-items: center; gap: 15px; }
         
         /* Mobile Menu Button (Hidden on Desktop) */
-        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #123c2b; padding: 5px; transition: 0.3s; outline: none; }
+        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #0b1c3c; padding: 5px; transition: 0.3s; outline: none; }
         .mobile-portal-li { display: none; }
 
         /* Footer portal link fix */
@@ -101,7 +101,7 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #2fa76d;
+                border-top: 2px solid #fbbc05;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 margin-top: 0 !important;
@@ -135,13 +135,13 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 padding: 15px 0;
                 font-size: 16px;
                 font-weight: 700;
-                color: #123c2b !important;
+                color: #0b1c3c !important;
                 text-decoration: none;
             }
             
             /* Styled Portal Button in Mobile Menu */
             .mobile-portal-btn {
-                background: #123c2b !important;
+                background: #0b1c3c !important;
                 color: #fff !important;
                 border-radius: 10px;
                 margin-top: 10px;
@@ -150,8 +150,8 @@ if ($settings_q && $settings_q->num_rows > 0) {
                 padding: 12px 30px !important;
             }
             .mobile-portal-btn:hover {
-                background: #2fa76d !important;
-                color: #123c2b !important;
+                background: #fbbc05 !important;
+                color: #0b1c3c !important;
             }
 
             /* Page Title Box Padding */
@@ -172,22 +172,22 @@ if ($settings_q && $settings_q->num_rows > 0) {
         /* =========================================================
            PORTAL LOGIN MODAL (ലോഗിൻ പോപ്പ്-അപ്പ് സിസ്റ്റം)
            ========================================================= */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; transform: rotate(90deg); }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
-        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #2fa76d; color: #123c2b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,167,109, 0.3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
+        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -255,14 +255,14 @@ if ($settings_q && $settings_q->num_rows > 0) {
                         echo '
                         <div class="event-card">
                             <div style="height: 200px; background-image: url(\''.$row['image'].'\'); background-size: cover; background-position: center; position: relative;">
-                                <div style="position: absolute; top: 15px; left: 15px; background: #2fa76d; color: #123c2b; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px;">'.$row['event_date'].'</div>
+                                <div style="position: absolute; top: 15px; left: 15px; background: #fbbc05; color: #0b1c3c; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px;">'.$row['event_date'].'</div>
                             </div>
                             <div class="event-card-content">
                                 <div>
-                                    <h3 style="color: #123c2b; font-size: 18px; margin-bottom: 10px; font-weight: 800;">'.$row['title'].'</h3>
+                                    <h3 style="color: #0b1c3c; font-size: 18px; margin-bottom: 10px; font-weight: 800;">'.$row['title'].'</h3>
                                     <p style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 15px;">'.$row['description'].'</p>
                                 </div>
-                                <a href="#" style="color: #218457; font-size: 13px; font-weight: 700; text-decoration: none;">Read More <i class="fa-solid fa-arrow-right"></i></a>
+                                <a href="#" style="color: #3b82f6; font-size: 13px; font-weight: 700; text-decoration: none;">Read More <i class="fa-solid fa-arrow-right"></i></a>
                             </div>
                         </div>';
                     }

@@ -133,7 +133,7 @@ try {
         *, *::before, *::after { box-sizing: inherit; }
 
         .header-right { display: flex; align-items: center; gap: 15px; }
-        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #123c2b; padding: 5px; transition: 0.3s; outline: none; }
+        .mobile-menu-toggle { display: none; background: transparent; border: none; font-size: 28px; cursor: pointer; color: #0b1c3c; padding: 5px; transition: 0.3s; outline: none; }
         .mobile-portal-li { display: none; }
 
         ul.f-links li a.portal-trigger, ul.f-links li a.open-portal-modal { background: none !important; padding: 0 !important; border: none !important; box-shadow: none !important; display: inline !important; color: inherit; }
@@ -156,7 +156,7 @@ try {
             background: #ffffff;
             padding: 8px 12px;
             border-radius: 60px;
-            box-shadow: 0 10px 30px rgba(18,60,43, 0.06);
+            box-shadow: 0 10px 30px rgba(11, 28, 60, 0.06);
             border: 1px solid #e2e8f0;
             display: inline-flex;
             align-items: center;
@@ -206,27 +206,27 @@ try {
         }
 
         .year-pill-link:hover {
-            color: #123c2b;
+            color: #0b1c3c;
             background: #f8fafc;
             border-color: #cbd5e1;
             transform: translateY(-2px);
         }
 
         .year-pill-link.active {
-            background: #123c2b;
+            background: #0b1c3c;
             color: #ffffff !important;
-            box-shadow: 0 6px 18px rgba(18,60,43, 0.22);
-            border-color: #123c2b;
+            box-shadow: 0 6px 18px rgba(11, 28, 60, 0.22);
+            border-color: #0b1c3c;
             transform: translateY(-1px);
         }
 
         .year-pill-link.active .pill-dot {
             width: 7px;
             height: 7px;
-            background-color: #2fa76d;
+            background-color: #fbbc05;
             border-radius: 50%;
             display: inline-block;
-            box-shadow: 0 0 8px #2fa76d;
+            box-shadow: 0 0 8px #fbbc05;
             animation: pulseDot 1.8s infinite;
         }
 
@@ -244,20 +244,20 @@ try {
         .committee-badge-box h2 {
             font-size: 24px;
             font-weight: 900;
-            color: #123c2b;
+            color: #0b1c3c;
             margin: 0 0 8px;
             display: inline-flex;
             align-items: center;
             gap: 12px;
         }
         .committee-badge-box span.active-tag {
-            background: #eff8f2;
+            background: #fffbeb;
             color: #b45309;
             font-size: 13px;
             font-weight: 800;
             padding: 4px 14px;
             border-radius: 20px;
-            border: 1px solid #bbe2c7;
+            border: 1px solid #fde68a;
         }
 
         /* Leader Card Structural Layout */
@@ -276,8 +276,8 @@ try {
         }
         .leader-card:hover {
             transform: translateY(-7px);
-            box-shadow: 0 15px 35px rgba(18,60,43,0.08);
-            border-color: #2fa76d;
+            box-shadow: 0 15px 35px rgba(11,28,60,0.08);
+            border-color: #fbbc05;
         }
         .leader-img-wrapper { margin: 0 auto 20px auto !important; }
         .leader-info { 
@@ -287,11 +287,11 @@ try {
             justify-content: flex-end !important; 
             text-align: center;
         }
-        .leader-info h4 { font-size: 18px; font-weight: 800; color: #123c2b; margin: 0 0 6px 0; }
+        .leader-info h4 { font-size: 18px; font-weight: 800; color: #0b1c3c; margin: 0 0 6px 0; }
         .leader-info p { font-size: 13px; color: #64748b; font-weight: 600; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
 
         .committee-message { grid-column:1 / -1; text-align:center; color:#64748b; padding:35px; background:#fff; border-radius:16px; border: 1px solid #e2e8f0; font-weight:600; }
-        .committee-photo { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#e2e8f0; color:#64748b; width:130px; height:130px; border-radius:50%; border:3px solid #2fa76d; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
+        .committee-photo { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; background:#e2e8f0; color:#64748b; width:130px; height:130px; border-radius:50%; border:3px solid #fbbc05; box-shadow:0 4px 15px rgba(0,0,0,0.08); }
         .committee-photo img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
         .committee-photo .fa-user { font-size:48px; }
 
@@ -328,7 +328,7 @@ try {
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #2fa76d;
+                border-top: 2px solid #fbbc05;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
                 margin-top: 0 !important;
@@ -337,10 +337,10 @@ try {
             @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
             nav#navbar ul { flex-direction: column !important; align-items: stretch !important; gap: 0 !important; margin: 0; padding: 0; }
             nav#navbar ul li { width: 100%; border-bottom: 1px solid #f1f5f9; text-align: center; }
-            nav#navbar ul li a { display: block; padding: 15px 0; font-size: 16px; font-weight: 700; color: #123c2b !important; }
+            nav#navbar ul li a { display: block; padding: 15px 0; font-size: 16px; font-weight: 700; color: #0b1c3c !important; }
             
-            .mobile-portal-btn { background: #123c2b !important; color: #fff !important; border-radius: 10px; margin-top: 10px; display: inline-block !important; width: auto; padding: 12px 30px !important; }
-            .mobile-portal-btn:hover { background: #2fa76d !important; color: #123c2b !important; }
+            .mobile-portal-btn { background: #0b1c3c !important; color: #fff !important; border-radius: 10px; margin-top: 10px; display: inline-block !important; width: auto; padding: 12px 30px !important; }
+            .mobile-portal-btn:hover { background: #fbbc05 !important; color: #0b1c3c !important; }
 
             .inner-page-content { padding: 40px 20px !important; width: 100vw !important; box-sizing: border-box !important; }
             .page-title-box h1 { font-size: 2.2rem !important; line-height: 1.2 !important; margin-bottom: 10px !important; }
@@ -366,22 +366,22 @@ try {
         }
 
         /* PORTAL LOGIN MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 99999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); box-sizing: border-box; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; transform: rotate(90deg); }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
-        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #2fa76d; color: #123c2b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,167,109, 0.3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
+        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -442,7 +442,7 @@ try {
         <div class="year-selector-container fade-in">
             <div class="year-selector-wrapper">
                 <div class="year-label-tag">
-                    <i class="fa-solid fa-calendar-check" style="color: #2fa76d;"></i> Academic Session
+                    <i class="fa-solid fa-calendar-check" style="color: #fbbc05;"></i> Academic Session
                 </div>
                 <div class="year-pills-list">
                     <?php foreach ($committee_years as $year): 

@@ -64,13 +64,13 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
         }
         
         /* Today's Programmes Box */
-        .today-box { background: linear-gradient(135deg, #123c2b 0%, #145c3b 100%); border-radius: 20px; padding: 30px; color: white; margin-bottom: 40px; box-shadow: 0 15px 35px rgba(18,60,43, 0.15); position: relative; overflow: hidden; }
-        .today-box::before { content: ''; position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: rgba(47,167,109, 0.1); border-radius: 50%; animation: pulseBg 4s infinite alternate; }
-        .today-box h2 { font-weight: 900; margin-top: 0; display: flex; align-items: center; gap: 10px; color: #2fa76d; }
+        .today-box { background: linear-gradient(135deg, #0b1c3c 0%, #1e3a8a 100%); border-radius: 20px; padding: 30px; color: white; margin-bottom: 40px; box-shadow: 0 15px 35px rgba(11, 28, 60, 0.15); position: relative; overflow: hidden; }
+        .today-box::before { content: ''; position: absolute; top: -50%; right: -10%; width: 300px; height: 300px; background: rgba(251, 188, 5, 0.1); border-radius: 50%; animation: pulseBg 4s infinite alternate; }
+        .today-box h2 { font-weight: 900; margin-top: 0; display: flex; align-items: center; gap: 10px; color: #fbbc05; }
         .today-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; position: relative; z-index: 2; }
         .today-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); padding: 20px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.2); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .today-card:hover { transform: translateY(-8px) scale(1.02); background: rgba(255, 255, 255, 0.15); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .t-wing { font-size: 11px; background: #2fa76d; color: #123c2b; padding: 3px 10px; border-radius: 15px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-bottom: 10px; }
+        .t-wing { font-size: 11px; background: #fbbc05; color: #0b1c3c; padding: 3px 10px; border-radius: 15px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-bottom: 10px; }
         .t-title { font-size: 18px; font-weight: 800; margin: 0 0 10px 0; }
         .t-details { font-size: 13px; color: #cbd5e1; display: flex; align-items: center; gap: 15px; }
 
@@ -81,17 +81,17 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
         /* Calendar UI */
         .cal-wrapper { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
         .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .cal-nav-btn { background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; color: #123c2b; font-size: 16px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-        .cal-nav-btn:hover { background: #218457; color: white; transform: scale(1.1); }
-        .cal-month-year { font-size: 20px; font-weight: 900; color: #123c2b; text-transform: uppercase; animation: fadeIn 0.5s ease; }
+        .cal-nav-btn { background: #f1f5f9; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; color: #0b1c3c; font-size: 16px; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .cal-nav-btn:hover { background: #3b82f6; color: white; transform: scale(1.1); }
+        .cal-month-year { font-size: 20px; font-weight: 900; color: #0b1c3c; text-transform: uppercase; animation: fadeIn 0.5s ease; }
         
         .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; text-align: center; }
         .cal-day-name { font-weight: 800; color: #64748b; font-size: 13px; padding-bottom: 10px; }
-        .cal-cell { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; border-radius: 12px; font-weight: 700; font-size: 15px; color: #123c2b; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; border: 2px solid transparent; animation: popIn 0.5s ease forwards; opacity: 0; }
-        .cal-cell:hover:not(.empty) { background: #edf8f0; border-color: #218457; transform: scale(1.08); z-index: 2; box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2); }
+        .cal-cell { aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8fafc; border-radius: 12px; font-weight: 700; font-size: 15px; color: #0b1c3c; cursor: pointer; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; border: 2px solid transparent; animation: popIn 0.5s ease forwards; opacity: 0; }
+        .cal-cell:hover:not(.empty) { background: #eff6ff; border-color: #3b82f6; transform: scale(1.08); z-index: 2; box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2); }
         .cal-cell.empty { background: transparent; cursor: default; }
-        .cal-cell.active-date { background: #218457; color: white; box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); border-color: #218457; transform: scale(1.1); z-index: 3; }
-        .cal-cell.today { border-color: #2fa76d; color: #b45309; }
+        .cal-cell.active-date { background: #3b82f6; color: white; box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); border-color: #3b82f6; transform: scale(1.1); z-index: 3; }
+        .cal-cell.today { border-color: #fbbc05; color: #b45309; }
         
         .event-dot { width: 6px; height: 6px; background: #ef4444; border-radius: 50%; position: absolute; bottom: 8px; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2); animation: pulseDot 2s infinite; }
         .active-date .event-dot { background: #fff; box-shadow: none; animation: none; }
@@ -99,14 +99,14 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
         /* Selected Day Details Box */
         .details-wrapper { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); height: 100%; min-height: 400px; overflow: hidden;}
         .details-header { border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px; }
-        .d-date { font-size: 18px; font-weight: 800; color: #123c2b; }
+        .d-date { font-size: 18px; font-weight: 800; color: #0b1c3c; }
         
         .event-list { display: flex; flex-direction: column; gap: 15px; }
-        .event-item { padding: 15px; border-left: 4px solid #218457; background: #f8fafc; border-radius: 0 8px 8px 0; animation: slideInRight 0.4s ease forwards; opacity: 0; transform: translateX(20px); }
+        .event-item { padding: 15px; border-left: 4px solid #3b82f6; background: #f8fafc; border-radius: 0 8px 8px 0; animation: slideInRight 0.4s ease forwards; opacity: 0; transform: translateX(20px); }
         .event-item.Conducted { border-left-color: #10b981; }
-        .e-time { font-size: 12px; font-weight: 800; color: #218457; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
+        .e-time { font-size: 12px; font-weight: 800; color: #3b82f6; margin-bottom: 5px; display: flex; align-items: center; gap: 5px; }
         .Conducted .e-time { color: #10b981; }
-        .e-title { font-size: 16px; font-weight: 800; color: #123c2b; margin: 0 0 5px 0; }
+        .e-title { font-size: 16px; font-weight: 800; color: #0b1c3c; margin: 0 0 5px 0; }
         .e-meta { font-size: 12px; color: #64748b; font-weight: 600; display: flex; gap: 10px; }
         .empty-msg { text-align: center; color: #94a3b8; font-weight: 600; padding: 40px 0; animation: fadeIn 0.5s ease; }
         .empty-msg i { font-size: 40px; margin-bottom: 15px; color: #cbd5e1; display: block; }
@@ -120,14 +120,14 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
            PDF REPORT STYLES (Strictly formatted for A4 Portrait)
            ========================================= */
         #pdf-report-container { display: none; } 
-        .pdf-content-wrapper { padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: white; width: 750px; margin: 0 auto; color: #123c2b; }
-        .pdf-header { text-align: center; border-bottom: 2px solid #123c2b; padding-bottom: 15px; margin-bottom: 15px; }
-        .pdf-header h1 { color: #123c2b; margin: 0 0 5px 0; font-size: 20px; text-transform: uppercase; font-weight: 900;}
+        .pdf-content-wrapper { padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: white; width: 750px; margin: 0 auto; color: #0b1c3c; }
+        .pdf-header { text-align: center; border-bottom: 2px solid #0b1c3c; padding-bottom: 15px; margin-bottom: 15px; }
+        .pdf-header h1 { color: #0b1c3c; margin: 0 0 5px 0; font-size: 20px; text-transform: uppercase; font-weight: 900;}
         .pdf-header h2 { color: #64748b; margin: 0; font-size: 14px; }
         .pdf-header p { color: #94a3b8; font-size: 10px; margin-top: 5px; }
         
         .pdf-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .pdf-table th { background: #123c2b; color: white; text-align: left; padding: 8px 6px; border: 1px solid #cbd5e1; font-size: 11px; text-transform: uppercase;}
+        .pdf-table th { background: #0b1c3c; color: white; text-align: left; padding: 8px 6px; border: 1px solid #cbd5e1; font-size: 11px; text-transform: uppercase;}
         .pdf-table td { padding: 6px; border: 1px solid #cbd5e1; font-size: 10px; vertical-align: top; word-wrap: break-word; }
         .pdf-table tr { page-break-inside: avoid; }
         
@@ -135,22 +135,22 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
         .status-Approved { color: #f59e0b; font-weight: bold; }
 
         /* Portal Modal Styles */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(18,60,43, 0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 28, 60, 0.8); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; width: 100%; max-width: 400px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 20px; right: 25px; font-size: 24px; color: #94a3b8; cursor: pointer; transition: 0.3s; }
         .close-modal:hover { color: #ef4444; transform: rotate(90deg); }
         .login-tabs { display: flex; margin-bottom: 25px; background: #f1f5f9; border-radius: 10px; padding: 5px; }
         .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 14px; color: #64748b; cursor: pointer; border-radius: 8px; transition: 0.3s; }
-        .tab-btn.active { background: #fff; color: #123c2b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .tab-btn.active { background: #fff; color: #0b1c3c; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .login-form { display: none; }
         .login-form.active-form { display: block; animation: slideUp 0.4s ease; }
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #123c2b; margin-bottom: 8px; }
-        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #123c2b; outline: none; transition: 0.3s; box-sizing: border-box; }
-        .form-group input:focus { border-color: #2fa76d; background: #f3faf5; }
-        .submit-btn { width: 100%; padding: 14px; background: #123c2b; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .submit-btn:hover { background: #2fa76d; color: #123c2b; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(47,167,109, 0.3); }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #0b1c3c; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px 15px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-size: 14px; color: #0b1c3c; outline: none; transition: 0.3s; box-sizing: border-box; }
+        .form-group input:focus { border-color: #fbbc05; background: #fffdf0; }
+        .submit-btn { width: 100%; padding: 14px; background: #0b1c3c; color: #fff; border: none; border-radius: 10px; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 15px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .submit-btn:hover { background: #fbbc05; color: #0b1c3c; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 188, 5, 0.3); }
 
         /* Animations */
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -171,7 +171,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
             background: transparent;
             border: none;
             font-size: 28px;
-            color: #123c2b;
+            color: #0b1c3c;
             cursor: pointer;
             transition: 0.3s;
         }
@@ -207,7 +207,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
                 box-shadow: 0 20px 30px rgba(0,0,0,0.15);
                 padding: 20px 30px;
                 z-index: 1000;
-                border-top: 2px solid #2fa76d;
+                border-top: 2px solid #fbbc05;
                 border-bottom-left-radius: 20px;
                 border-bottom-right-radius: 20px;
             }
@@ -239,13 +239,13 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
                 padding: 15px 0;
                 font-size: 16px;
                 font-weight: 700;
-                color: #123c2b !important;
+                color: #0b1c3c !important;
                 text-align: center;
             }
             
             /* Styled Portal Button in Mobile Menu */
             .mobile-portal-btn {
-                background: #2fa76d !important;
+                background: #fbbc05 !important;
                 color: #02032c !important;
                 border-radius: 10px;
                 margin-top: 10px;
@@ -255,7 +255,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
             }
             .mobile-portal-btn:hover {
                 background: #e4dfd2 !important;
-                color: #123c2b !important;
+                color: #0b1c3c !important;
             }
         }
         
@@ -335,7 +335,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
                     if (count($today_events) > 0) {
                         $anim_delay = 0;
                         foreach ($today_events as $t) {
-                            $stat_col = ($t['status'] == 'Conducted') ? '#10b981' : '#2fa76d';
+                            $stat_col = ($t['status'] == 'Conducted') ? '#10b981' : '#fbbc05';
                             echo '<div class="today-card" style="animation: popIn 0.5s ease forwards; animation-delay: '.$anim_delay.'s; opacity:0;">
                                     <span class="t-wing">'.$t['wing_name'].'</span>
                                     <h3 class="t-title">'.$t['title'].'</h3>
@@ -380,7 +380,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
                 <!-- Right: Selected Day Details -->
                 <div class="details-wrapper">
                     <div class="details-header">
-                        <span style="font-size: 12px; font-weight: 800; color: #218457; text-transform: uppercase; letter-spacing: 1px;">Selected Date</span>
+                        <span style="font-size: 12px; font-weight: 800; color: #3b82f6; text-transform: uppercase; letter-spacing: 1px;">Selected Date</span>
                         <div class="d-date" id="selected-date-display">Select a date</div>
                     </div>
                     
