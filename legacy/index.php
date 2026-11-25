@@ -73,6 +73,7 @@ try {
     <link rel="preload" as="image" href="/bg-image.jpg" fetchpriority="high">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="/brand.css">
+    <link rel="stylesheet" href="/portal-login.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
@@ -334,13 +335,13 @@ try {
                 
                 <!-- Portal Link inside mobile menu -->
                 <li class="mobile-portal-li">
-                    <a href="#" class="portal-btn open-portal-modal mobile-portal-btn">Portal Login</a>
+                    <a href="/portals" class="portal-btn open-portal-modal mobile-portal-btn" data-portal-login="student">Portal Login</a>
                 </li>
             </ul>
         </nav>
 
         <div class="header-right">
-            <a href="#" class="portal-btn open-portal-modal">Portal</a>
+            <a href="/portals" class="portal-btn open-portal-modal" data-portal-login="student">Portal</a>
         </div>
     </header>
 
@@ -362,13 +363,9 @@ try {
             </div>
         </div>
 
-        <a href="#white-section" class="scroll-indicator fade-in">
-            <div class="chevron-container">
-                <div class="chevron"></div>
-                <div class="chevron"></div>
-                <div class="chevron"></div>
-            </div>
-            <p>Scroll Down</p>
+        <a href="#white-section" class="scroll-indicator">
+            <span class="scroll-track" aria-hidden="true"><span></span></span>
+            <span>Scroll down</span>
         </a>
     </section>
 
@@ -552,35 +549,8 @@ try {
     <?php include __DIR__ . '/footer.php'; ?>
 
     <!-- Portal Login Popup (Modal) -->
-    <div id="portalModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal"><i class="fa-solid fa-xmark"></i></span>
-            <div style="text-align:center; margin-bottom:20px;">
-                <h2 style="color:#0b1c3c; margin:0 0 5px 0; font-weight:900;">Portal Login</h2>
-                <p style="color:#64748b; font-size:13px; margin:0; font-weight:600;">Select your account type to continue</p>
-            </div>
-            
-            <!-- ലോഗിൻ ടാബുകൾ -->
-            <div class="login-tabs">
-                <button class="tab-btn active" data-target="wing-login">Wing</button>
-                <button class="tab-btn" data-target="class-login">Class</button>
-                <button class="tab-btn" data-target="student-login">Student</button>
-                <button class="tab-btn" data-target="admin-login">Admin</button>
-            </div>
+    <?php include __DIR__ . '/portal-login.php'; ?>
 
-            <!-- Wing Login Form -->
-            <div id="wing-login" class="login-form active-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=wing">Continue to Wing Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-
-            <!-- Class Login Form -->
-            <div id="class-login" class="login-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=class">Continue to Class Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-
-            <!-- Student Login Form -->
-            <div id="student-login" class="login-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=student">Continue to Student Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-            <div id="admin-login" class="login-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=admin">Continue to Admin Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-        </div>
-    </div> 
-
-    <!-- ജാവാസ്ക്രിപ്റ്റ് (Animations, Nav Toggle & Login Tabs) -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             
@@ -626,49 +596,7 @@ try {
             }
 
             // Portal Login Popup Fix
-            const portalBtns = document.querySelectorAll('.portal-btn, .open-portal-modal');
-            const portalModal = document.getElementById('portalModal');
-            const closeModal = document.querySelector('.close-modal');
 
-            if (portalBtns.length > 0 && portalModal) {
-                portalBtns.forEach(btn => {
-                    btn.addEventListener('click', (e) => { 
-                        e.preventDefault(); 
-                        portalModal.classList.add('show'); 
-                        
-                        // Close mobile menu if it is open when modal opens
-                        if(navbar && navbar.classList.contains('active-menu')) {
-                            navbar.classList.remove('active-menu');
-                            if(menuBtn) {
-                                const icon = menuBtn.querySelector('i');
-                                icon.classList.remove('fa-xmark');
-                                icon.classList.add('fa-bars');
-                            }
-                        }
-                    });
-                });
-                closeModal.addEventListener('click', () => portalModal.classList.remove('show'));
-                window.addEventListener('click', (e) => { 
-                    if (e.target === portalModal) portalModal.classList.remove('show'); 
-                });
-            }
-
-            // ലോഗിൻ ടാബ് മാറ്റാനുള്ള കോഡ്
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const loginForms = document.querySelectorAll('.login-form');
-
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // എല്ലാ ടാബുകളിൽ നിന്നും ആക്ടീവ് മാറ്റുന്നു
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    loginForms.forEach(f => f.classList.remove('active-form'));
-                    
-                    // ക്ലിക്ക് ചെയ്ത ടാബ് ആക്ടീവ് ആക്കുന്നു
-                    btn.classList.add('active');
-                    const targetForm = document.getElementById(btn.getAttribute('data-target'));
-                    if(targetForm) targetForm.classList.add('active-form');
-                });
-            });
         });
     </script>
 </body>

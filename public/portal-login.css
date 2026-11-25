@@ -1,0 +1,103 @@
+.portal-dialog {
+  width: min(420px, calc(100% - 32px));
+  max-height: calc(100dvh - 28px);
+  margin: auto;
+  border: 1px solid #dbe3ef;
+  border-radius: 24px;
+  background: #fff;
+  color: #0b1c3c;
+  box-shadow: 0 20px 60px #05081045;
+}
+.portal-dialog[open] {
+  animation: portal-enter 220ms ease-out both;
+}
+.portal-dialog::backdrop {
+  background: #050810a6;
+}
+.portal-login-form {
+  display: grid;
+  gap: 13px;
+  padding: 24px;
+  position: relative;
+}
+.portal-login-form .nusha-mark {
+  width: 24px;
+  height: 38px;
+}
+.portal-login-form h2 {
+  font-size: 24px;
+}
+.portal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: #f0f3f8;
+  color: inherit;
+  font-size: 22px;
+  cursor: pointer;
+}
+.portal-role-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+  padding: 4px;
+  background: #f0f3f8;
+  border-radius: 12px;
+}
+.portal-role-options button {
+  border: 0;
+  border-radius: 9px;
+  padding: 8px 3px;
+  background: transparent;
+  color: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.portal-role-options button[aria-pressed="true"] {
+  background: #0b1c3c;
+  color: #fff;
+}
+.portal-login-form label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.portal-login-form input {
+  min-width: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 16px;
+}
+.portal-login-submit {
+  border: 0;
+  border-radius: 11px;
+  padding: 11px;
+  background: #0b1c3c;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+}
+.portal-login-submit:disabled {
+  opacity: 0.65;
+}
+.portal-login-status {
+  min-height: 17px;
+  color: #42546e;
+  font-size: 12px;
+}
+@keyframes portal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(9px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

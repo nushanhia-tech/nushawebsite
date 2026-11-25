@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import SiteContent from "./site-content";
+import Accounts from "./accounts";
 import { createClient } from "@supabase/supabase-js";
 import {
   ArrowDownToLine,
@@ -81,10 +82,35 @@ export default function Home() {
 
   useEffect(() => {
     if (!db) return;
+    let handoff;
+    try {
+      handoff = sessionStorage.getItem("nusha-portal-session");
+      sessionStorage.removeItem("nusha-portal-session");
+    } catch {
+      // Storage may be disabled by the browser.
+    }
     const { data } = db.auth.onAuthStateChange((_event, current) => {
       setSession(current);
-      setLoaded(true);
+      if (!handoff) setLoaded(true);
     });
+    if (handoff) {
+      let tokens;
+      try {
+        tokens = JSON.parse(handoff);
+      } catch {
+        tokens = null;
+      }
+      if (!tokens) setLoaded(true);
+      else {
+        db.auth
+          .setSession(tokens)
+          .then(({ error }) => {
+            if (error) setNotice("Sign-in expired. Please try again.");
+          })
+          .catch(() => setNotice("Sign-in was interrupted. Please try again."))
+          .finally(() => setLoaded(true));
+      }
+    }
     return () => data.subscription.unsubscribe();
   }, []);
 
@@ -156,13 +182,23 @@ export default function Home() {
     setNotice("");
     const values = new FormData(event.currentTarget);
     try {
-      const result = await db.auth.signInWithPassword({
-        email: values.get("email"),
-        password: values.get("password"),
+      const response = await fetch("/api/portal/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: values.get("username"),
+          password: values.get("password"),
+          role: new URLSearchParams(window.location.search).get("role"),
+        }),
       });
-      if (result.error) setNotice(result.error.message);
-    } catch {
-      setNotice("Sign-in is temporarily unavailable. Try again.");
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+      const { error } = await db.auth.setSession(result.session);
+      if (error) throw error;
+    } catch (error) {
+      setNotice(
+        error.message || "Sign-in is temporarily unavailable. Try again.",
+      );
     } finally {
       setBusy(false);
     }
@@ -280,10 +316,12 @@ export default function Home() {
           ) : (
             <form onSubmit={signIn}>
               <label>
-                Email
+                Username
                 <input
-                  type="email"
-                  name="email"
+                  type="text"
+                  name="username"
+                  maxLength={40}
+                  autoCapitalize="none"
                   required
                   autoComplete="username"
                 />
@@ -575,7 +613,12 @@ export default function Home() {
             </div>
           )}
         </section>
-        {role === "admin" && db && <SiteContent db={db} />}
+        {role === "admin" && db && (
+          <>
+            <Accounts db={db} />
+            <SiteContent db={db} />
+          </>
+        )}
         <footer>
           <a href="/">NUS’HA public website</a>
           <button onClick={() => open({ type: "help" })}>

@@ -48,6 +48,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
     <title>Event Calendar - NUS'HA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="/brand.css">
+    <link rel="stylesheet" href="/portal-login.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -303,11 +304,11 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
                 
                 <!-- Portal Link inside mobile menu -->
                 <li class="mobile-portal-li">
-                    <a href="#" class="portal-btn open-portal-modal mobile-portal-btn">Portal Login</a>
+                    <a href="/portals" class="portal-btn open-portal-modal mobile-portal-btn" data-portal-login="student">Portal Login</a>
                 </li>
             </ul>
         </nav>
-        <a href="#" class="portal-btn open-portal-modal desktop-portal-btn">Portal</a>
+        <a href="/portals" class="portal-btn open-portal-modal desktop-portal-btn" data-portal-login="student">Portal</a>
     </header>
 
     <main class="inner-page-content" style="padding-top: 100px;">
@@ -393,37 +394,8 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
     </main>
 
     <!-- Portal Login Popup (Modal) -->
-    <div id="portalModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-modal"><i class="fa-solid fa-xmark"></i></span>
-            <div style="text-align:center; margin-bottom:20px;">
-                <h2 style="color:#0b1c3c; margin:0 0 5px 0; font-weight:900;">Portal Login</h2>
-                <p style="color:#64748b; font-size:13px; margin:0; font-weight:600;">Select your account type to continue</p>
-            </div>
-            
-            <div class="login-tabs">
-                <button class="tab-btn active" data-target="wing-login">Wing</button>
-                <button class="tab-btn" data-target="class-login">Class</button>
-                <button class="tab-btn" data-target="student-login">Student</button>
-                <button class="tab-btn" data-target="admin-login">Admin</button>
-            </div>
+    <?php include __DIR__ . '/portal-login.php'; ?>
 
-            <!-- Wing Login -->
-            <div id="wing-login" class="login-form active-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=wing">Continue to Wing Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-
-            <!-- Class Login -->
-            <div id="class-login" class="login-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=class">Continue to Class Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-
-            <!-- Student Login -->
-            <div id="student-login" class="login-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=student">Continue to Student Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-            <div id="admin-login" class="login-form"><a class="submit-btn" style="display:block; text-align:center; text-decoration:none;" href="/portals?role=admin">Continue to Admin Portal <i class="fa-solid fa-arrow-right-to-bracket"></i></a></div>
-        </div>
-    </div> 
-
-    <!-- ഫൂട്ടർ -->
-    <?php include __DIR__ . '/footer.php'; ?>
-
-    <!-- JavaScript For Interactive Calendar & PDF -->
     <script>
         const eventsData = <?php echo $events_json; ?>;
         
@@ -543,42 +515,7 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
             }
 
             // Modal Logic
-            const portalBtns = document.querySelectorAll('.portal-btn, .open-portal-modal');
-            const portalModal = document.getElementById('portalModal');
-            const closeModal = document.querySelector('.close-modal');
 
-            if (portalBtns.length > 0 && portalModal) {
-                portalBtns.forEach(btn => {
-                    btn.addEventListener('click', (e) => { 
-                        e.preventDefault(); 
-                        portalModal.classList.add('show'); 
-                        
-                        // Close mobile menu if it is open when modal opens
-                        if(mainNav && mainNav.classList.contains('nav-active')){
-                            mainNav.classList.remove('nav-active');
-                            if(mobileBtn) {
-                                const menuIcon = mobileBtn.querySelector('i');
-                                menuIcon.classList.remove('fa-xmark');
-                                menuIcon.classList.add('fa-bars');
-                            }
-                        }
-                    });
-                });
-                closeModal.addEventListener('click', () => portalModal.classList.remove('show'));
-                window.addEventListener('click', (e) => { if (e.target === portalModal) portalModal.classList.remove('show'); });
-            }
-
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const loginForms = document.querySelectorAll('.login-form');
-
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    loginForms.forEach(f => f.classList.remove('active-form'));
-                    btn.classList.add('active');
-                    document.getElementById(btn.getAttribute('data-target')).classList.add('active-form');
-                });
-            });
         });
     </script>
     <script>window.calendarReportEvents = <?php echo $report_events_json; ?>;</script>

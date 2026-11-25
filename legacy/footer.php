@@ -25,7 +25,7 @@
             </nav>
             <nav class="nf-links" aria-label="Footer resources">
                 <h3>Quick access</h3>
-                <a href="/portals?role=student">Student portal</a>
+                <a href="/portals?role=student" data-portal-login="student">Student portal</a>
                 <a href="calendar.php">Event calendar</a>
                 <a href="contact.php">Contact us</a>
                 <a href="index.php">Home</a>

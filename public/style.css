@@ -28,7 +28,7 @@ header.scrolled nav ul li a:hover, header.scrolled nav ul li a.active { color: #
 header.scrolled .portal-btn { background-color: #fbbc05; color: #0b1c3c; }
 header.scrolled .portal-btn:hover { background-color: #0b1c3c; color: #ffffff; }
 
-.logo { display: flex; align-items: center; gap: 15px; }
+.logo { display: flex; align-items: center; gap: 8px; }
 .logo-icon { height: 42px; width: auto; }
 .logo-text { display: flex; flex-direction: column; transition: color 0.3s; }
 .logo-title { font-size: 18px; font-weight: 800; line-height: 1.1; }
@@ -66,15 +66,25 @@ nav ul li a:hover, nav ul li a.active { color: #ffffff; }
 
 /* Scroll Down അനിമേഷൻ (Arrows) */
 .scroll-indicator {
-    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; text-decoration: none;
-    z-index: 10; opacity: 0.8; transition: 0.3s;
+    position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+    display: inline-flex; align-items: center; gap: 9px; padding: 8px 13px;
+    z-index: 10; color: #fff; background: #050810b3; border: 1px solid #ffffff40;
+    border-radius: 999px; text-decoration: none; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em;
 }
-.scroll-indicator:hover { opacity: 1; }
-.scroll-indicator p { color: white; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; margin-top: 5px; text-transform: uppercase; }
-.chevron-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 5px; }
-.chevron { width: 16px; height: 16px; border-right: 3px solid #fbbc05; border-bottom: 3px solid #fbbc05; transform: rotate(45deg); margin-top: -8px; }
-
+.scroll-indicator:hover, .scroll-indicator:focus-visible { border-color: #fbbc05; }
+.scroll-track {
+    width: 16px; height: 24px; border: 1px solid #fbbc05;
+    border-radius: 11px; display: grid; justify-items: center; padding-top: 4px;
+}
+.scroll-track span {
+    width: 4px; height: 6px; border-radius: 4px; background: #fbbc05;
+    animation: scroll-dot 1.55s ease-in-out 3;
+}
+@keyframes scroll-dot {
+    0%, 100% { transform: translateY(0); opacity: 1; }
+    60% { transform: translateY(7px); opacity: 0.45; }
+}
 @keyframes fadeUp { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
 .fade-in { animation: fadeIn 200ms ease-out; }

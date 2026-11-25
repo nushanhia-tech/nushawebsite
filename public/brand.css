@@ -36,3 +36,14 @@ body:not(:has(.hero)) header .nusha-mark {
     background: CanvasText;
   }
 }
+
+.logo .nusha-mark,
+.nf-brand .nusha-mark {
+  width: 24px;
+  flex-basis: 24px;
+}
+
+.logo,
+.nf-brand {
+  gap: 8px;
+}
