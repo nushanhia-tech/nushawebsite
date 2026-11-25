@@ -32,7 +32,7 @@ The shared logo is an SVG trace of the supplied NUS’HA logo image. It uses the
 
 ## Admin tools
 
-Apply all SQL migrations in filename order. On an existing deployment, apply `202611250001_admin_tools.sql` after the first two migrations. It adds announcement audiences, access and submission controls, fee imports, programme standings, and the saved card design. The account directory and account management use the server-side `SUPABASE_SERVICE_ROLE_KEY` already required for provisioning.
+Apply all SQL migrations in filename order. On an existing deployment, apply `202611250001_admin_tools.sql` after the first two migrations. It adds announcement audiences, access and submission controls, fee imports, programme standings, and the saved card design. Account management uses the server-side `SUPABASE_SERVICE_ROLE_KEY` and the profile privileges in `202611250002_profile_service_access.sql`.
 
 - **Work queue** shows pending and recent items. The sidebar also opens dedicated views for Bookings, Evaluations, Results, Print jobs, Announcements, Outreach, and Feedback. Search by title, name, or admission number, and optionally filter by month.
 - **Accounts** includes administrator accounts, student CSV import, password reset, photo URLs, and submission access. Removing access deactivates the account and preserves linked history.

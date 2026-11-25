@@ -172,21 +172,41 @@ export async function POST(request) {
       role,
       member_number: role === "student" ? profile.member_number : null,
     };
+    // Some Supabase projects create the profile in an Auth trigger.
+    // Complete the profile for this newly created Auth ID either way.
     let { error } = await db
       .from("profiles")
-      .insert({ ...basic, username, photo_url: profile.photo_url });
+      .upsert(
+        { ...basic, username, photo_url: profile.photo_url },
+        { onConflict: "id" },
+      );
     if (error?.code === "PGRST204" && role !== "admin" && !profile.photo_url) {
-      ({ error } = await db.from("profiles").insert(basic));
+      ({ error } = await db
+        .from("profiles")
+        .upsert(basic, { onConflict: "id" }));
     }
     if (error) {
       const cleanup = await db.auth.admin.deleteUser(id);
       if (cleanup.error) console.error("Portal account rollback failed", id);
+      console.error("Portal profile save failed", error.code);
+      const explanation = {
+        23505: "That username or admission number is already assigned.",
+        42501:
+          "Supabase denied profile writes. Run the Profile Service Access migration in SQL Editor.",
+        42703:
+          "The portal profile columns are missing. Run the Admin Tools migration in SQL Editor.",
+        PGRST204:
+          "The portal profile columns are missing. Run the Admin Tools migration and reload the Supabase schema cache.",
+        PGRST205:
+          "The profiles table is missing from the Supabase API. Run the Portal migration and reload the schema cache.",
+      }[error.code];
       return portalResponse(
         {
           error:
-            error.code === "23505"
-              ? "This admission number is already assigned."
-              : "The portal profile could not be created. Check the Admin Tools migration.",
+            explanation ||
+            "The portal profile could not be saved (" +
+              (error.code || "unknown error") +
+              ").",
         },
         error.code === "23505" ? 409 : 503,
       );
