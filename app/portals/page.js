@@ -14,6 +14,7 @@ const SiteContent = dynamic(() => import("./site-content"), {
   loading: () => <p role="status">Loading website editor…</p>,
 });
 const PageVisibility = dynamic(() => import("./page-visibility"));
+const PublicTextEditor = dynamic(() => import("./public-text-editor"));
 const Accounts = dynamic(() => import("./accounts"), {
   loading: () => <p role="status">Loading accounts…</p>,
 });
@@ -948,6 +949,7 @@ export default function Home() {
                 </p>
               ))}
             {adminSection === "website" && db && <PageVisibility db={db} />}
+            {adminSection === "website" && db && <PublicTextEditor db={db} />}
             {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
         ) : (role === "class" || role === "wing") && portalSection === "performance" ? (
