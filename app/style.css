@@ -1289,7 +1289,9 @@ form .secondary {
     background: #e8f5ed;
     box-shadow: 0 7px 18px #174d3224;
     transform: translateX(-50%);
-    transition: left 540ms cubic-bezier(.22, 1, .36, 1), background-color 260ms ease;
+    pointer-events: none;
+    will-change: left;
+    transition: left 650ms cubic-bezier(.22, 1.2, .36, 1), background-color 260ms ease;
   }
   .portal-mobile-nav button {
     position: relative;
@@ -1312,6 +1314,12 @@ form .secondary {
   }
   .portal-mobile-nav button[aria-current="page"] {
     color: #14734f;
+  }
+  .portal-mobile-nav button[aria-current="page"] svg {
+    transform: scale(1.12);
+  }
+  .portal-mobile-nav button:active svg {
+    transform: scale(.86);
   }
   .portal-mobile-nav button svg {
     transition: transform 300ms cubic-bezier(.2, .9, .2, 1), color 240ms ease;
