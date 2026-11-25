@@ -1088,7 +1088,7 @@ form .secondary {
     animation: portal-menu-enter 250ms cubic-bezier(.22, 1, .36, 1) both;
   }
   .portal-shell .workspace {
-    padding: 0 14px 124px;
+    padding: 0 14px max(140px, calc(120px + env(safe-area-inset-bottom)));
   }
   .portal-shell .topbar {
     min-height: 62px;
@@ -1275,14 +1275,7 @@ form .secondary {
     box-shadow: 0 -8px 30px #16251c14;
   }
   .portal-mobile-nav::after {
-    z-index: 0;
-    top: -46px;
-    left: -7%;
-    width: 114%;
-    height: 91px;
-    border-radius: 0 0 50% 50% / 0 0 42% 42%;
-    background: linear-gradient(110deg, #dcefe3, #b9ddc6 52%, #e9f5ed);
-    animation: portal-wave-drift 5.5s ease-in-out infinite alternate;
+    display: none;
   }
   .portal-mobile-indicator {
     position: absolute;
@@ -1321,7 +1314,7 @@ form .secondary {
     color: #14734f;
   }
   .portal-mobile-nav button[aria-current="page"] svg {
-    transform: translateY(-5px) scale(1.05);
+    transform: translateY(-13px) scale(1.05);
   }
   .portal-mobile-nav button svg {
     transition: transform 300ms cubic-bezier(.2, .9, .2, 1), color 240ms ease;
@@ -1351,10 +1344,6 @@ form .secondary {
   .portal-mobile-nav .portal-mobile-add[aria-current="page"] > span {
     color: #14734f;
   }
-}
-@keyframes portal-wave-drift {
-  from { transform: translateX(-1.5%) scaleX(1.01); }
-  to { transform: translateX(1.5%) scaleX(1.04); }
 }
 @keyframes portal-add-float {
   0%, 100% { transform: translateY(0); }
