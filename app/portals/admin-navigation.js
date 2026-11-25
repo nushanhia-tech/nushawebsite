@@ -133,10 +133,10 @@ export const adminSections = Object.fromEntries(
   ),
 );
 
-export function PortalNavigation({ role, kinds, filter, onFilter, signedIn, signOut, menuOpen, setMenuOpen }) {
+export function PortalNavigation({ className = "", role, kinds, filter, onFilter, signedIn, signOut, menuOpen, setMenuOpen }) {
   const Icon = { student: Users, wing: Layers3, class: ClipboardCheck, printer: Printer }[role] || Users;
   return (
-    <aside className="admin-sidebar" aria-label={`${role} portal navigation`}>
+    <aside className={`admin-sidebar ${className}`} aria-label={`${role} portal navigation`}>
       <div className="admin-sidebar-brand">
         <a className="mark" href="/" aria-label="NUS’HA public website"><span className="nusha-mark" aria-hidden="true" /></a>
         <div><strong>NUS’HA</strong><small>{role[0].toUpperCase() + role.slice(1)} Portal</small></div>

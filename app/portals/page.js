@@ -68,6 +68,55 @@ const initialDemo = Object.fromEntries(
   Object.keys(portals).map((role) => [role, demoItems(role)]),
 );
 
+function PortalOverview({ role, records, createItems, onCreate }) {
+  const pending = records.filter((item) => item.status === "Pending").length;
+  const active = records.filter((item) => ["Approved", "In progress", "Ready"].includes(item.status)).length;
+  const finished = records.filter((item) => ["Published", "Conducted", "Evaluated", "Collected", "Verified", "Paid", "Resolved"].includes(item.status)).length;
+  const days = Array.from({ length: 7 }, (_, index) => {
+    const day = new Date();
+    day.setDate(day.getDate() - (6 - index));
+    const key = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit" }).format(day);
+    const count = records.filter((item) => item.created_at && new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(item.created_at)) === key).length;
+    return { day, count };
+  });
+  const maximum = Math.max(1, ...days.map((day) => day.count));
+  const points = days.map(({ count }, index) => `${24 + index * 58},${142 - (count / maximum) * 112}`).join(" ");
+  const activityTotal = days.reduce((sum, day) => sum + day.count, 0);
+  const labels = new Intl.DateTimeFormat("en", { weekday: "short", timeZone: "Asia/Kolkata" });
+
+  return (
+    <section className="portal-overview" aria-label="Portal dashboard overview">
+      <div className="portal-metrics">
+        <article className="portal-metric portal-metric-primary"><span>Total tasks</span><strong>{records.length}</strong><small>Items in your workspace</small><ArrowUpRight size={19} aria-hidden="true" /></article>
+        <article className="portal-metric"><span>In progress</span><strong>{active}</strong><small>Moving forward</small><ArrowUpRight size={19} aria-hidden="true" /></article>
+        <article className="portal-metric"><span>Waiting</span><strong>{pending}</strong><small>Needs a next step</small><ArrowUpRight size={19} aria-hidden="true" /></article>
+        <article className="portal-metric"><span>Completed</span><strong>{finished}</strong><small>Finished items</small><ArrowUpRight size={19} aria-hidden="true" /></article>
+      </div>
+      <div className="portal-insight-grid">
+        <section className="panel portal-activity-card">
+          <div className="portal-card-heading"><div><h2>Activity</h2><p>Your updates over the last seven days</p></div><span className="portal-period">7 days</span></div>
+          <div className="portal-chart-wrap">
+            <svg className="portal-chart" viewBox="0 0 420 178" role="img" aria-label={`${activityTotal} tasks created in the last seven days`}>
+              <defs><linearGradient id="portal-chart-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#13865a" stopOpacity=".24" /><stop offset="100%" stopColor="#13865a" stopOpacity="0" /></linearGradient></defs>
+              {[30, 70, 110, 150].map((y) => <line key={y} x1="18" x2="408" y1={y} y2={y} className="portal-chart-grid" />)}
+              <polygon points={`24,150 ${points} 372,150`} fill="url(#portal-chart-fill)" />
+              <polyline points={points} fill="none" stroke="#13865a" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              {days.map(({ count }, index) => <circle key={index} cx={24 + index * 58} cy={142 - (count / maximum) * 112} r="4" fill="#fff" stroke="#13865a" strokeWidth="2" />)}
+            </svg>
+            <div className="portal-chart-labels">{days.map(({ day }, index) => <span key={index}>{labels.format(day)}</span>)}</div>
+          </div>
+          <div className="portal-chart-foot"><span><i /> New tasks</span><strong>{activityTotal} this week</strong></div>
+        </section>
+        <section className="panel portal-actions-card">
+          <div className="portal-card-heading"><div><h2>Quick actions</h2><p>Start something new</p></div><span className="portal-action-icon"><LayoutGrid size={18} /></span></div>
+          {createItems.length ? <div className="portal-quick-actions">{createItems.map((kind) => <button type="button" key={kind} onClick={() => onCreate(kind)}><span className="portal-quick-icon"><Plus size={18} /></span><span>{kinds[kind].action}<small>Open a new request</small></span><ArrowUpRight size={17} /></button>)}</div> : <p className="portal-no-actions">There are no new actions for this portal right now.</p>}
+          <div className="portal-role-note"><span className="portal-role-dot" /><span>{role === "student" ? "Your membership and dues are ready below." : "Your submissions and updates appear in your task list."}</span></div>
+        </section>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   const [role, setRole] = useState("admin");
   const [records, setRecords] = useState([]);
@@ -582,7 +631,7 @@ export default function Home() {
     );
 
   return (
-    <div className="shell admin-shell">
+    <div className={"shell admin-shell" + (isAdmin ? "" : " portal-shell")}>
       {isAdmin ? (
         <AdminNavigation
           section={adminSection}
@@ -595,6 +644,7 @@ export default function Home() {
         />
       ) : (
         <PortalNavigation
+          className={"role-sidebar" + (adminMenuOpen ? " portal-mobile-open" : "")}
           role={role}
           kinds={portal.kinds}
           filter={filter}
@@ -731,7 +781,7 @@ export default function Home() {
           </p>
         )}
         {role === "student" && (
-          <div className="student-row">
+          <div className="student-row" id="student-membership">
             <section className="panel">
               <h2>Digital membership</h2>
               <CardPreview
@@ -762,6 +812,15 @@ export default function Home() {
               )}
             </section>
           </div>
+        )}
+
+        {role !== "admin" && (
+          <PortalOverview
+            role={role}
+            records={recordsForRole}
+            createItems={portal.create}
+            onCreate={(kind) => open({ type: "create", kind })}
+          />
         )}
 
         {role === "admin" ? (
@@ -822,11 +881,11 @@ export default function Home() {
             {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
         ) : (
-          <section className="work" aria-labelledby="work-title">
+          <section className="work" id="portal-work" aria-labelledby="work-title">
             <div className="work-head">
               <div>
                 <h2 id="work-title">
-                  {role === "printer" ? "Print queue" : "Work overview"}
+                  {role === "printer" ? "Print queue" : "Recent tasks"}
                 </h2>
                 <p>
                   {shown.length} {shown.length === 1 ? "item" : "items"}
@@ -947,6 +1006,26 @@ export default function Home() {
           </button>
         </footer>
       </main>
+
+      {role !== "admin" && (
+        <nav className="portal-mobile-nav" aria-label="Mobile portal navigation">
+          <button type="button" onClick={() => { setFilter("all"); setSearch(""); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+            <LayoutGrid size={20} /><span>Home</span>
+          </button>
+          <button type="button" onClick={() => { setFilter("all"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
+            <List size={20} /><span>Tasks</span>
+          </button>
+          <button className="portal-mobile-add" type="button" aria-label={portal.create.length ? kinds[portal.create[0]].action : "No new action available"} disabled={!portal.create.length} onClick={() => portal.create[0] && open({ type: "create", kind: portal.create[0] })}>
+            <span><Plus size={23} /></span><small>Add</small>
+          </button>
+          <button type="button" onClick={() => { setFilter("notice"); setSearch(""); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
+            <Bell size={20} /><span>Updates</span>
+          </button>
+          <button type="button" aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen(!adminMenuOpen)}>
+            <RoleIcon size={20} /><span>Menu</span>
+          </button>
+        </nav>
+      )}
 
       <dialog ref={dialog} onClose={() => setModal(null)}>
         {modal && (
