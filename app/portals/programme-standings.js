@@ -59,7 +59,9 @@ export default function ProgrammeStandings({ db, role }) {
     const form = event.currentTarget;
     const values = Object.fromEntries(new FormData(form));
     run(async () => {
-      const { error } = await db.from("programme_standings").insert(values);
+      const placements = Object.entries(fields).slice(2).filter(([key]) => values[key]?.trim()).map(([key, label]) => ({ label, admission: values[key].trim() }));
+      if (!placements.length) throw new Error("Enter at least one admission number.");
+      const { error } = await db.rpc("publish_shared_standings", { programme: values.programme_name, programme_category: values.category, placements });
       if (error) throw error;
       form.reset();
       await refresh();
@@ -89,11 +91,11 @@ export default function ProgrammeStandings({ db, role }) {
           <form className="account-form" onSubmit={publish}>
             {Object.entries(fields).map(([key, label], index) => (
               <label key={key}>
-                {label}
+                  {index > 1 ? label + " — admission number" : label}
                 <input
                   name={key}
                   required={key === "programme_name"}
-                  maxLength={index === 0 ? 160 : index === 1 ? 120 : 300}
+                  maxLength={index === 0 ? 160 : index === 1 ? 120 : 80}
                 />
               </label>
             ))}

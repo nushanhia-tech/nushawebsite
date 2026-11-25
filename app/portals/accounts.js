@@ -243,6 +243,25 @@ export default function Accounts({ db, activeId }) {
           </button>
           {account.id === selected && (
             <div className="admin-account-tools">
+              {account.role === "student" && (
+                <form className="account-form" onSubmit={(event) => {
+                  event.preventDefault();
+                  const classId = new FormData(event.currentTarget).get("classId");
+                  run(async () => {
+                    const { error } = await db.rpc("admin_set_student_class", { student_id: account.id, selected_class: classId || null });
+                    if (error) throw error;
+                    setNotice("Student class updated.");
+                  });
+                }}>
+                  <label>Student's class
+                    <select name="classId" defaultValue={account.class_id || ""}>
+                      <option value="">No class assigned</option>
+                      {accounts.filter((entry) => entry.role === "class" && entry.active !== false).map((entry) => <option key={entry.id} value={entry.id}>{entry.display_name}</option>)}
+                    </select>
+                  </label>
+                  <button className="secondary" disabled={busy}>Save class</button>
+                </form>
+              )}
               <form
                 className="account-form"
                 onSubmit={(event) => {
