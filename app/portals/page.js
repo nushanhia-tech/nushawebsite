@@ -333,6 +333,7 @@ export default function Home() {
   function selectPortalSection(value) {
     setPortalSection(value);
     setFilter(value === "overview" || value === "tasks" ? "all" : value);
+    setView(value === "overview" ? "board" : "list");
     setSearch("");
     setAdminMenuOpen(false);
   }
@@ -935,7 +936,7 @@ export default function Home() {
                     onChange={(event) => setSearch(event.target.value)}
                   />
                 </label>
-                <div className="segmented" aria-label="View options">
+                {portalSection === "overview" && <div className="segmented" aria-label="View options">
                   <button
                     aria-label="Board view"
                     aria-pressed={view === "board"}
@@ -950,10 +951,10 @@ export default function Home() {
                   >
                     <List size={18} />
                   </button>
-                </div>
+                </div>}
               </div>
             </div>
-            {(portalSection === "overview" || portalSection === "tasks") && (
+            {portalSection === "overview" && (
             <div className="filter-row">
               <div className="filters" aria-label="Filter items">
                 {["all", ...portal.kinds].map((kind) => (

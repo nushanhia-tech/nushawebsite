@@ -1294,7 +1294,7 @@ form .secondary {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     align-items: end;
     min-height: 83px;
-    padding: 19px 8px max(8px, env(safe-area-inset-bottom));
+    padding: 19px 0 max(8px, env(safe-area-inset-bottom));
     border: 0;
     background: transparent;
     box-shadow: none;
