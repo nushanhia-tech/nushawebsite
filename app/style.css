@@ -957,6 +957,32 @@ form .secondary {
 .admin-body .site-content {
   margin-top: 0;
 }
+.photo-upload {
+  display: grid;
+  gap: 7px;
+  margin: 7px 0 12px;
+}
+.photo-upload input[type="file"] {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 9px;
+  border: 1px dashed #b8c7dc;
+  border-radius: 10px;
+  background: #f7f9fc;
+}
+.photo-upload small {
+  color: var(--muted);
+}
+.photo-upload-preview {
+  display: block;
+  width: 96px;
+  height: 76px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+}
 .admin-queue {
   display: grid;
   gap: 16px;

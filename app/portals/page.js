@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import AdminQueue from "./admin-queue";
-import AdminNavigation, { adminSections } from "./admin-navigation";
+import AdminNavigation, { PortalNavigation, adminSections } from "./admin-navigation";
 import { AdminEditFields, OutreachFields } from "./admin-item-fields";
 import { CardPreview, defaultCard } from "./id-card";
 import { supabaseProjectUrl } from "../../lib/supabase-url";
@@ -38,12 +38,10 @@ import {
   Layers3,
   LayoutGrid,
   List,
-  LogOut,
   Plus,
   Printer,
   Search,
   ShieldCheck,
-  Sparkles,
   Users,
   X,
 } from "lucide-react";
@@ -584,7 +582,7 @@ export default function Home() {
     );
 
   return (
-    <div className={"shell" + (isAdmin ? " admin-shell" : "")}>
+    <div className="shell admin-shell">
       {isAdmin ? (
         <AdminNavigation
           section={adminSection}
@@ -596,41 +594,19 @@ export default function Home() {
           setMenuOpen={setAdminMenuOpen}
         />
       ) : (
-        <aside className="rail" aria-label="Portal navigation">
-          <a className="mark" href="/" aria-label="NUS’HA home">
-            <span className="nusha-mark" aria-hidden="true" />
-          </a>
-          <div className="rail-links">
-            {Object.entries(portals)
-              .filter(([id]) => !db || id === role)
-              .map(([id, entry]) => {
-                const Icon = roleIcons[id];
-                return (
-                  <button
-                    className={id === role ? "rail-active" : ""}
-                    key={id}
-                    title={entry.name}
-                    aria-label={entry.name + " portal"}
-                    aria-current={id === role ? "page" : undefined}
-                    onClick={() => selectRole(id)}
-                  >
-                    <Icon size={19} />
-                    <span>{entry.name}</span>
-                  </button>
-                );
-              })}
-          </div>
-          {db && (
-            <button
-              className="signout"
-              title="Sign out"
-              aria-label="Sign out"
-              onClick={signOut}
-            >
-              <LogOut size={19} />
-            </button>
-          )}
-        </aside>
+        <PortalNavigation
+          role={role}
+          kinds={portal.kinds}
+          filter={filter}
+          onFilter={(value) => {
+            setFilter(value);
+            setAdminMenuOpen(false);
+          }}
+          signedIn={Boolean(db)}
+          signOut={signOut}
+          menuOpen={adminMenuOpen}
+          setMenuOpen={setAdminMenuOpen}
+        />
       )}
       <main className="workspace">
         <header className="topbar">
@@ -717,14 +693,15 @@ export default function Home() {
             )}
           </section>
         ) : (
-          <section className="hero">
-            <div className="hero-content">
-              <div className="eyebrow">
-                <RoleIcon size={16} /> {portal.name} portal
+          <section className="admin-intro">
+            <div className="admin-intro-content">
+              <div>
+                <div className="eyebrow"><RoleIcon size={16} /> {portal.name} portal</div>
+                <h1>{portal.title}</h1>
+                <p>{portal.description}</p>
               </div>
-              <h1>{portal.title}</h1>
-              <p>{portal.description}</p>
-              {portal.create.length > 0 && (
+              <div className="admin-intro-actions">
+                {portal.create.length > 0 && (
                 <button
                   className="primary"
                   onClick={() =>
@@ -734,16 +711,8 @@ export default function Home() {
                   <Plus size={17} />
                   {kinds[portal.create[0]].action}
                 </button>
-              )}
-            </div>
-            <div className="hero-art" aria-hidden="true">
-              <div className="orb orbit-one" />
-              <div className="orb orbit-two" />
-              <div className="orb orbit-three" />
-              <div className="emblem">
-                <RoleIcon strokeWidth={1.2} size={56} />
+                )}
               </div>
-              <Sparkles className="spark" size={24} />
             </div>
           </section>
         )}
@@ -1055,7 +1024,7 @@ export default function Home() {
                     </label>
                   )}
                   {role === "admin" && modal.kind === "outreach" && (
-                    <OutreachFields create />
+                    <OutreachFields create db={db} />
                   )}
                   <button className="primary" disabled={busy}>
                     Save <Check size={16} />
@@ -1105,7 +1074,7 @@ export default function Home() {
                     );
                   }}
                 >
-                  <AdminEditFields item={modal.item} />
+                  <AdminEditFields item={modal.item} db={db} />
                   <button className="primary" disabled={busy}>
                     Save changes
                   </button>

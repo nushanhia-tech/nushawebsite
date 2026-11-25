@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
+import PhotoUpload from "./photo-upload";
 
 const fields = {
   events: [
     ["title", "Title"],
     ["event_date", "Date label"],
     ["description", "Description"],
-    ["image", "Image URL", "url"],
+    ["image", "Photo"],
   ],
   highlights: [
     ["title", "Title"],
     ["event_date", "Date label"],
     ["description", "Description"],
-    ["image", "Image URL", "url"],
+    ["image", "Photo"],
   ],
   updates: [
     ["content", "Update"],
@@ -22,9 +23,12 @@ const fields = {
     ["name", "Name"],
     ["position", "Position"],
     ["committee_year", "Committee year", "number"],
-    ["photo", "Photo URL", "url"],
+    ["photo", "Photo"],
   ],
-  settings: [["outreach_status", "Outreach access"]],
+  settings: [
+    ["outreach_status", "Outreach access"],
+    ["website_status", "Main website visibility"],
+  ],
 };
 
 export default function SiteContent({ db, outreachOnly = false }) {
@@ -41,8 +45,6 @@ export default function SiteContent({ db, outreachOnly = false }) {
       .select("id,content")
       .eq("section", section)
       .order("id", { ascending: false });
-    if (section === "settings")
-      request = request.not("content->outreach_status", "is", null);
     if (signal) request = request.abortSignal(signal);
     const { data, error } = await request;
     if (signal?.aborted) return;
@@ -90,7 +92,9 @@ export default function SiteContent({ db, outreachOnly = false }) {
     mutate(operation, "Website content saved.");
   }
 
-  const current = rows;
+  const current = section === "settings"
+    ? rows.filter((row) => row.content.outreach_status || row.content.website_status)
+    : rows;
   return (
     <section className="panel site-content">
       <h2>{outreachOnly ? "Outreach visibility" : "Public website content"}</h2>
@@ -120,7 +124,7 @@ export default function SiteContent({ db, outreachOnly = false }) {
         <div className="content-row" key={row.id}>
           <span>
             {section === "settings"
-              ? "Outreach is " + row.content.outreach_status
+              ? `Website ${row.content.website_status || "on"} · outreach ${row.content.outreach_status || "open"}`
               : row.content[fields[section][0][0]]}
           </span>
           <button
@@ -173,14 +177,19 @@ export default function SiteContent({ db, outreachOnly = false }) {
           {fields[section].map(([name, label, type]) => (
             <label key={name}>
               {label}
-              {name === "outreach_status" ? (
+              {name.endsWith("_status") ? (
                 <select
                   name={name}
-                  defaultValue={draft.content[name] || "open"}
+                  defaultValue={draft.content[name] || (name === "website_status" ? "on" : "open")}
                 >
-                  <option value="open">Open</option>
-                  <option value="closed">Closed</option>
+                  {name === "website_status" ? (
+                    <><option value="on">On — visible to visitors</option><option value="off">Off — hidden from visitors</option></>
+                  ) : (
+                    <><option value="open">Open</option><option value="closed">Closed</option></>
+                  )}
                 </select>
+              ) : name === "image" || name === "photo" ? (
+                <PhotoUpload db={db} name={name} label="Attach image" value={draft.content[name] || ""} />
               ) : (
                 <input
                   name={name}

@@ -1,4 +1,6 @@
-export function OutreachFields({ details = {}, create }) {
+import PhotoUpload from "./photo-upload";
+
+export function OutreachFields({ details = {}, create, db }) {
   return (
     <>
       <label>
@@ -25,24 +27,8 @@ export function OutreachFields({ details = {}, create }) {
           maxLength={160}
         />
       </label>
-      <label>
-        Thumbnail URL
-        <input
-          name="thumbnail"
-          type="url"
-          defaultValue={details.thumbnail ?? ""}
-          maxLength={1000}
-        />
-      </label>
-      <label>
-        Author photo URL
-        <input
-          name="author_photo"
-          type="url"
-          defaultValue={details.author_photo ?? ""}
-          maxLength={1000}
-        />
-      </label>
+      <PhotoUpload db={db} name="thumbnail" label="Post image" value={details.thumbnail ?? ""} />
+      <PhotoUpload db={db} name="author_photo" label="Author photo" value={details.author_photo ?? ""} />
       {create && (
         <label className="confirmation">
           <input type="checkbox" name="publish" value="true" /> Publish
@@ -53,7 +39,7 @@ export function OutreachFields({ details = {}, create }) {
   );
 }
 
-export function AdminEditFields({ item }) {
+export function AdminEditFields({ item, db }) {
   const details = item.admin_details ?? {};
   return (
     <>
@@ -77,7 +63,7 @@ export function AdminEditFields({ item }) {
         />
       </label>
       {item.kind === "outreach" ? (
-        <OutreachFields details={item.public_details ?? {}} />
+        <OutreachFields details={item.public_details ?? {}} db={db} />
       ) : (
         <>
           <label>

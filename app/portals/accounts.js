@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { adminAccountRequest, csvRows } from "./admin-client";
+import PhotoUpload from "./photo-upload";
 
 const labels = {
   student: "Student",
@@ -175,7 +176,7 @@ export default function Accounts({ db, activeId }) {
           )}
           {role !== "admin" && (
             <label>
-              Photo URL <input name="photoUrl" type="url" maxLength={500} />
+              <PhotoUpload db={db} name="photoUrl" label={`${labels[role]} photo`} />
             </label>
           )}
           <label>
@@ -273,12 +274,11 @@ export default function Accounts({ db, activeId }) {
                   </label>
                 )}
                 <label>
-                  Photo URL
-                  <input
+                  <PhotoUpload
+                    db={db}
                     name="photoUrl"
-                    type="url"
-                    defaultValue={account.photo_url || ""}
-                    maxLength={500}
+                    label="Profile photo"
+                    value={account.photo_url || ""}
                   />
                 </label>
                 <button className="primary" disabled={busy}>
