@@ -14,8 +14,8 @@ export const portals = {
     group: "Programme team",
     title: "Programme workspace",
     description: "Organize programmes, book venues and share results.",
-    kinds: ["booking", "activity", "result", "print", "notice"],
-    create: ["booking", "activity", "result", "print"],
+    kinds: ["booking", "activity", "result", "print", "notice", "support"],
+    create: ["booking", "activity", "result", "print", "support"],
   },
   class: {
     name: "Class",
