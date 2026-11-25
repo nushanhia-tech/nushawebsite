@@ -146,6 +146,7 @@ export function PortalNavigation({ className = "", role, kinds, section, onSelec
         <nav className="admin-sidebar-nav" aria-label="Portal sections">
           <div className="admin-nav-group"><p>Workspace</p>
             <button type="button" aria-current={section === "overview" ? "page" : undefined} onClick={() => onSelect("overview")}><Icon size={17} /><span>Overview</span></button>
+            {(role === "class" || role === "wing") && <button type="button" aria-current={section === "performance" ? "page" : undefined} onClick={() => onSelect("performance")}><Trophy size={17} /><span>Performance</span></button>}
             {role === "student" && <button type="button" aria-current={section === "membership" ? "page" : undefined} onClick={() => onSelect("membership")}><IdCard size={17} /><span>Membership</span></button>}
             <button type="button" aria-current={section === "tasks" ? "page" : undefined} onClick={() => onSelect("tasks")}><Inbox size={17} /><span>All tasks</span></button>
             {kinds.filter((kind) => kind !== "notice").map((kind) => {

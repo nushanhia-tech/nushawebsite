@@ -869,6 +869,19 @@ export default function Home() {
               ))}
             {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
+        ) : (role === "class" || role === "wing") && portalSection === "performance" ? (
+          <section className="panel portal-membership-view" aria-labelledby="performance-title">
+            <h2 id="performance-title">Programme performance</h2>
+            <p>Points from evaluated programme submissions.</p>
+            <div className="portal-metrics" style={{ marginTop: 18 }}>
+              <article className="portal-metric portal-metric-primary"><span>Total points</span><strong>{recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").reduce((sum, item) => sum + (Number(item.score) || 0), 0)}</strong><small>Evaluated programmes</small></article>
+              <article className="portal-metric"><span>Reports submitted</span><strong>{recordsForRole.filter((item) => item.kind === "activity").length}</strong><small>Programme submissions</small></article>
+            </div>
+            <h3 style={{ marginTop: 24 }}>Recently evaluated</h3>
+            <div className="list" style={{ marginTop: 12 }}>
+              {recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").length ? recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").map((item) => <Item key={item.id} item={item} onClick={() => open({ type: "detail", item })} />) : <p className="empty">No evaluated programmes yet.</p>}
+            </div>
+          </section>
         ) : role === "student" && portalSection === "membership" ? (
           <section key="membership" className="panel portal-membership-view" id="student-membership">
             <div className="portal-card-heading"><div><h2>Digital membership</h2><p>Your student membership card.</p></div><span className="portal-action-icon"><IdCard size={18} /></span></div>
