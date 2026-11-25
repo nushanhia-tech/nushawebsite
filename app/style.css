@@ -898,3 +898,91 @@ form .secondary {
     grid-column: 1 / -1;
   }
 }
+
+.admin-tools-stack {
+  display: grid;
+  gap: 14px;
+}
+.admin-disclosure {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.admin-disclosure summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.admin-disclosure[open] > * + * {
+  margin-top: 12px;
+}
+.admin-account-row {
+  flex-wrap: wrap;
+}
+.admin-account-tools {
+  display: grid;
+  width: 100%;
+  gap: 13px;
+  padding: 12px;
+  background: var(--surface, #f5f7fb);
+  border-radius: 8px;
+}
+.admin-input,
+.dialog-body textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font: inherit;
+}
+.admin-delete {
+  margin: 10px 0;
+}
+.id-card-preview {
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  max-width: 100%;
+  background: #14274b center / cover no-repeat;
+  border-radius: 12px;
+  container-type: inline-size;
+}
+.id-card-photo,
+.id-card-copy {
+  position: absolute;
+}
+.id-card-photo {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  color: #14274b;
+  background: #dbeafe;
+  font-weight: 750;
+}
+.id-card-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.id-card-copy {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.admin-card-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr));
+  gap: 12px;
+}
+
+.admin-tools-stack {
+  grid-template-columns: minmax(0, 1fr);
+}
+.admin-tools-stack > *,
+.admin-card-fields label {
+  min-width: 0;
+}
+.admin-tools-stack .site-content {
+  grid-template-columns: minmax(0, 1fr);
+}

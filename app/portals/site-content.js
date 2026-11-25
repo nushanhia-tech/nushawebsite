@@ -41,6 +41,8 @@ export default function SiteContent({ db }) {
       .select("id,content")
       .eq("section", section)
       .order("id", { ascending: false });
+    if (section === "settings")
+      request = request.not("content->outreach_status", "is", null);
     if (signal) request = request.abortSignal(signal);
     const { data, error } = await request;
     if (signal?.aborted) return;
@@ -73,7 +75,10 @@ export default function SiteContent({ db }) {
 
   function save(event) {
     event.preventDefault();
-    const content = Object.fromEntries(new FormData(event.currentTarget));
+    const content = {
+      ...draft.content,
+      ...Object.fromEntries(new FormData(event.currentTarget)),
+    };
     if (section === "leadership")
       content.committee_year = content.committee_year
         ? Number(content.committee_year)
@@ -119,6 +124,23 @@ export default function SiteContent({ db }) {
           >
             Edit
           </button>
+          {section !== "settings" && (
+            <button
+              className="secondary"
+              disabled={busy}
+              onClick={() => {
+                if (window.confirm("Delete this website entry?")) {
+                  if (draft?.id === row.id) setDraft(null);
+                  mutate(
+                    db.from("site_content").delete().eq("id", row.id),
+                    "Website entry deleted.",
+                  );
+                }
+              }}
+            >
+              Delete
+            </button>
+          )}
         </div>
       ))}
       {loading && (

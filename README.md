@@ -29,3 +29,14 @@ The shared logo is an SVG trace of the supplied NUS’HA logo image. It uses the
 2. Use the Supabase Auth user ID as the ID of a row in `public.profiles`, with `role = 'admin'` and a display name. Supabase Auth accounts with an assigned role can sign in from the public popup by selecting the matching portal type.
 3. Add `SUPABASE_SERVICE_ROLE_KEY` as a server-only Vercel variable and redeploy. Admin can then create Student, Class, and Wing accounts from **Create portal account**. The service key is used only for authorized account creation on the server. Staff issue each member a username and initial password directly. The internal account address is generated automatically, so users do not need to supply an email or confirm an email.
 4. To migrate existing portal users, update each Supabase Auth user's email to `username@accounts.nusha.invalid` and keep the same user ID and profile row. Email-based portal forms have been replaced by username sign-in.
+
+## Admin tools
+
+Apply all SQL migrations in filename order. On an existing deployment, apply `202611250001_admin_tools.sql` after the first two migrations. It adds announcement audiences, access and submission controls, fee imports, programme standings, and the saved card design. The account directory and account management use the server-side `SUPABASE_SERVICE_ROLE_KEY` already required for provisioning.
+
+- **Work queue** covers editing and scoring submissions, booking approvals, outreach moderation and editing, announcements, results, fees, and feedback. Search by title, name, or admission number, and optionally filter by month.
+- **Accounts** includes administrator accounts, student CSV import, password reset, photo URLs, and submission access. Removing access deactivates the account and preserves linked history.
+- **Website** manages programmes, highlights, updates, the leadership roster, and outreach visibility.
+- **Tools** covers fee assignment and imports, global submission access, programme calendars and reports, and membership card layouts and PDFs. Wings can publish placements and grades from the Wing dashboard.
+
+Student-account CSV columns are Name, Admission number, Password. Fee CSV columns are Admission number, Description, Category, Amount. Both use a header row. Student account import reports failed rows individually. A fee import either saves all rows or saves none. Keep student CSV files private. Photos in the bulk card PDF require the image host to permit browser cross-origin access; the exporter uses initials when a photo cannot be loaded.

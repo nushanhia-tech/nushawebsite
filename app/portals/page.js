@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import AdminQueue from "./admin-queue";
+import { AdminEditFields, OutreachFields } from "./admin-item-fields";
+import { CardPreview, defaultCard } from "./id-card";
 import { supabaseProjectUrl } from "../../lib/supabase-url";
 
 const SiteContent = dynamic(() => import("./site-content"), {
@@ -10,6 +12,15 @@ const SiteContent = dynamic(() => import("./site-content"), {
 });
 const Accounts = dynamic(() => import("./accounts"), {
   loading: () => <p role="status">Loading accounts…</p>,
+});
+const AdminTools = dynamic(() => import("./admin-tools"), {
+  loading: () => <p role="status">Loading tools…</p>,
+});
+const CardDesigner = dynamic(() => import("./card-designer"), {
+  loading: () => <p role="status">Loading card designer…</p>,
+});
+const ProgrammeStandings = dynamic(() => import("./programme-standings"), {
+  loading: () => <p role="status">Loading programme results…</p>,
 });
 import { createClient } from "@supabase/supabase-js";
 import {
@@ -64,6 +75,7 @@ export default function Home() {
   const [recordsLoading, setRecordsLoading] = useState(Boolean(db));
   const [adminSection, setAdminSection] = useState("queue");
   const [queueVersion, setQueueVersion] = useState(0);
+  const [cardDesign, setCardDesign] = useState(defaultCard);
   const [demo, setDemo] = useState(initialDemo);
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -77,7 +89,7 @@ export default function Home() {
   const [busy, setBusy] = useState(false);
   const dialog = useRef(null);
 
-  async function refresh(signal) {
+  async function refresh(signal, profileRole = profile?.role) {
     let query = db
       .from("work_items")
       .select("*")
@@ -87,7 +99,31 @@ export default function Home() {
     if (signal?.aborted) return;
     setRecordsLoading(false);
     if (result.error) setNotice(result.error.message);
-    else setRecords(result.data);
+    else {
+      setRecords(result.data);
+      if (profileRole === "admin") {
+        const ids = [
+          ...new Set(
+            result.data
+              .flatMap((item) => [item.owner_id, item.recipient_id])
+              .filter(Boolean),
+          ),
+        ];
+        if (ids.length) {
+          const { data } = await db.rpc("admin_record_people", { ids });
+          if (data && !signal?.aborted) {
+            const people = new Map(data.map((person) => [person.id, person]));
+            setRecords((current) =>
+              current.map((item) => ({
+                ...item,
+                sender: people.get(item.owner_id)?.display_name,
+                recipient: people.get(item.recipient_id),
+              })),
+            );
+          }
+        }
+      }
+    }
   }
 
   useEffect(() => {
@@ -151,7 +187,7 @@ export default function Home() {
       else {
         setRole(result.data.role);
         setProfile(result.data);
-        await refresh(controller.signal);
+        await refresh(controller.signal, result.data.role);
       }
     }
     load();
@@ -160,6 +196,17 @@ export default function Home() {
       controller.abort();
     };
   }, [userId]);
+
+  useEffect(() => {
+    if (!db || !profile?.id || profile.role !== "student") return;
+    let active = true;
+    db.rpc("portal_card_design").then(({ data }) => {
+      if (active && data) setCardDesign({ ...defaultCard, ...data });
+    });
+    return () => {
+      active = false;
+    };
+  }, [profile?.id, profile?.role]);
 
   useEffect(() => {
     if (modal) dialog.current?.showModal();
@@ -230,12 +277,50 @@ export default function Home() {
     setError("");
     const values = Object.fromEntries(new FormData(event.currentTarget));
     delete values.kind;
+    const {
+      target_role,
+      category,
+      author_name,
+      author_role,
+      thumbnail,
+      author_photo,
+      publish,
+    } = values;
+    for (const key of [
+      "target_role",
+      "category",
+      "author_name",
+      "author_role",
+      "thumbnail",
+      "author_photo",
+      "publish",
+    ])
+      delete values[key];
     const item = {
       ...values,
       title: values.title.trim(),
       kind: modal.kind,
       amount: values.amount ? Number(values.amount) : null,
     };
+    if (target_role) item.target_role = target_role;
+    if (
+      modal.kind === "outreach" &&
+      (category !== "Article" ||
+        author_name ||
+        author_role ||
+        thumbnail ||
+        author_photo ||
+        publish === "true")
+    ) {
+      item.admin_details = {
+        category,
+        author_name,
+        author_role,
+        thumbnail,
+        author_photo,
+        publish,
+      };
+    }
     try {
       if (!item.title) throw new Error("Enter a title.");
       if (db) {
@@ -243,9 +328,10 @@ export default function Home() {
         if (result.error) throw result.error;
         await refresh();
       } else {
-        const status = ["notice", "result"].includes(item.kind)
-          ? "Published"
-          : "Pending";
+        const status =
+          ["notice", "result"].includes(item.kind) || publish === "true"
+            ? "Published"
+            : "Pending";
         setDemo((previous) => ({
           ...previous,
           [role]: [
@@ -279,11 +365,17 @@ export default function Home() {
     const score = values.has("score") ? Number(values.get("score")) : null;
     try {
       if (db) {
-        const result = await db.rpc("advance_item", {
-          item_id: item.id,
-          next_status: status,
-          points: score,
-        });
+        const result =
+          status === "Paid"
+            ? await db.rpc("admin_manage_item", {
+                item_id: item.id,
+                operation: "mark_paid",
+              })
+            : await db.rpc("advance_item", {
+                item_id: item.id,
+                next_status: status,
+                points: score,
+              });
         if (result.error) throw result.error;
         await refresh();
       } else {
@@ -304,6 +396,100 @@ export default function Home() {
       setModal(null);
     } catch (failure) {
       setError(failure.message || "The status could not be updated.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function manageItem(item, operation, fields = {}) {
+    setBusy(true);
+    setError("");
+    try {
+      if (db) {
+        const { error } = await db.rpc("admin_manage_item", {
+          item_id: item.id,
+          operation,
+          fields,
+        });
+        if (error) throw error;
+        await refresh();
+      } else {
+        setDemo((previous) => ({
+          ...previous,
+          [role]: previous[role].flatMap((row) => {
+            if (row.id !== item.id) return [row];
+            if (operation === "delete") return [];
+            const updated = {
+              ...row,
+              title: fields.title,
+              detail: fields.detail,
+            };
+            return [
+              item.kind === "outreach"
+                ? {
+                    ...updated,
+                    public_details: { ...row.public_details, ...fields },
+                  }
+                : {
+                    ...updated,
+                    scheduled_on: fields.scheduled_on,
+                    score: fields.score === "" ? null : Number(fields.score),
+                    status: fields.score === "" ? "Pending" : "Evaluated",
+                    admin_details: fields,
+                  },
+            ];
+          }),
+        }));
+      }
+      setNotice(operation === "delete" ? "Item deleted." : "Item updated.");
+      setModal(null);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function exportReport(event) {
+    event.preventDefault();
+    setBusy(true);
+    setError("");
+    try {
+      const values = new FormData(event.currentTarget);
+      const type = values.get("reportType");
+      const month = values.get("month");
+      const matches = recordsForRole.filter(
+        (item) =>
+          (type === "calendar"
+            ? item.kind === "booking" &&
+              ["Approved", "Conducted"].includes(item.status)
+            : item.kind === "result") &&
+          (!month ||
+            (item.scheduled_on || item.created_at || "").slice(0, 7) === month),
+      );
+      if (db && type === "results") {
+        const { data, error } = await db.rpc("admin_programme_standings");
+        if (error && error.code !== "PGRST202") throw error;
+        const { standingsDetail } = await import("./programme-standings");
+        for (const row of data ?? []) {
+          if (month && row.created_at.slice(0, 7) !== month) continue;
+          matches.push({
+            title: [row.programme_name, row.category]
+              .filter(Boolean)
+              .join(" · "),
+            detail: standingsDetail(row),
+            scheduled_on: row.created_at.slice(0, 10),
+            sender: row.wing_name,
+            status: "Published",
+          });
+        }
+      }
+      const { downloadProgrammeReport } = await import("./admin-pdf");
+      await downloadProgrammeReport(matches, type);
+      setNotice("PDF downloaded.");
+      setModal(null);
+    } catch (error) {
+      setError(error.message || "The PDF could not be created.");
     } finally {
       setBusy(false);
     }
@@ -452,11 +638,18 @@ export default function Home() {
             <p>
               Review requests, create accounts, and update the public website.
             </p>
+            {db && profile && !Object.hasOwn(profile, "active") && (
+              <p role="status">
+                Apply the Admin Tools migration in Supabase to enable the new
+                database actions.
+              </p>
+            )}
             <nav className="admin-nav" aria-label="Admin sections">
               {[
                 ["queue", "Work queue"],
                 ["accounts", "Accounts"],
                 ["website", "Website"],
+                ["tools", "Tools"],
               ].map(([value, label]) => (
                 <button
                   key={value}
@@ -520,16 +713,17 @@ export default function Home() {
         )}
         {role === "student" && (
           <div className="student-row">
-            <section className="panel member">
-              <GraduationCap size={25} />
-              <div>
-                <small>Digital membership</small>
-                <h2>{name}</h2>
-                <span>
-                  {profile?.member_number ||
-                    (!db ? "NUS–0247" : "Member number unavailable")}
-                </span>
-              </div>
+            <section className="panel">
+              <h2>Digital membership</h2>
+              <CardPreview
+                profile={{
+                  display_name: name,
+                  member_number:
+                    profile?.member_number || (!db ? "NUS–0247" : "Student"),
+                  photo_url: profile?.photo_url,
+                }}
+                design={cardDesign}
+              />
             </section>
             <section className="panel">
               <small>Outstanding dues</small>
@@ -564,7 +758,7 @@ export default function Home() {
             )}
             {adminSection === "accounts" &&
               (db ? (
-                <Accounts db={db} />
+                <Accounts db={db} activeId={userId} />
               ) : (
                 <p className="panel">
                   Account creation uses a connected Supabase project.
@@ -578,6 +772,13 @@ export default function Home() {
                   Website editing uses a connected Supabase project.
                 </p>
               ))}
+            {adminSection === "tools" && (
+              <div className="admin-tools-stack">
+                <AdminTools db={db} refresh={refresh} open={open} />
+                <ProgrammeStandings db={db} role="admin" />
+                <CardDesigner db={db} />
+              </div>
+            )}
           </div>
         ) : (
           <section className="work" aria-labelledby="work-title">
@@ -697,6 +898,7 @@ export default function Home() {
             )}
           </section>
         )}
+        {role === "wing" && <ProgrammeStandings db={db} role="wing" />}
         <footer>
           <a href="/">NUS’HA public website</a>
           <button onClick={() => open({ type: "help" })}>
@@ -767,8 +969,70 @@ export default function Home() {
                       </label>
                     ),
                   )}
+                  {role === "admin" && modal.kind === "notice" && (
+                    <label>
+                      Audience
+                      <select name="target_role">
+                        <option value="">Everyone</option>
+                        <option value="student">Students</option>
+                        <option value="class">Classes</option>
+                        <option value="wing">Wings</option>
+                        <option value="printer">Printer</option>
+                        <option value="admin">Admins</option>
+                      </select>
+                    </label>
+                  )}
+                  {role === "admin" && modal.kind === "outreach" && (
+                    <OutreachFields create />
+                  )}
                   <button className="primary" disabled={busy}>
                     Save <Check size={16} />
+                  </button>
+                </form>
+              </>
+            )}
+            {modal.type === "report" && (
+              <>
+                <h2>Download programme report</h2>
+                <form onSubmit={exportReport}>
+                  <label>
+                    Report
+                    <select name="reportType">
+                      <option value="results">Programme results</option>
+                      <option value="calendar">Official calendar</option>
+                    </select>
+                  </label>
+                  <label>
+                    Filter by month (optional)
+                    <input type="month" name="month" />
+                  </label>
+                  <button className="primary" disabled={busy}>
+                    Download PDF
+                  </button>
+                </form>
+              </>
+            )}
+            {modal.type === "admin-edit" && (
+              <>
+                <h2>
+                  Edit{" "}
+                  {modal.item.kind === "outreach"
+                    ? "outreach post"
+                    : "submission"}
+                </h2>
+                <form
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    manageItem(
+                      modal.item,
+                      "edit",
+                      Object.fromEntries(new FormData(event.currentTarget)),
+                    );
+                  }}
+                >
+                  <AdminEditFields item={modal.item} />
+                  <button className="primary" disabled={busy}>
+                    Save changes
                   </button>
                 </form>
               </>
@@ -827,6 +1091,86 @@ export default function Home() {
                     <ArrowDownToLine size={16} /> Print job sheet
                   </button>
                 )}
+                {role === "admin" && modal.item.sender && (
+                  <p>Submitted by: {modal.item.sender}</p>
+                )}
+                {role === "admin" && modal.item.recipient && (
+                  <p>
+                    Recipient: {modal.item.recipient.display_name}
+                    {modal.item.recipient.member_number &&
+                      " · " + modal.item.recipient.member_number}
+                  </p>
+                )}
+                {role === "admin" && modal.item.kind === "activity" && (
+                  <>
+                    {modal.item.admin_details?.time && (
+                      <p>Time: {modal.item.admin_details.time}</p>
+                    )}
+                    {modal.item.admin_details?.stage && (
+                      <p>Stage: {modal.item.admin_details.stage}</p>
+                    )}
+                    {modal.item.admin_details?.month && (
+                      <p>Submission month: {modal.item.admin_details.month}</p>
+                    )}
+                    {/^(https?:)\/\//i.test(
+                      modal.item.admin_details?.file || "",
+                    ) && (
+                      <p>
+                        <a
+                          href={modal.item.admin_details.file}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Open submission file
+                        </a>
+                      </p>
+                    )}
+                  </>
+                )}
+                {role === "admin" && modal.item.target_role && (
+                  <p>Audience: {modal.item.target_role}</p>
+                )}
+                {role === "admin" && modal.item.admin_details?.category && (
+                  <p>Category: {modal.item.admin_details.category}</p>
+                )}
+                {role === "admin" &&
+                  ["activity", "outreach"].includes(modal.item.kind) && (
+                    <button
+                      className="secondary"
+                      disabled={busy}
+                      onClick={() =>
+                        open({ type: "admin-edit", item: modal.item })
+                      }
+                    >
+                      Edit{" "}
+                      {modal.item.kind === "activity" ? "submission" : "post"}
+                    </button>
+                  )}
+                {role === "admin" &&
+                  [
+                    "activity",
+                    "booking",
+                    "due",
+                    "notice",
+                    "result",
+                    "support",
+                    "outreach",
+                  ].includes(modal.item.kind) && (
+                    <button
+                      className="secondary admin-delete"
+                      disabled={busy}
+                      onClick={() => {
+                        const message =
+                          modal.item.kind === "due"
+                            ? "Delete this due and its payment references?"
+                            : "Delete this item permanently?";
+                        if (window.confirm(message))
+                          manageItem(modal.item, "delete");
+                      }}
+                    >
+                      Delete item
+                    </button>
+                  )}
                 {nextStatuses(role, modal.item).map((status) => (
                   <form
                     className="transition"
@@ -845,6 +1189,12 @@ export default function Home() {
                         />
                       </label>
                     )}
+                    {status === "Paid" && (
+                      <label className="confirmation">
+                        <input type="checkbox" required /> I have confirmed this
+                        payment.
+                      </label>
+                    )}
                     {status === "Verified" && (
                       <label className="confirmation">
                         <input type="checkbox" required /> I confirmed the
@@ -861,6 +1211,7 @@ export default function Home() {
                         ? "Verify and mark dues paid"
                         : {
                             Approved: "Approve",
+                            Paid: "Mark paid",
                             Rejected: "Reject",
                             Evaluated: "Save evaluation",
                             Published: "Publish",

@@ -132,6 +132,7 @@ export const stages = [
     title: "Completed",
     statuses: [
       "Published",
+      "Conducted",
       "Evaluated",
       "Collected",
       "Verified",
@@ -158,6 +159,7 @@ export function nextStatuses(role, item) {
     {
       booking: ["Approved", "Rejected"],
       activity: ["Evaluated"],
+      due: ["Paid"],
       payment: ["Verified", "Rejected"],
       outreach: ["Published", "Rejected"],
       support: ["Resolved"],

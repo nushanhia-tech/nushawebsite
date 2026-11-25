@@ -11,11 +11,13 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
   );
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [month, setMonth] = useState("");
 
   useEffect(() => {
     setKind(initialFilter);
     setScope(initialFilter === "all" ? "pending" : "all");
     setQuery("");
+    setMonth("");
     setPage(1);
   }, [initialFilter]);
 
@@ -24,7 +26,21 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
     return (
       (kind === "all" || item.kind === kind) &&
       (scope === "all" || item.status === "Pending") &&
-      (!term || item.title.toLowerCase().includes(term))
+      (!term ||
+        [
+          item.title,
+          item.sender,
+          item.recipient?.display_name,
+          item.recipient?.member_number,
+          item.admin_details?.admission,
+        ].some((value) => value?.toLowerCase().includes(term))) &&
+      (!month ||
+        (
+          item.admin_details?.month ||
+          item.scheduled_on ||
+          item.created_at ||
+          ""
+        ).slice(0, 7) === month)
     );
   });
   const pages = Math.max(1, Math.ceil(shown.length / PAGE_SIZE));
@@ -99,7 +115,7 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
           <input
             type="search"
             value={query}
-            placeholder="Search by title"
+            placeholder="Title, name, or admission number"
             onChange={(event) => {
               setQuery(event.target.value);
               setPage(1);
@@ -108,6 +124,17 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
         </label>
       </div>
 
+      <label className="admin-control" style={{ maxWidth: 190 }}>
+        Month
+        <input
+          type="month"
+          value={month}
+          onChange={(event) => {
+            setMonth(event.target.value);
+            setPage(1);
+          }}
+        />
+      </label>
       {shown.length > 0 ? (
         <ul className="admin-queue-list">
           {shown
@@ -117,7 +144,15 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
                 <button onClick={() => open({ type: "detail", item })}>
                   <span className="admin-item-title">
                     <strong>{item.title}</strong>
-                    <small>{kinds[item.kind].label}</small>
+                    <small>
+                      {[
+                        kinds[item.kind].label,
+                        item.recipient?.display_name || item.sender,
+                        item.recipient?.member_number,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </small>
                   </span>
                   <span
                     className={
@@ -135,7 +170,7 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
         <p className="admin-empty">
           {loading
             ? "Getting your work queue…"
-            : scope === "pending" && kind === "all" && !query
+            : scope === "pending" && kind === "all" && !query && !month
               ? "You’re all caught up."
               : "No matching items."}
         </p>
