@@ -972,6 +972,70 @@ form .secondary {
   border-radius: 20px;
   box-shadow: 0 4px 16px #10261908;
 }
+.portal-shell .student-details-card {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 17px;
+  padding: 23px;
+  border-color: #e7ebe8;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px #10261908;
+}
+.student-details-avatar {
+  display: grid;
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 23px;
+  background: #e4f2e9;
+  color: #14734f;
+  font-size: 22px;
+  font-weight: 750;
+}
+.student-details-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.student-details-copy {
+  min-width: 0;
+}
+.student-details-copy h2 {
+  color: #1b2c22;
+  font-size: 22px;
+}
+.student-detail-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin-top: 13px;
+}
+.student-detail-facts span {
+  display: grid;
+  gap: 3px;
+}
+.student-detail-facts small {
+  color: #829087;
+  font-size: 10px;
+}
+.student-detail-facts strong {
+  color: #39483e;
+  font-size: 12px;
+  font-weight: 650;
+}
+.portal-membership-view {
+  margin-top: 16px;
+  animation: portal-section-enter 280ms ease both;
+}
+.portal-shell .work {
+  animation: portal-section-enter 280ms ease both;
+}
+.portal-membership-view .portal-card-heading {
+  margin-bottom: 18px;
+}
 .portal-shell .work {
   padding: 19px;
   border: 1px solid #e7ebe8;
@@ -1061,6 +1125,7 @@ form .secondary {
     min-height: 0;
     border-radius: 20px;
     box-shadow: 0 18px 55px #0d1d1838;
+    animation: portal-menu-enter 250ms cubic-bezier(.22, 1, .36, 1) both;
   }
   .portal-shell .workspace {
     padding: 0 14px 124px;
@@ -1154,6 +1219,29 @@ form .secondary {
     grid-template-columns: minmax(0, 1fr);
     gap: 10px;
   }
+  .portal-shell .student-details-card {
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 16px;
+    border-radius: 17px;
+  }
+  .student-details-avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 17px;
+    font-size: 17px;
+  }
+  .student-details-copy h2 {
+    font-size: 18px;
+  }
+  .student-detail-facts {
+    gap: 9px 15px;
+    margin-top: 10px;
+  }
+  .student-detail-facts strong {
+    font-size: 11px;
+  }
   .portal-shell .student-row .panel {
     padding: 16px;
     border-radius: 17px;
@@ -1233,8 +1321,22 @@ form .secondary {
     width: 114%;
     height: 91px;
     border-radius: 0 0 50% 50% / 0 0 42% 42%;
-    background: linear-gradient(110deg, #d90039, #ff1744 52%, #e70845);
+    background: linear-gradient(110deg, #dcefe3, #b9ddc6 52%, #e9f5ed);
     animation: portal-wave-drift 5.5s ease-in-out infinite alternate;
+  }
+  .portal-mobile-indicator {
+    position: absolute;
+    z-index: 2;
+    top: -8px;
+    left: calc(10% + var(--active-shift, 0%));
+    width: 54px;
+    height: 54px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    background: #e8f5ed;
+    box-shadow: 0 7px 18px #174d3224;
+    transform: translateX(-50%);
+    transition: left 540ms cubic-bezier(.22, 1, .36, 1), background-color 260ms ease;
   }
   .portal-mobile-nav button {
     position: relative;
@@ -1253,10 +1355,16 @@ form .secondary {
     font-weight: 600;
   }
   .portal-mobile-nav button:active {
-    color: #e0003a;
+    color: #14734f;
   }
   .portal-mobile-nav button[aria-current="page"] {
-    color: #dd0038;
+    color: #14734f;
+  }
+  .portal-mobile-nav button[aria-current="page"] svg {
+    transform: translateY(-5px) scale(1.05);
+  }
+  .portal-mobile-nav button svg {
+    transition: transform 300ms cubic-bezier(.2, .9, .2, 1), color 240ms ease;
   }
   .portal-mobile-nav button:disabled {
     opacity: .5;
@@ -1275,13 +1383,13 @@ form .secondary {
     margin-top: -46px;
     border: 5px solid #fff;
     border-radius: 50%;
-    color: #111;
+    color: #14734f;
     background: #fff;
-    box-shadow: 0 6px 20px #5b061d50;
-    animation: portal-add-float 2.6s ease-in-out infinite;
+    box-shadow: 0 6px 20px #153d2926;
+    animation: portal-add-float 3s ease-in-out infinite;
   }
   .portal-mobile-nav .portal-mobile-add[aria-current="page"] > span {
-    color: #e0003a;
+    color: #14734f;
   }
   .portal-selected-section {
     min-height: 118px;
@@ -1313,10 +1421,24 @@ form .secondary {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-4px); }
 }
+@keyframes portal-section-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes portal-menu-enter {
+  from { opacity: 0; transform: translateY(-8px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
 @media (prefers-reduced-motion: reduce) {
   .portal-mobile-nav::after,
-  .portal-mobile-add > span {
+  .portal-mobile-add > span,
+  .portal-mobile-indicator,
+  .portal-shell .role-sidebar.portal-mobile-open,
+  .portal-selected-section,
+  .portal-shell .work,
+  .portal-membership-view {
     animation: none !important;
+    transition: none !important;
   }
 }
 @media print {

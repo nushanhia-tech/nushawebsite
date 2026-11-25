@@ -35,6 +35,7 @@ import {
   CircleHelp,
   Clock,
   GraduationCap,
+  IdCard,
   Layers3,
   LayoutGrid,
   List,
@@ -110,7 +111,7 @@ function PortalOverview({ role, records, createItems, onCreate }) {
         <section className="panel portal-actions-card">
           <div className="portal-card-heading"><div><h2>Quick actions</h2><p>Start something new</p></div><span className="portal-action-icon"><LayoutGrid size={18} /></span></div>
           {createItems.length ? <div className="portal-quick-actions">{createItems.map((kind) => <button type="button" key={kind} onClick={() => onCreate(kind)}><span className="portal-quick-icon"><Plus size={18} /></span><span>{kinds[kind].action}<small>Open a new request</small></span><ArrowUpRight size={17} /></button>)}</div> : <p className="portal-no-actions">There are no new actions for this portal right now.</p>}
-          <div className="portal-role-note"><span className="portal-role-dot" /><span>{role === "student" ? "Your membership and dues are ready below." : "Your submissions and updates appear in your task list."}</span></div>
+          <div className="portal-role-note"><span className="portal-role-dot" /><span>{role === "student" ? "Your student details and activity are up to date." : "Your submissions and updates appear in your task list."}</span></div>
         </section>
       </div>
     </section>
@@ -290,6 +291,8 @@ export default function Home() {
       ? "All tasks"
       : portalSection === "notice"
         ? "Announcements"
+        : portalSection === "membership"
+          ? "Membership"
         : kinds[portalSection]?.label || "Portal details";
   const outstanding = recordsForRole.filter(
     (item) => item.kind === "due" && item.status === "Pending",
@@ -796,37 +799,20 @@ export default function Home() {
           </p>
         )}
         {role === "student" && portalSection === "overview" && (
-          <div className="student-row" id="student-membership">
-            <section className="panel">
-              <h2>Digital membership</h2>
-              <CardPreview
-                profile={{
-                  display_name: name,
-                  member_number:
-                    profile?.member_number || (!db ? "NUS–0247" : "Student"),
-                  photo_url: profile?.photo_url,
-                }}
-                design={cardDesign}
-              />
-            </section>
-            <section className="panel">
-              <small>Outstanding dues</small>
-              <h2>
-                ₹
-                {outstanding
-                  .reduce((sum, item) => sum + Number(item.amount), 0)
-                  .toLocaleString("en-IN")}
-              </h2>
-              {outstanding.length > 0 && (
-                <button
-                  className="text-button"
-                  onClick={() => setFilter("due")}
-                >
-                  View dues <ArrowUpRight size={14} />
-                </button>
-              )}
-            </section>
-          </div>
+          <section className="panel student-details-card" aria-labelledby="student-details-title">
+            <div className="student-details-avatar">
+              {profile?.photo_url ? <img src={profile.photo_url} alt="" /> : name.split(" ").map((part) => part[0]).slice(0, 2).join("")}
+            </div>
+            <div className="student-details-copy">
+              <span className="portal-section-kicker">Student profile</span>
+              <h2 id="student-details-title">{name}</h2>
+              <div className="student-detail-facts">
+                <span><small>Portal</small><strong>Student</strong></span>
+                <span><small>Admission number</small><strong>{profile?.member_number || "Not added yet"}</strong></span>
+                {profile?.username && <span><small>Username</small><strong>{profile.username}</strong></span>}
+              </div>
+            </div>
+          </section>
         )}
 
         {role !== "admin" && portalSection === "overview" && (
@@ -837,8 +823,8 @@ export default function Home() {
             onCreate={(kind) => open({ type: "create", kind })}
           />
         )}
-        {role !== "admin" && portalSection !== "overview" && (
-          <section className="portal-selected-section" aria-live="polite">
+        {role !== "admin" && portalSection !== "overview" && portalSection !== "membership" && (
+          <section key={portalSection} className="portal-selected-section" aria-live="polite">
             <div>
               <span className="portal-section-kicker">{portal.name} workspace</span>
               <h2>{portalSectionTitle}</h2>
@@ -914,8 +900,20 @@ export default function Home() {
               ))}
             {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
+        ) : role === "student" && portalSection === "membership" ? (
+          <section key="membership" className="panel portal-membership-view" id="student-membership">
+            <div className="portal-card-heading"><div><h2>Digital membership</h2><p>Your student membership card.</p></div><span className="portal-action-icon"><IdCard size={18} /></span></div>
+            <CardPreview
+              profile={{
+                display_name: name,
+                member_number: profile?.member_number || (!db ? "NUS–0247" : "Student"),
+                photo_url: profile?.photo_url,
+              }}
+              design={cardDesign}
+            />
+          </section>
         ) : (
-          <section className="work" id="portal-work" aria-labelledby="work-title">
+          <section key={portalSection} className="work" id="portal-work" aria-labelledby="work-title">
             <div className="work-head">
               <div>
                 <h2 id="work-title">{portalSection === "overview"
@@ -1046,7 +1044,12 @@ export default function Home() {
       </main>
 
       {role !== "admin" && (
-        <nav className="portal-mobile-nav" aria-label="Mobile portal navigation">
+        <nav
+          className="portal-mobile-nav"
+          aria-label="Mobile portal navigation"
+          style={{ "--active-shift": `${(adminMenuOpen || !["overview", "tasks", "notice"].includes(portalSection) ? 4 : portalSection === "tasks" ? 1 : portalSection === "notice" ? 3 : 0) * 20}%` }}
+        >
+          <span className="portal-mobile-indicator" aria-hidden="true" />
           <button type="button" aria-current={portalSection === "overview" ? "page" : undefined} onClick={() => { selectPortalSection("overview"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
             <LayoutGrid size={20} /><span>Home</span>
           </button>
@@ -1059,7 +1062,7 @@ export default function Home() {
           <button type="button" aria-current={portalSection === "notice" ? "page" : undefined} onClick={() => { selectPortalSection("notice"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
             <Bell size={20} /><span>Updates</span>
           </button>
-          <button type="button" aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen(!adminMenuOpen)}>
+          <button type="button" aria-current={adminMenuOpen || !["overview", "tasks", "notice"].includes(portalSection) ? "page" : undefined} aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen(!adminMenuOpen)}>
             <RoleIcon size={20} /><span>Menu</span>
           </button>
         </nav>
