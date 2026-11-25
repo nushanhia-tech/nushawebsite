@@ -1044,21 +1044,6 @@ form .secondary {
   box-shadow: 0 4px 16px #10261908;
   scroll-margin-top: 20px;
 }
-.portal-selected-section {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  min-height: 138px;
-  margin: 18px 0 14px;
-  padding: 24px 27px;
-  border: 1px solid #dfe9e2;
-  border-radius: 22px;
-  background: linear-gradient(110deg, #fff 0%, #f4faf6 100%);
-  box-shadow: 0 5px 20px #132d1d0a;
-}
-.portal-selected-section > div:first-child {
-  flex: 1;
-}
 .portal-section-kicker {
   display: block;
   margin-bottom: 7px;
@@ -1067,31 +1052,6 @@ form .secondary {
   font-weight: 750;
   letter-spacing: .06em;
   text-transform: uppercase;
-}
-.portal-selected-section h2 {
-  color: #192c22;
-  font-size: 26px;
-}
-.portal-selected-section p {
-  margin-top: 6px;
-  color: #75837a;
-  font-size: 13px;
-}
-.portal-section-count {
-  display: grid;
-  justify-items: center;
-  gap: 2px;
-  min-width: 76px;
-  padding: 10px;
-  border-radius: 15px;
-  background: #e7f4eb;
-  color: #14734f;
-}
-.portal-section-count strong {
-  font-size: 24px;
-}
-.portal-section-count span {
-  font-size: 10px;
 }
 .portal-shell .work-head h2 {
   font-size: 20px;
@@ -1391,27 +1351,6 @@ form .secondary {
   .portal-mobile-nav .portal-mobile-add[aria-current="page"] > span {
     color: #14734f;
   }
-  .portal-selected-section {
-    min-height: 118px;
-    margin: 13px 0 9px;
-    padding: 17px;
-    gap: 12px;
-    border-radius: 18px;
-  }
-  .portal-selected-section h2 {
-    font-size: 21px;
-  }
-  .portal-selected-section p {
-    font-size: 11px;
-    line-height: 1.45;
-  }
-  .portal-section-count {
-    min-width: 57px;
-    padding: 8px;
-  }
-  .portal-section-count strong {
-    font-size: 20px;
-  }
 }
 @keyframes portal-wave-drift {
   from { transform: translateX(-1.5%) scaleX(1.01); }
@@ -1434,7 +1373,6 @@ form .secondary {
   .portal-mobile-add > span,
   .portal-mobile-indicator,
   .portal-shell .role-sidebar.portal-mobile-open,
-  .portal-selected-section,
   .portal-shell .work,
   .portal-membership-view {
     animation: none !important;

@@ -336,6 +336,7 @@ export default function Home() {
     setView(value === "overview" ? "board" : "list");
     setSearch("");
     setAdminMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function open(value) {
@@ -769,19 +770,6 @@ export default function Home() {
                 <h1>{portal.title}</h1>
                 <p>{portal.description}</p>
               </div>
-              <div className="admin-intro-actions">
-                {portal.create.length > 0 && (
-                <button
-                  className="primary"
-                  onClick={() =>
-                    open({ type: "create", kind: portal.create[0] })
-                  }
-                >
-                  <Plus size={17} />
-                  {kinds[portal.create[0]].action}
-                </button>
-                )}
-              </div>
             </div>
           </section>
         )}
@@ -824,26 +812,6 @@ export default function Home() {
             onCreate={(kind) => open({ type: "create", kind })}
           />
         )}
-        {role !== "admin" && portalSection !== "overview" && portalSection !== "membership" && (
-          <section key={portalSection} className="portal-selected-section" aria-live="polite">
-            <div>
-              <span className="portal-section-kicker">{portal.name} workspace</span>
-              <h2>{portalSectionTitle}</h2>
-              <p>{portalSection === "tasks"
-                ? "Browse every request and update in your workspace."
-                : portalSection === "notice"
-                  ? "The latest union updates for your portal."
-                  : `Review your ${portalSectionTitle.toLowerCase()} requests and updates.`}</p>
-            </div>
-            <div className="portal-section-count"><strong>{shown.length}</strong><span>{shown.length === 1 ? "item" : "items"}</span></div>
-            {portal.create.includes(portalSection) && (
-              <button className="primary" onClick={() => open({ type: "create", kind: portalSection })}>
-                <Plus size={16} /> {kinds[portalSection].action}
-              </button>
-            )}
-          </section>
-        )}
-
         {role === "admin" ? (
           <div className="admin-body">
             {(adminSection === "fees" || adminSection === "submissions") && (
@@ -936,6 +904,11 @@ export default function Home() {
                     onChange={(event) => setSearch(event.target.value)}
                   />
                 </label>
+                {portalSection !== "overview" && portalSection !== "tasks" && portal.create.includes(portalSection) && (
+                  <button className="primary portal-section-action" onClick={() => open({ type: "create", kind: portalSection })}>
+                    <Plus size={16} /> {kinds[portalSection].action}
+                  </button>
+                )}
                 {portalSection === "overview" && <div className="segmented" aria-label="View options">
                   <button
                     aria-label="Board view"
@@ -989,7 +962,7 @@ export default function Home() {
               )}
             </div>
             )}
-            {view === "board" ? (
+            {portalSection === "overview" && view === "board" ? (
               <div className="board">
                 {stages.map((stage, index) => {
                   const Icon = stageIcons[stage.icon];
@@ -1051,16 +1024,16 @@ export default function Home() {
           style={{ "--active-shift": `${(adminMenuOpen || !["overview", "tasks", "notice"].includes(portalSection) ? 4 : portalSection === "tasks" ? 1 : portalSection === "notice" ? 3 : 0) * 20}%` }}
         >
           <span className="portal-mobile-indicator" aria-hidden="true" />
-          <button type="button" aria-current={portalSection === "overview" ? "page" : undefined} onClick={() => { selectPortalSection("overview"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+          <button type="button" aria-current={portalSection === "overview" ? "page" : undefined} onClick={() => selectPortalSection("overview")}>
             <LayoutGrid size={20} /><span>Home</span>
           </button>
-          <button type="button" aria-current={portalSection === "tasks" ? "page" : undefined} onClick={() => { selectPortalSection("tasks"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
+          <button type="button" aria-current={portalSection === "tasks" ? "page" : undefined} onClick={() => selectPortalSection("tasks")}>
             <List size={20} /><span>Tasks</span>
           </button>
           <button className="portal-mobile-add" type="button" aria-label={portal.create.length ? kinds[portal.create[0]].action : "No new action available"} disabled={!portal.create.length} onClick={() => portal.create[0] && open({ type: "create", kind: portal.create[0] })}>
             <span><Plus size={23} /></span><small>Add</small>
           </button>
-          <button type="button" aria-current={portalSection === "notice" ? "page" : undefined} onClick={() => { selectPortalSection("notice"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
+          <button type="button" aria-current={portalSection === "notice" ? "page" : undefined} onClick={() => selectPortalSection("notice")}>
             <Bell size={20} /><span>Updates</span>
           </button>
           <button type="button" aria-current={adminMenuOpen || !["overview", "tasks", "notice"].includes(portalSection) ? "page" : undefined} aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen(!adminMenuOpen)}>
