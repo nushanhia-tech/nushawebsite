@@ -47,3 +47,9 @@ body:not(:has(.hero)) header .nusha-mark {
 .nf-brand {
   gap: 8px;
 }
+
+@media (min-width: 769px) {
+  header nav#navbar { flex: 1 1 auto; min-width: 0; }
+  header nav#navbar ul { justify-content: center; align-items: center; gap: clamp(12px, 2vw, 35px); }
+  header nav#navbar ul li { text-align: center; }
+}
