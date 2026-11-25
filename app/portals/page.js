@@ -1,8 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import SiteContent from "./site-content";
-import Accounts from "./accounts";
+import dynamic from "next/dynamic";
+import AdminQueue from "./admin-queue";
+import { supabaseProjectUrl } from "../../lib/supabase-url";
+
+const SiteContent = dynamic(() => import("./site-content"), {
+  loading: () => <p role="status">Loading website editor…</p>,
+});
+const Accounts = dynamic(() => import("./accounts"), {
+  loading: () => <p role="status">Loading accounts…</p>,
+});
 import { createClient } from "@supabase/supabase-js";
 import {
   ArrowDownToLine,
@@ -29,7 +37,7 @@ import {
 } from "lucide-react";
 import { demoItems, kinds, nextStatuses, portals, stages } from "../data";
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const url = supabaseProjectUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
 const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const db = url && key ? createClient(url, key) : null;
 const roleIcons = {
@@ -40,12 +48,12 @@ const roleIcons = {
   admin: ShieldCheck,
 };
 const stageIcons = { review: Clock, progress: Layers3, done: Check };
-const dateLabel = (value) =>
-  new Intl.DateTimeFormat("en-IN", {
-    day: "numeric",
-    month: "short",
-    timeZone: "Asia/Kolkata",
-  }).format(new Date(value));
+const dateFormatter = new Intl.DateTimeFormat("en-IN", {
+  day: "numeric",
+  month: "short",
+  timeZone: "Asia/Kolkata",
+});
+const dateLabel = (value) => dateFormatter.format(new Date(value));
 const initialDemo = Object.fromEntries(
   Object.keys(portals).map((role) => [role, demoItems(role)]),
 );
@@ -53,6 +61,9 @@ const initialDemo = Object.fromEntries(
 export default function Home() {
   const [role, setRole] = useState("admin");
   const [records, setRecords] = useState([]);
+  const [recordsLoading, setRecordsLoading] = useState(Boolean(db));
+  const [adminSection, setAdminSection] = useState("queue");
+  const [queueVersion, setQueueVersion] = useState(0);
   const [demo, setDemo] = useState(initialDemo);
   const [session, setSession] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -66,11 +77,15 @@ export default function Home() {
   const [busy, setBusy] = useState(false);
   const dialog = useRef(null);
 
-  async function refresh() {
-    const result = await db
+  async function refresh(signal) {
+    let query = db
       .from("work_items")
       .select("*")
       .order("created_at", { ascending: false });
+    if (signal) query = query.abortSignal(signal);
+    const result = await query;
+    if (signal?.aborted) return;
+    setRecordsLoading(false);
     if (result.error) setNotice(result.error.message);
     else setRecords(result.data);
   }
@@ -118,11 +133,15 @@ export default function Home() {
   useEffect(() => {
     if (!db || !userId) return;
     let active = true;
+    const controller = new AbortController();
+    setRecords([]);
+    setRecordsLoading(true);
     async function load() {
       const result = await db
         .from("profiles")
         .select("*")
         .eq("id", userId)
+        .abortSignal(controller.signal)
         .single();
       if (!active) return;
       if (result.error)
@@ -132,12 +151,13 @@ export default function Home() {
       else {
         setRole(result.data.role);
         setProfile(result.data);
-        await refresh();
+        await refresh(controller.signal);
       }
     }
     load();
     return () => {
       active = false;
+      controller.abort();
     };
   }, [userId]);
 
@@ -240,6 +260,7 @@ export default function Home() {
         }));
       }
       setFilter(item.kind);
+      setQueueVersion((value) => value + 1);
       setSearch("");
       setNotice("Saved.");
       setModal(null);
@@ -403,7 +424,9 @@ export default function Home() {
               title="Announcements"
               aria-label="Announcements"
               onClick={() => {
+                setAdminSection("queue");
                 setFilter("notice");
+                setQueueVersion((value) => value + 1);
                 setSearch("");
               }}
             >
@@ -423,33 +446,64 @@ export default function Home() {
           </div>
         </header>
 
-        <section className="hero">
-          <div className="hero-content">
-            <div className="eyebrow">
-              <RoleIcon size={16} /> {portal.name} portal
+        {role === "admin" ? (
+          <section className="admin-intro">
+            <h1>Admin Portal</h1>
+            <p>
+              Review requests, create accounts, and update the public website.
+            </p>
+            <nav className="admin-nav" aria-label="Admin sections">
+              {[
+                ["queue", "Work queue"],
+                ["accounts", "Accounts"],
+                ["website", "Website"],
+              ].map(([value, label]) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={adminSection === value}
+                  onClick={() => {
+                    if (value === "queue" && adminSection !== value)
+                      setFilter("all");
+                    setAdminSection(value);
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
+          </section>
+        ) : (
+          <section className="hero">
+            <div className="hero-content">
+              <div className="eyebrow">
+                <RoleIcon size={16} /> {portal.name} portal
+              </div>
+              <h1>{portal.title}</h1>
+              <p>{portal.description}</p>
+              {portal.create.length > 0 && (
+                <button
+                  className="primary"
+                  onClick={() =>
+                    open({ type: "create", kind: portal.create[0] })
+                  }
+                >
+                  <Plus size={17} />
+                  {kinds[portal.create[0]].action}
+                </button>
+              )}
             </div>
-            <h1>{portal.title}</h1>
-            <p>{portal.description}</p>
-            {portal.create.length > 0 && (
-              <button
-                className="primary"
-                onClick={() => open({ type: "create", kind: portal.create[0] })}
-              >
-                <Plus size={17} />
-                {kinds[portal.create[0]].action}
-              </button>
-            )}
-          </div>
-          <div className="hero-art" aria-hidden="true">
-            <div className="orb orbit-one" />
-            <div className="orb orbit-two" />
-            <div className="orb orbit-three" />
-            <div className="emblem">
-              <RoleIcon strokeWidth={1.2} size={56} />
+            <div className="hero-art" aria-hidden="true">
+              <div className="orb orbit-one" />
+              <div className="orb orbit-two" />
+              <div className="orb orbit-three" />
+              <div className="emblem">
+                <RoleIcon strokeWidth={1.2} size={56} />
+              </div>
+              <Sparkles className="spark" size={24} />
             </div>
-            <Sparkles className="spark" size={24} />
-          </div>
-        </section>
+          </section>
+        )}
 
         {!db && (
           <p className="demo-label">
@@ -497,127 +551,151 @@ export default function Home() {
           </div>
         )}
 
-        <section className="work" aria-labelledby="work-title">
-          <div className="work-head">
-            <div>
-              <h2 id="work-title">
-                {role === "printer" ? "Print queue" : "Work overview"}
-              </h2>
-              <p>
-                {shown.length} {shown.length === 1 ? "item" : "items"}
-              </p>
-            </div>
-            <div className="toolbar">
-              <label className="search">
-                <Search size={17} />
-                <input
-                  aria-label="Search items"
-                  placeholder="Search items"
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-              </label>
-              <div className="segmented" aria-label="View options">
-                <button
-                  aria-label="Board view"
-                  aria-pressed={view === "board"}
-                  onClick={() => setView("board")}
-                >
-                  <LayoutGrid size={17} />
-                </button>
-                <button
-                  aria-label="List view"
-                  aria-pressed={view === "list"}
-                  onClick={() => setView("list")}
-                >
-                  <List size={18} />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="filter-row">
-            <div className="filters" aria-label="Filter items">
-              {["all", ...portal.kinds].map((kind) => (
-                <button
-                  key={kind}
-                  aria-pressed={filter === kind}
-                  onClick={() => setFilter(kind)}
-                >
-                  {kind === "all" ? "All items" : kinds[kind].label}
-                </button>
-              ))}
-            </div>
-            {portal.create.length > 1 && (
-              <div className="actions">
-                <ChevronDown size={16} />
-                <select
-                  aria-label="More actions"
-                  value=""
-                  onChange={(event) => {
-                    if (event.target.value)
-                      open({ type: "create", kind: event.target.value });
-                  }}
-                >
-                  <option value="">More actions</option>
-                  {portal.create.map((kind) => (
-                    <option key={kind} value={kind}>
-                      {kinds[kind].action}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        {role === "admin" ? (
+          <div className="admin-body">
+            {adminSection === "queue" && (
+              <AdminQueue
+                key={queueVersion}
+                records={recordsForRole}
+                initialFilter={filter}
+                open={open}
+                loading={recordsLoading}
+              />
             )}
-          </div>
-          {view === "board" ? (
-            <div className="board">
-              {stages.map((stage, index) => {
-                const Icon = stageIcons[stage.icon];
-                const items = shown.filter((item) =>
-                  stage.statuses.includes(item.status),
-                );
-                return (
-                  <section className={"lane lane-" + index} key={stage.title}>
-                    <h3>
-                      <Icon size={17} />
-                      {stage.title}
-                      <span>{items.length}</span>
-                    </h3>
-                    {items.length ? (
-                      items.map((item) => (
-                        <Item
-                          key={item.id}
-                          item={item}
-                          onClick={() => open({ type: "detail", item })}
-                        />
-                      ))
-                    ) : (
-                      <p className="empty">No items here.</p>
-                    )}
-                  </section>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="list">
-              {shown.length ? (
-                shown.map((item) => (
-                  <Item
-                    key={item.id}
-                    item={item}
-                    onClick={() => open({ type: "detail", item })}
-                  />
-                ))
+            {adminSection === "accounts" &&
+              (db ? (
+                <Accounts db={db} />
               ) : (
-                <p className="empty">No items match.</p>
+                <p className="panel">
+                  Account creation uses a connected Supabase project.
+                </p>
+              ))}
+            {adminSection === "website" &&
+              (db ? (
+                <SiteContent db={db} />
+              ) : (
+                <p className="panel">
+                  Website editing uses a connected Supabase project.
+                </p>
+              ))}
+          </div>
+        ) : (
+          <section className="work" aria-labelledby="work-title">
+            <div className="work-head">
+              <div>
+                <h2 id="work-title">
+                  {role === "printer" ? "Print queue" : "Work overview"}
+                </h2>
+                <p>
+                  {shown.length} {shown.length === 1 ? "item" : "items"}
+                </p>
+              </div>
+              <div className="toolbar">
+                <label className="search">
+                  <Search size={17} />
+                  <input
+                    aria-label="Search items"
+                    placeholder="Search items"
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
+                </label>
+                <div className="segmented" aria-label="View options">
+                  <button
+                    aria-label="Board view"
+                    aria-pressed={view === "board"}
+                    onClick={() => setView("board")}
+                  >
+                    <LayoutGrid size={17} />
+                  </button>
+                  <button
+                    aria-label="List view"
+                    aria-pressed={view === "list"}
+                    onClick={() => setView("list")}
+                  >
+                    <List size={18} />
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="filter-row">
+              <div className="filters" aria-label="Filter items">
+                {["all", ...portal.kinds].map((kind) => (
+                  <button
+                    key={kind}
+                    aria-pressed={filter === kind}
+                    onClick={() => setFilter(kind)}
+                  >
+                    {kind === "all" ? "All items" : kinds[kind].label}
+                  </button>
+                ))}
+              </div>
+              {portal.create.length > 1 && (
+                <div className="actions">
+                  <ChevronDown size={16} />
+                  <select
+                    aria-label="More actions"
+                    value=""
+                    onChange={(event) => {
+                      if (event.target.value)
+                        open({ type: "create", kind: event.target.value });
+                    }}
+                  >
+                    <option value="">More actions</option>
+                    {portal.create.map((kind) => (
+                      <option key={kind} value={kind}>
+                        {kinds[kind].action}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               )}
             </div>
-          )}
-        </section>
-        {role === "admin" && db && (
-          <>
-            <Accounts db={db} />
-            <SiteContent db={db} />
-          </>
+            {view === "board" ? (
+              <div className="board">
+                {stages.map((stage, index) => {
+                  const Icon = stageIcons[stage.icon];
+                  const items = shown.filter((item) =>
+                    stage.statuses.includes(item.status),
+                  );
+                  return (
+                    <section className={"lane lane-" + index} key={stage.title}>
+                      <h3>
+                        <Icon size={17} />
+                        {stage.title}
+                        <span>{items.length}</span>
+                      </h3>
+                      {items.length ? (
+                        items.map((item) => (
+                          <Item
+                            key={item.id}
+                            item={item}
+                            onClick={() => open({ type: "detail", item })}
+                          />
+                        ))
+                      ) : (
+                        <p className="empty">No items here.</p>
+                      )}
+                    </section>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="list">
+                {shown.length ? (
+                  shown.map((item) => (
+                    <Item
+                      key={item.id}
+                      item={item}
+                      onClick={() => open({ type: "detail", item })}
+                    />
+                  ))
+                ) : (
+                  <p className="empty">No items match.</p>
+                )}
+              </div>
+            )}
+          </section>
         )}
         <footer>
           <a href="/">NUS’HA public website</a>

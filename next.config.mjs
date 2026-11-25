@@ -6,6 +6,12 @@ export default {
       "./node_modules/@php-wasm/node-8-3/{jspi,asyncify}/*.{js,wasm}",
     ],
   },
+  async headers() {
+    return ["/vendor/:path*", "/bg-image.webp"].map((source) => ({
+      source,
+      headers: [{ key: "Cache-Control", value: "public, max-age=86400" }],
+    }));
+  },
   async rewrites() {
     return [{ source: "/", destination: "/index.php" }];
   },

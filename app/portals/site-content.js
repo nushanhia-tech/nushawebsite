@@ -33,19 +33,27 @@ export default function SiteContent({ db }) {
   const [draft, setDraft] = useState(null);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  async function refresh() {
-    const { data, error } = await db
+  async function refresh(signal) {
+    let request = db
       .from("site_content")
-      .select("*")
+      .select("id,content")
+      .eq("section", section)
       .order("id", { ascending: false });
+    if (signal) request = request.abortSignal(signal);
+    const { data, error } = await request;
+    if (signal?.aborted) return;
+    setLoading(false);
     if (error) setMessage(error.message);
     else setRows(data);
   }
 
   useEffect(() => {
-    refresh();
-  }, []);
+    const controller = new AbortController();
+    refresh(controller.signal);
+    return () => controller.abort();
+  }, [section]);
 
   async function mutate(operation, success) {
     setBusy(true);
@@ -77,7 +85,7 @@ export default function SiteContent({ db }) {
     mutate(operation, "Website content saved.");
   }
 
-  const current = rows.filter((row) => row.section === section);
+  const current = rows;
   return (
     <section className="panel site-content">
       <h2>Public website content</h2>
@@ -87,6 +95,8 @@ export default function SiteContent({ db }) {
           value={section}
           disabled={busy}
           onChange={(event) => {
+            setRows([]);
+            setLoading(true);
             setSection(event.target.value);
             setDraft(null);
             setMessage("");
@@ -111,16 +121,25 @@ export default function SiteContent({ db }) {
           </button>
         </div>
       ))}
-      {!current.length && <p className="empty">No entries in this section.</p>}
-      {!draft && (section !== "settings" || current.length === 0) && (
-        <button
-          className="primary"
-          disabled={busy}
-          onClick={() => setDraft({ content: {} })}
-        >
-          Add entry
-        </button>
+      {loading && (
+        <p className="empty" role="status">
+          Loading entries…
+        </p>
       )}
+      {!loading && !current.length && (
+        <p className="empty">No entries in this section.</p>
+      )}
+      {!loading &&
+        !draft &&
+        (section !== "settings" || current.length === 0) && (
+          <button
+            className="primary"
+            disabled={busy}
+            onClick={() => setDraft({ content: {} })}
+          >
+            Add entry
+          </button>
+        )}
       {draft && (
         <form key={draft.id || "new"} onSubmit={save}>
           {fields[section].map(([name, label, type]) => (

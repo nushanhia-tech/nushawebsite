@@ -775,3 +775,126 @@ form .secondary {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
   align-items: end;
 }
+
+.admin-intro {
+  padding: 26px 0 16px;
+}
+.admin-intro h1 {
+  font-size: clamp(32px, 5vw, 46px);
+}
+.admin-intro p,
+.admin-section-head p {
+  margin-top: 6px;
+  color: var(--muted);
+}
+.admin-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 18px;
+}
+.admin-nav button {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  padding: 9px 13px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.admin-nav button[aria-pressed="true"] {
+  background: #182f55;
+  border-color: #182f55;
+  color: #fff;
+}
+.admin-body {
+  max-width: 980px;
+}
+.admin-body .site-content {
+  margin-top: 0;
+}
+.admin-queue {
+  display: grid;
+  gap: 16px;
+}
+.admin-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.admin-queue-filters {
+  display: grid;
+  grid-template-columns: minmax(105px, 1fr) minmax(110px, 1fr) minmax(
+      145px,
+      1.4fr
+    );
+  gap: 10px;
+}
+.admin-control {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+.admin-control select,
+.admin-control input {
+  min-width: 0;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  background: #fff;
+}
+.admin-queue-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+.admin-queue-list button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  color: var(--ink);
+  background: #fff;
+  cursor: pointer;
+}
+.admin-queue-list button:hover {
+  background: #f5f8ff;
+}
+.admin-item-title {
+  display: grid;
+  gap: 4px;
+  overflow-wrap: anywhere;
+}
+.admin-item-title small,
+.admin-empty {
+  color: var(--muted);
+}
+.admin-empty {
+  padding: 10px 0;
+}
+.admin-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+@media (max-width: 570px) {
+  .admin-queue-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-queue-filters label:last-child {
+    grid-column: 1 / -1;
+  }
+}

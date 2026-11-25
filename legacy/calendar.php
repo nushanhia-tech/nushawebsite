@@ -49,8 +49,8 @@ $report_events_json = json_encode($all_events, JSON_HEX_TAG | JSON_HEX_APOS | JS
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="/brand.css">
     <link rel="stylesheet" href="/portal-login.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/vendor/fonts/montserrat.css">
+    <link rel="stylesheet" href="/vendor/fontawesome/css/site-icons.css">
     
     <!-- Reliable PDF generator: reports are drawn page-by-page, not as one long HTML screenshot. -->
     <script src="/load-pdf.js" defer></script>
