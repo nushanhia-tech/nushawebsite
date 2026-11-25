@@ -7,6 +7,7 @@ import AdminNavigation, { PortalNavigation, adminSections } from "./admin-naviga
 import { AdminEditFields, OutreachFields } from "./admin-item-fields";
 import { CardPreview, defaultCard } from "./id-card";
 import PhotoUpload from "./photo-upload";
+import { csvRows } from "./admin-client";
 import { supabaseProjectUrl } from "../../lib/supabase-url";
 
 const SiteContent = dynamic(() => import("./site-content"), {
@@ -343,6 +344,45 @@ export default function Home() {
   function open(value) {
     setError("");
     setModal(value);
+  }
+
+  async function manageOwn(item, operation, fields = {}) {
+    setBusy(true);
+    setError("");
+    try {
+      if (!db) throw new Error("Connect Supabase to manage programme records.");
+      const { error } = await db.rpc("manage_own_programme", { item_id: item.id, operation, fields });
+      if (error) throw error;
+      await refresh();
+      setModal(null);
+      setNotice(operation === "delete" ? "Record deleted." : "Record updated.");
+    } catch (failure) {
+      setError(failure.message || "The record could not be updated.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function importProgrammes(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    setBusy(true);
+    setError("");
+    try {
+      if (!db) throw new Error("Connect Supabase to import programme reports.");
+      const rows = await csvRows(new FormData(form).get("csv"), 6);
+      const items = rows.map(([title, scheduled_on, time, detail, category, stage]) => ({
+        kind: "activity", title: title.trim(), scheduled_on, detail: detail.trim(),
+        admin_details: { time, category, stage, month: scheduled_on.slice(0, 7) },
+      }));
+      const { error } = await db.from("work_items").insert(items);
+      if (error) throw error;
+      await refresh();
+      setModal(null);
+      setNotice(`${items.length} programme reports imported.`);
+    } catch (failure) {
+      setError(failure.message || "The reports could not be imported.");
+    } finally { setBusy(false); }
   }
 
   async function signIn(event) {
@@ -926,6 +966,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="toolbar">
+                {portalSection === "activity" && ["class", "wing"].includes(role) && <button className="secondary" onClick={() => open({ type: "bulk-programmes" })}>Import CSV</button>}
                 <label className="search">
                   <Search size={17} />
                   <input
@@ -1217,6 +1258,31 @@ export default function Home() {
                 </form>
               </>
             )}
+            {modal.type === "own-edit" && (
+              <>
+                <h2>Edit programme report</h2>
+                <form onSubmit={(event) => { event.preventDefault(); manageOwn(modal.item, "edit", Object.fromEntries(new FormData(event.currentTarget))); }}>
+                  <label>Title<input name="title" defaultValue={modal.item.title} required maxLength={160} /></label>
+                  <label>Description<textarea name="detail" defaultValue={modal.item.detail} required maxLength={2000} /></label>
+                  <label>Date<input type="date" name="scheduled_on" defaultValue={modal.item.scheduled_on || ""} /></label>
+                  <label>Time<input type="time" name="time" defaultValue={modal.item.admin_details?.time || ""} /></label>
+                  <label>Category<input name="category" defaultValue={modal.item.admin_details?.category || ""} maxLength={120} /></label>
+                  <label>Stage<select name="stage" defaultValue={modal.item.admin_details?.stage || "Stage"}><option>Stage</option><option>Non-Stage</option></select></label>
+                  <label>Month<input type="month" name="month" defaultValue={modal.item.admin_details?.month || ""} /></label>
+                  <button className="primary" disabled={busy}>Save changes</button>
+                </form>
+              </>
+            )}
+            {modal.type === "bulk-programmes" && (
+              <>
+                <h2>Import programme reports</h2>
+                <p>CSV columns: Title, Date (YYYY-MM-DD), Time, Description, Category, Stage. Include a header row.</p>
+                <form onSubmit={importProgrammes}>
+                  <label>CSV file<input type="file" name="csv" accept=".csv,text/csv" required /></label>
+                  <button className="primary" disabled={busy}>Import reports</button>
+                </form>
+              </>
+            )}
             {modal.type === "detail" && (
               <>
                 <span className="tag">{modal.item.status}</span>
@@ -1226,6 +1292,19 @@ export default function Home() {
                   <p>Scheduled for {dateLabel(modal.item.scheduled_on)}</p>
                 )}
                 {modal.item.score != null && <p>{modal.item.score} points</p>}
+                {["class", "wing"].includes(role) && modal.item.owner_id === userId && modal.item.kind === "activity" && (
+                  <>
+                    {modal.item.admin_details?.photo && <p><a href={modal.item.admin_details.photo} target="_blank" rel="noreferrer">View programme photo</a></p>}
+                    {modal.item.admin_details?.poster && <p><a href={modal.item.admin_details.poster} target="_blank" rel="noreferrer">View programme poster</a></p>}
+                    {modal.item.status === "Pending" && <div className="dialog-actions"><button className="secondary" onClick={() => open({ type: "own-edit", item: modal.item })}>Edit report</button><button className="secondary" disabled={busy} onClick={() => { if (window.confirm("Delete this programme report?")) manageOwn(modal.item, "delete"); }}>Delete report</button></div>}
+                  </>
+                )}
+                {role === "wing" && modal.item.owner_id === userId && modal.item.kind === "booking" && (
+                  <div className="dialog-actions">
+                    {modal.item.status === "Approved" && <button className="secondary" disabled={busy} onClick={() => manageOwn(modal.item, "conducted")}>Mark conducted</button>}
+                    {["Pending", "Rejected"].includes(modal.item.status) && <button className="secondary" disabled={busy} onClick={() => { if (window.confirm("Delete this booking?")) manageOwn(modal.item, "delete"); }}>Delete booking</button>}
+                  </div>
+                )}
                 {modal.item.amount != null && (
                   <p>Amount due ₹{modal.item.amount}</p>
                 )}
