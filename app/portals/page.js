@@ -14,6 +14,8 @@ const SiteContent = dynamic(() => import("./site-content"), {
   loading: () => <p role="status">Loading website editor…</p>,
 });
 const PageVisibility = dynamic(() => import("./page-visibility"));
+const PrintCatalog = dynamic(() => import("./print-catalog"));
+const PrinterBilling = dynamic(() => import("./printer-billing"));
 const PublicTextEditor = dynamic(() => import("./public-text-editor"));
 const Accounts = dynamic(() => import("./accounts"), {
   loading: () => <p role="status">Loading accounts…</p>,
@@ -952,6 +954,10 @@ export default function Home() {
             {adminSection === "website" && db && <PublicTextEditor db={db} />}
             {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
+        ) : role === "printer" && portalSection === "billing" ? (
+          <PrinterBilling db={db} />
+        ) : role === "printer" && portalSection === "catalog" ? (
+          <PrintCatalog db={db} />
         ) : (role === "class" || role === "wing") && portalSection === "performance" ? (
           <section className="panel portal-membership-view" aria-labelledby="performance-title">
             <h2 id="performance-title">Programme performance</h2>

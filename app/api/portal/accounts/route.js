@@ -136,7 +136,7 @@ export async function POST(request) {
     const profile = details(input);
     const role = input?.role;
     if (
-      !["student", "class", "wing", "admin"].includes(role) ||
+      !["student", "class", "wing", "printer", "admin"].includes(role) ||
       !email ||
       email.startsWith("admin@") ||
       !profile ||

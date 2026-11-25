@@ -4,7 +4,7 @@
         <span class="nusha-mark" aria-hidden="true"></span>
         <h2 id="portal-login-title">Portal login</h2>
         <div class="portal-role-options" role="group" aria-label="Portal type">
-            <?php foreach (['student' => 'Student', 'class' => 'Class', 'wing' => 'Wing', 'admin' => 'Admin'] as $role => $label): ?>
+            <?php foreach (['student' => 'Student', 'class' => 'Class', 'wing' => 'Wing', 'printer' => 'Printer', 'admin' => 'Admin'] as $role => $label): ?>
                 <button type="button" data-role="<?= $role ?>" aria-pressed="<?= $role === 'student' ? 'true' : 'false' ?>"><?= $label ?></button>
             <?php endforeach; ?>
         </div>

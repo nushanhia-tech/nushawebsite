@@ -147,7 +147,7 @@ export default function Accounts({ db, activeId }) {
               value={role}
               onChange={(event) => setRole(event.target.value)}
             >
-              {["student", "class", "wing", "admin"].map((value) => (
+              {["student", "class", "wing", "printer", "admin"].map((value) => (
                 <option key={value} value={value}>
                   {labels[value]}
                 </option>
