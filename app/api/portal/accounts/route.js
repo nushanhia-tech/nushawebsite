@@ -10,7 +10,55 @@ async function admin(request, operation) {
     ?.match(/^Bearer (\S+)$/i)?.[1];
   if (!token)
     return portalResponse({ error: "Sign in as an administrator." }, 401);
-  const db = authClient(process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const viewer = authClient(
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    token,
+  );
+  if (!viewer)
+    return portalResponse(
+      { error: "Portal authentication is not configured." },
+      503,
+    );
+
+  const { data: auth, error: authError } = await viewer.auth.getUser(token);
+  if (authError?.status >= 500)
+    return portalResponse(
+      { error: "Supabase sign-in verification is temporarily unavailable." },
+      503,
+    );
+  if (!auth?.user)
+    return portalResponse({ error: "Sign in again to continue." }, 401);
+
+  const { data: actor, error: profileError } = await viewer
+    .from("profiles")
+    .select("*")
+    .eq("id", auth.user.id)
+    .maybeSingle();
+  if (profileError) {
+    console.error(
+      "Account manager could not verify the Admin profile",
+      profileError.code,
+    );
+    return portalResponse(
+      {
+        error:
+          "Could not verify your portal profile. Check that the Supabase portal migrations are applied.",
+      },
+      503,
+    );
+  }
+  if (actor?.role !== "admin" || actor.active === false) {
+    return portalResponse(
+      {
+        error:
+          "Administrator access is required. Check that your Supabase profile is an active Admin.",
+      },
+      403,
+    );
+  }
+
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const db = authClient(serviceKey);
   if (!db)
     return portalResponse(
       {
@@ -19,16 +67,23 @@ async function admin(request, operation) {
       503,
     );
 
-  const { data: auth } = await db.auth.getUser(token);
-  if (!auth.user)
-    return portalResponse({ error: "Sign in again to continue." }, 401);
-  const { data: actor } = await db
-    .from("profiles")
-    .select("*")
-    .eq("id", auth.user.id)
-    .maybeSingle();
-  if (actor?.role !== "admin" || actor.active === false) {
-    return portalResponse({ error: "Administrator access is required." }, 403);
+  const { data: serviceUser, error: serviceError } =
+    await db.auth.admin.getUserById(actor.id);
+  if (serviceError || serviceUser?.user?.id !== actor.id) {
+    const rejected = [400, 401, 403, 404].includes(serviceError?.status);
+    console.error(
+      "Supabase account management credentials could not be verified",
+      serviceError?.status,
+    );
+    return portalResponse(
+      {
+        error:
+          rejected || !serviceError
+            ? "Vercel’s SUPABASE_SERVICE_ROLE_KEY could not authorize account management. Use the service_role or Secret key from the linked Supabase project, then redeploy."
+            : "Supabase account management is temporarily unavailable. Please try again.",
+      },
+      503,
+    );
   }
   return operation(db, actor);
 }
