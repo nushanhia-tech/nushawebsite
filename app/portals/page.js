@@ -1024,16 +1024,16 @@ export default function Home() {
           style={{ "--active-shift": `${(adminMenuOpen || !["overview", "tasks", "notice"].includes(portalSection) ? 4 : portalSection === "tasks" ? 1 : portalSection === "notice" ? 3 : 0) * 20}%` }}
         >
           <span className="portal-mobile-indicator" aria-hidden="true" />
-          <button type="button" aria-current={portalSection === "overview" ? "page" : undefined} onClick={() => selectPortalSection("overview")}>
+          <button type="button" aria-current={!adminMenuOpen && portalSection === "overview" ? "page" : undefined} onClick={() => selectPortalSection("overview")}>
             <LayoutGrid size={20} /><span>Home</span>
           </button>
-          <button type="button" aria-current={portalSection === "tasks" ? "page" : undefined} onClick={() => selectPortalSection("tasks")}>
+          <button type="button" aria-current={!adminMenuOpen && portalSection === "tasks" ? "page" : undefined} onClick={() => selectPortalSection("tasks")}>
             <List size={20} /><span>Tasks</span>
           </button>
           <button className="portal-mobile-add" type="button" aria-label={portal.create.length ? kinds[portal.create[0]].action : "No new action available"} disabled={!portal.create.length} onClick={() => portal.create[0] && open({ type: "create", kind: portal.create[0] })}>
             <span><Plus size={23} /></span><small>Add</small>
           </button>
-          <button type="button" aria-current={portalSection === "notice" ? "page" : undefined} onClick={() => selectPortalSection("notice")}>
+          <button type="button" aria-current={!adminMenuOpen && portalSection === "notice" ? "page" : undefined} onClick={() => selectPortalSection("notice")}>
             <Bell size={20} /><span>Updates</span>
           </button>
           <button type="button" aria-current={adminMenuOpen || !["overview", "tasks", "notice"].includes(portalSection) ? "page" : undefined} aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen(!adminMenuOpen)}>
