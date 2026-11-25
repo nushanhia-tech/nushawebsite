@@ -37,7 +37,7 @@ export const adminGroups = [
       },
       {
         id: "evaluations",
-        label: "Evaluations",
+        label: "Assessment",
         description: "Edit programme submissions and award points.",
         icon: ClipboardCheck,
         kinds: ["activity"],
@@ -150,7 +150,7 @@ export function PortalNavigation({ className = "", role, kinds, section, onSelec
             {role === "student" && <button type="button" aria-current={section === "membership" ? "page" : undefined} onClick={() => onSelect("membership")}><IdCard size={17} /><span>Membership</span></button>}
             <button type="button" aria-current={section === "tasks" ? "page" : undefined} onClick={() => onSelect("tasks")}><Inbox size={17} /><span>All tasks</span></button>
             {kinds.filter((kind) => kind !== "notice").map((kind) => {
-              const labels = { due: "Dues", payment: "Payments", result: "Results", activity: "Activities", booking: "Bookings", print: "Print jobs", support: "Support", outreach: "Outreach" };
+              const labels = { due: "Dues", payment: "Payments", result: "Results", activity: "Monthly assessment", booking: "Bookings", print: "Print jobs", support: "Support", outreach: "Outreach" };
               return <button type="button" key={kind} aria-current={section === kind ? "page" : undefined} onClick={() => onSelect(kind)}><Inbox size={17} /><span>{labels[kind] || kind}</span></button>;
             })}
             <button type="button" aria-current={section === "notice" ? "page" : undefined} onClick={() => onSelect("notice")}><Bell size={17} /><span>Announcements</span></button>

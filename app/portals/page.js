@@ -141,6 +141,8 @@ export default function Home() {
   const [notice, setNotice] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [assessment, setAssessment] = useState(null);
+  const [assessmentOwners, setAssessmentOwners] = useState([]);
   const dialog = useRef(null);
 
   async function refresh(signal, profileRole = profile?.role) {
@@ -224,6 +226,20 @@ export default function Home() {
 
   const userId = session?.user.id;
   useEffect(() => {
+    if (!db || !userId || !["class", "wing"].includes(profile?.role)) return;
+    let active = true;
+    const load = () => db.rpc("assessment_status").then(({ data, error }) => { if (active) setAssessment(error ? { enabled: false } : data); });
+    load();
+    const timer = window.setInterval(load, 30000);
+    return () => { active = false; window.clearInterval(timer); };
+  }, [userId, profile?.role]);
+  useEffect(() => {
+    if (!db || profile?.role !== "admin" || adminSection !== "evaluations") return;
+    let active = true;
+    db.rpc("admin_assessment_owners").then(({ data, error }) => { if (active) { if (error) setNotice(error.message); else setAssessmentOwners(data || []); } });
+    return () => { active = false; };
+  }, [profile?.role, adminSection]);
+  useEffect(() => {
     if (!db || !userId) return;
     let active = true;
     const controller = new AbortController();
@@ -270,13 +286,23 @@ export default function Home() {
     else dialog.current?.close();
   }, [modal]);
 
-  const portal = portals[role];
+  const basePortal = portals[role];
+  const assessmentOpen = !db || assessment?.enabled === true;
+  const portal = ["class", "wing"].includes(role) && !assessmentOpen
+    ? { ...basePortal, kinds: basePortal.kinds.filter((kind) => kind !== "activity"), create: basePortal.create.filter((kind) => kind !== "activity") }
+    : basePortal;
+  useEffect(() => {
+    if (["class", "wing"].includes(role) && !assessmentOpen) {
+      if (portalSection === "activity") { setPortalSection("overview"); setFilter("all"); }
+      if ((modal?.type === "create" && modal.kind === "activity") || modal?.type === "bulk-programmes" || modal?.type === "own-edit") setModal(null);
+    }
+  }, [role, assessmentOpen, portalSection, modal?.type, modal?.kind]);
   const section = adminSections[adminSection];
   const isAdmin = role === "admin";
   const RoleIcon = roleIcons[role];
   const name = profile?.display_name || portal.identity;
   const recordsForRole = (db ? records : demo[role]).filter((item) =>
-    portal.kinds.includes(item.kind),
+    basePortal.kinds.includes(item.kind),
   );
   const shown = recordsForRole.filter(
     (item) =>
@@ -343,6 +369,7 @@ export default function Home() {
 
   function open(value) {
     setError("");
+    if (value.type === "create" && value.kind === "activity" && ["class", "wing"].includes(role)) { selectPortalSection("activity"); return; }
     setModal(value);
   }
 
@@ -413,7 +440,7 @@ export default function Home() {
     }
   }
 
-  async function create(event) {
+  async function create(event, explicitKind) {
     event.preventDefault();
     setBusy(true);
     setError("");
@@ -444,17 +471,17 @@ export default function Home() {
     const item = {
       ...values,
       title: values.title.trim(),
-      kind: modal.kind,
+      kind: explicitKind || modal.kind,
       amount: values.amount ? Number(values.amount) : null,
     };
     if (target_role) item.target_role = target_role;
-    if (modal.kind === "activity" && ["class", "wing"].includes(role)) {
+    if (item.kind === "activity" && ["class", "wing"].includes(role)) {
       item.admin_details = { photo: programmeDetails.programme_photo, poster: programmeDetails.programme_poster,
         time: programmeDetails.programme_time, stage: programmeDetails.programme_stage,
         month: programmeDetails.programme_month, category: programmeDetails.programme_category };
     }
     if (
-      modal.kind === "outreach" &&
+      item.kind === "outreach" &&
       (category !== "Article" ||
         author_name ||
         author_role ||
@@ -473,6 +500,7 @@ export default function Home() {
     }
     try {
       if (!item.title) throw new Error("Enter a title.");
+      if (explicitKind === "activity" && (!programmeDetails.programme_photo || !programmeDetails.programme_poster)) throw new Error("Attach a photo and poster, and wait for both uploads to finish.");
       if (db) {
         const result = await db.from("work_items").insert(item);
         if (result.error) throw result.error;
@@ -501,7 +529,8 @@ export default function Home() {
       setNotice("Saved.");
       setModal(null);
     } catch (failure) {
-      setError(failure.message || "The item could not be saved.");
+      if (explicitKind) setNotice(failure.message || "The item could not be saved.");
+      else setError(failure.message || "The item could not be saved.");
     } finally {
       setBusy(false);
     }
@@ -863,7 +892,7 @@ export default function Home() {
         )}
         {role === "admin" ? (
           <div className="admin-body">
-            {(adminSection === "fees" || adminSection === "submissions") && (
+            {(adminSection === "fees" || adminSection === "submissions" || adminSection === "evaluations") && (
               <AdminTools
                 key={adminSection}
                 db={db}
@@ -891,6 +920,7 @@ export default function Home() {
                 }
                 open={open}
                 loading={recordsLoading}
+                assessmentOwners={adminSection === "evaluations" ? assessmentOwners : null}
               />
             )}
             {adminSection === "results" && (
@@ -940,6 +970,23 @@ export default function Home() {
               {recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").length ? recordsForRole.filter((item) => item.kind === "activity" && item.status === "Evaluated").map((item) => <Item key={item.id} item={item} onClick={() => open({ type: "detail", item })} />) : <p className="empty">No evaluated programmes yet.</p>}
             </div>
           </section>
+        ) : ["class", "wing"].includes(role) && portalSection === "activity" && assessmentOpen ? (
+          <div className="assessment-layout">
+            <section className="panel"><h2>Upload monthly assessment</h2><p>Open month: {assessment?.month || "Demo"}</p>
+              <form key={queueVersion} onSubmit={(event) => create(event, "activity")}>
+                <label>Programme name<input name="title" required maxLength={160} /></label>
+                <label>Date<input type="date" name="scheduled_on" required /></label>
+                <label>Time<input type="time" name="programme_time" required /></label>
+                <label>Description<textarea name="detail" required maxLength={2000} /></label>
+                <label>Stage<select name="programme_stage"><option>Stage</option><option>Non-Stage</option></select></label>
+                <label>Month<input type="month" name="programme_month" value={assessment?.month || ""} readOnly required /></label>
+                <PhotoUpload db={db} ownerId={userId} name="programme_photo" label="Upload photo" />
+                <PhotoUpload db={db} ownerId={userId} name="programme_poster" label="Upload poster" />
+                <button className="primary" disabled={busy}>Submit programme</button>
+              </form>
+            </section>
+            <section className="panel"><h2>Submitted programmes</h2><p>Open a record to see details, edit or delete it.</p><div className="list">{recordsForRole.filter((item) => item.kind === "activity").map((item) => <Item key={item.id} item={item} onClick={() => open({ type: "detail", item })} />)}{!recordsForRole.some((item) => item.kind === "activity") && <p className="empty">No submitted programmes yet.</p>}</div></section>
+          </div>
         ) : role === "student" && portalSection === "membership" ? (
           <section key="membership" className="panel portal-membership-view" id="student-membership">
             <div className="portal-card-heading"><div><h2>Digital membership</h2><p>Your student membership card.</p></div><span className="portal-action-icon"><IdCard size={18} /></span></div>
@@ -1362,6 +1409,8 @@ export default function Home() {
                 )}
                 {role === "admin" && modal.item.kind === "activity" && (
                   <>
+                    {modal.item.admin_details?.photo && <p><a href={modal.item.admin_details.photo} target="_blank" rel="noreferrer">View photo</a></p>}
+                    {modal.item.admin_details?.poster && <p><a href={modal.item.admin_details.poster} target="_blank" rel="noreferrer">View poster</a></p>}
                     {modal.item.admin_details?.time && (
                       <p>Time: {modal.item.admin_details.time}</p>
                     )}

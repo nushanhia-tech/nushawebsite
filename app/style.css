@@ -1030,6 +1030,19 @@ form .secondary {
   margin-top: 16px;
   animation: portal-section-enter 280ms ease both;
 }
+.assessment-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+  align-items: start;
+}
+.assessment-layout .panel { min-width: 0; }
+.assessment-layout .panel > p { margin: 8px 0 16px; color: var(--muted); }
+.assessment-layout .list { margin-top: 14px; }
+@media (max-width: 730px) {
+  .assessment-layout { grid-template-columns: minmax(0, 1fr); }
+}
 .portal-shell .work {
   animation: portal-section-enter 280ms ease both;
 }

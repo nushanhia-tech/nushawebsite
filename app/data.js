@@ -97,8 +97,8 @@ export const kinds = {
     ],
   },
   activity: {
-    label: "Activities",
-    action: "Submit activity",
+    label: "Monthly assessment",
+    action: "Submit assessment",
     fields: [["Activity description", "detail"]],
   },
   print: {

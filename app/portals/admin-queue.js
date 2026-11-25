@@ -12,6 +12,7 @@ export default function AdminQueue({
   title = "Work queue",
   availableKinds = portals.admin.kinds,
   overview = true,
+  assessmentOwners = null,
 }) {
   const [kind, setKind] = useState(initialFilter);
   const [scope, setScope] = useState(
@@ -20,6 +21,8 @@ export default function AdminQueue({
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [month, setMonth] = useState("");
+  const [ownerRole, setOwnerRole] = useState("all");
+  const [ownerId, setOwnerId] = useState("all");
 
   useEffect(() => {
     setKind(initialFilter);
@@ -34,6 +37,7 @@ export default function AdminQueue({
     return (
       (kind === "all" || item.kind === kind) &&
       (scope === "all" || item.status === "Pending") &&
+      (!assessmentOwners || ((ownerRole === "all" || assessmentOwners.some((owner) => owner.id === item.owner_id && owner.role === ownerRole)) && (ownerId === "all" || ownerId === item.owner_id))) &&
       (!term ||
         [
           item.title,
@@ -95,6 +99,7 @@ export default function AdminQueue({
           (availableKinds.length === 1 ? " admin-filters-compact" : "")
         }
       >
+        {assessmentOwners && <><label className="admin-control">Portal type<select value={ownerRole} onChange={(event) => { setOwnerRole(event.target.value); setOwnerId("all"); setPage(1); }}><option value="all">All classes and wings</option><option value="class">Classes</option><option value="wing">Wings</option></select></label><label className="admin-control">Class or wing<select value={ownerId} onChange={(event) => { setOwnerId(event.target.value); setPage(1); }}><option value="all">All accounts</option>{assessmentOwners.filter((owner) => ownerRole === "all" || owner.role === ownerRole).map((owner) => <option key={owner.id} value={owner.id}>{owner.display_name} ({owner.role})</option>)}</select></label></>}
         <label className="admin-control">
           Status
           <select

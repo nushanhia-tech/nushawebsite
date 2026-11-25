@@ -7,12 +7,13 @@ export default function AdminTools({ db, refresh, section }) {
   const [uploads, setUploads] = useState(null);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
+  const [assessmentMonth, setAssessmentMonth] = useState("");
 
   useEffect(() => {
     let live = true;
-    if (db && section === "submissions")
-      db.rpc("portal_upload_enabled").then(({ data, error }) => {
-        if (live && !error) setUploads(data);
+    if (db && (section === "submissions" || section === "evaluations"))
+      db.rpc("assessment_status").then(({ data, error }) => {
+        if (live && !error) { setUploads(data.enabled); setAssessmentMonth(data.month || ""); }
       });
     return () => {
       live = false;
@@ -72,7 +73,7 @@ export default function AdminTools({ db, refresh, section }) {
       <h2>
         {section === "fees"
           ? "Assign student fees"
-          : "Programme submission access"}
+          : "Monthly assessment access"}
       </h2>
       {!db ? (
         <p>Connect Supabase to manage this setting.</p>
@@ -133,7 +134,7 @@ export default function AdminTools({ db, refresh, section }) {
               </details>
             </>
           )}
-          {section === "submissions" && (
+          {(section === "submissions" || section === "evaluations") && (
             <>
               <p>
                 {uploads === null
@@ -142,15 +143,16 @@ export default function AdminTools({ db, refresh, section }) {
                     ? "Submissions are open."
                     : "Submissions are closed."}
               </p>
+              <label>Assessment month <input type="month" value={assessmentMonth} onChange={(event) => setAssessmentMonth(event.target.value)} /></label>
               {uploads !== null && (
                 <button
                   className="secondary"
                   disabled={busy}
                   onClick={() =>
                     run(async () => {
-                      const { error } = await db.rpc("admin_set_option", {
-                        option_name: "upload_status",
-                        value: uploads ? "closed" : "open",
+                      const { error } = await db.rpc("set_assessment_window", {
+                        month_value: assessmentMonth,
+                        is_open: !uploads,
                       });
                       if (error) throw error;
                       setUploads(!uploads);
@@ -161,6 +163,7 @@ export default function AdminTools({ db, refresh, section }) {
                   {uploads ? "Close submissions" : "Open submissions"}
                 </button>
               )}
+              {uploads && <button className="secondary" disabled={busy || !assessmentMonth} onClick={() => run(async () => { const { error } = await db.rpc("set_assessment_window", { month_value: assessmentMonth, is_open: true }); if (error) throw error; setNotice("Assessment month updated."); })}>Update open month</button>}
             </>
           )}
         </>
