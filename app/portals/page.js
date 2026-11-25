@@ -131,6 +131,7 @@ export default function Home() {
   const [profile, setProfile] = useState(null);
   const [loaded, setLoaded] = useState(!db);
   const [filter, setFilter] = useState("all");
+  const [portalSection, setPortalSection] = useState("overview");
   const [search, setSearch] = useState("");
   const [view, setView] = useState("board");
   const [modal, setModal] = useState(null);
@@ -276,11 +277,20 @@ export default function Home() {
   );
   const shown = recordsForRole.filter(
     (item) =>
-      (filter === "all" || item.kind === filter) &&
+      (portalSection === "overview" || portalSection === "tasks"
+        ? filter === "all" || item.kind === filter
+        : item.kind === portalSection) &&
       [item.title, item.detail, kinds[item.kind].label, item.status].some(
         (value) => value?.toLowerCase().includes(search.toLowerCase()),
       ),
   );
+  const portalSectionTitle = portalSection === "overview"
+    ? "Dashboard overview"
+    : portalSection === "tasks"
+      ? "All tasks"
+      : portalSection === "notice"
+        ? "Announcements"
+        : kinds[portalSection]?.label || "Portal details";
   const outstanding = recordsForRole.filter(
     (item) => item.kind === "due" && item.status === "Pending",
   );
@@ -312,8 +322,16 @@ export default function Home() {
   function selectRole(value) {
     setRole(value);
     setFilter("all");
+    setPortalSection("overview");
     setSearch("");
     setNotice("");
+  }
+
+  function selectPortalSection(value) {
+    setPortalSection(value);
+    setFilter(value === "overview" || value === "tasks" ? "all" : value);
+    setSearch("");
+    setAdminMenuOpen(false);
   }
 
   function open(value) {
@@ -647,11 +665,8 @@ export default function Home() {
           className={"role-sidebar" + (adminMenuOpen ? " portal-mobile-open" : "")}
           role={role}
           kinds={portal.kinds}
-          filter={filter}
-          onFilter={(value) => {
-            setFilter(value);
-            setAdminMenuOpen(false);
-          }}
+          section={portalSection}
+          onSelect={selectPortalSection}
           signedIn={Boolean(db)}
           signOut={signOut}
           menuOpen={adminMenuOpen}
@@ -673,8 +688,8 @@ export default function Home() {
               onClick={() => {
                 if (isAdmin) navigateAdmin("announcements");
                 else {
-                  setFilter("notice");
-                  setSearch("");
+                  selectPortalSection("notice");
+                  setView("list");
                 }
               }}
             >
@@ -780,7 +795,7 @@ export default function Home() {
             </button>
           </p>
         )}
-        {role === "student" && (
+        {role === "student" && portalSection === "overview" && (
           <div className="student-row" id="student-membership">
             <section className="panel">
               <h2>Digital membership</h2>
@@ -814,13 +829,32 @@ export default function Home() {
           </div>
         )}
 
-        {role !== "admin" && (
+        {role !== "admin" && portalSection === "overview" && (
           <PortalOverview
             role={role}
             records={recordsForRole}
             createItems={portal.create}
             onCreate={(kind) => open({ type: "create", kind })}
           />
+        )}
+        {role !== "admin" && portalSection !== "overview" && (
+          <section className="portal-selected-section" aria-live="polite">
+            <div>
+              <span className="portal-section-kicker">{portal.name} workspace</span>
+              <h2>{portalSectionTitle}</h2>
+              <p>{portalSection === "tasks"
+                ? "Browse every request and update in your workspace."
+                : portalSection === "notice"
+                  ? "The latest union updates for your portal."
+                  : `Review your ${portalSectionTitle.toLowerCase()} requests and updates.`}</p>
+            </div>
+            <div className="portal-section-count"><strong>{shown.length}</strong><span>{shown.length === 1 ? "item" : "items"}</span></div>
+            {portal.create.includes(portalSection) && (
+              <button className="primary" onClick={() => open({ type: "create", kind: portalSection })}>
+                <Plus size={16} /> {kinds[portalSection].action}
+              </button>
+            )}
+          </section>
         )}
 
         {role === "admin" ? (
@@ -884,9 +918,11 @@ export default function Home() {
           <section className="work" id="portal-work" aria-labelledby="work-title">
             <div className="work-head">
               <div>
-                <h2 id="work-title">
-                  {role === "printer" ? "Print queue" : "Recent tasks"}
-                </h2>
+                <h2 id="work-title">{portalSection === "overview"
+                  ? "Recent tasks"
+                  : portalSection === "tasks"
+                    ? role === "printer" ? "Print queue" : "All tasks"
+                    : portalSectionTitle}</h2>
                 <p>
                   {shown.length} {shown.length === 1 ? "item" : "items"}
                 </p>
@@ -919,6 +955,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
+            {(portalSection === "overview" || portalSection === "tasks") && (
             <div className="filter-row">
               <div className="filters" aria-label="Filter items">
                 {["all", ...portal.kinds].map((kind) => (
@@ -952,6 +989,7 @@ export default function Home() {
                 </div>
               )}
             </div>
+            )}
             {view === "board" ? (
               <div className="board">
                 {stages.map((stage, index) => {
@@ -998,7 +1036,7 @@ export default function Home() {
             )}
           </section>
         )}
-        {role === "wing" && <ProgrammeStandings db={db} role="wing" />}
+        {role === "wing" && (portalSection === "overview" || portalSection === "result") && <ProgrammeStandings db={db} role="wing" />}
         <footer>
           <a href="/">NUS’HA public website</a>
           <button onClick={() => open({ type: "help" })}>
@@ -1009,16 +1047,16 @@ export default function Home() {
 
       {role !== "admin" && (
         <nav className="portal-mobile-nav" aria-label="Mobile portal navigation">
-          <button type="button" onClick={() => { setFilter("all"); setSearch(""); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+          <button type="button" aria-current={portalSection === "overview" ? "page" : undefined} onClick={() => { selectPortalSection("overview"); window.scrollTo({ top: 0, behavior: "smooth" }); }}>
             <LayoutGrid size={20} /><span>Home</span>
           </button>
-          <button type="button" onClick={() => { setFilter("all"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
+          <button type="button" aria-current={portalSection === "tasks" ? "page" : undefined} onClick={() => { selectPortalSection("tasks"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
             <List size={20} /><span>Tasks</span>
           </button>
           <button className="portal-mobile-add" type="button" aria-label={portal.create.length ? kinds[portal.create[0]].action : "No new action available"} disabled={!portal.create.length} onClick={() => portal.create[0] && open({ type: "create", kind: portal.create[0] })}>
             <span><Plus size={23} /></span><small>Add</small>
           </button>
-          <button type="button" onClick={() => { setFilter("notice"); setSearch(""); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
+          <button type="button" aria-current={portalSection === "notice" ? "page" : undefined} onClick={() => { selectPortalSection("notice"); setView("list"); requestAnimationFrame(() => document.getElementById("portal-work")?.scrollIntoView({ behavior: "smooth", block: "start" })); }}>
             <Bell size={20} /><span>Updates</span>
           </button>
           <button type="button" aria-expanded={adminMenuOpen} onClick={() => setAdminMenuOpen(!adminMenuOpen)}>

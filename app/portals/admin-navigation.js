@@ -133,7 +133,7 @@ export const adminSections = Object.fromEntries(
   ),
 );
 
-export function PortalNavigation({ className = "", role, kinds, filter, onFilter, signedIn, signOut, menuOpen, setMenuOpen }) {
+export function PortalNavigation({ className = "", role, kinds, section, onSelect, signedIn, signOut, menuOpen, setMenuOpen }) {
   const Icon = { student: Users, wing: Layers3, class: ClipboardCheck, printer: Printer }[role] || Users;
   return (
     <aside className={`admin-sidebar ${className}`} aria-label={`${role} portal navigation`}>
@@ -145,12 +145,13 @@ export function PortalNavigation({ className = "", role, kinds, filter, onFilter
       <div className={"admin-sidebar-content" + (menuOpen ? " admin-sidebar-open" : "")}>
         <nav className="admin-sidebar-nav" aria-label="Portal sections">
           <div className="admin-nav-group"><p>Workspace</p>
-            <button type="button" aria-current={filter === "all" ? "page" : undefined} onClick={() => onFilter("all")}><Icon size={17} /><span>Overview</span></button>
+            <button type="button" aria-current={section === "overview" ? "page" : undefined} onClick={() => onSelect("overview")}><Icon size={17} /><span>Overview</span></button>
+            <button type="button" aria-current={section === "tasks" ? "page" : undefined} onClick={() => onSelect("tasks")}><Inbox size={17} /><span>All tasks</span></button>
             {kinds.filter((kind) => kind !== "notice").map((kind) => {
               const labels = { due: "Dues", payment: "Payments", result: "Results", activity: "Activities", booking: "Bookings", print: "Print jobs", support: "Support", outreach: "Outreach" };
-              return <button type="button" key={kind} aria-current={filter === kind ? "page" : undefined} onClick={() => onFilter(kind)}><Inbox size={17} /><span>{labels[kind] || kind}</span></button>;
+              return <button type="button" key={kind} aria-current={section === kind ? "page" : undefined} onClick={() => onSelect(kind)}><Inbox size={17} /><span>{labels[kind] || kind}</span></button>;
             })}
-            <button type="button" aria-current={filter === "notice" ? "page" : undefined} onClick={() => onFilter("notice")}><Bell size={17} /><span>Announcements</span></button>
+            <button type="button" aria-current={section === "notice" ? "page" : undefined} onClick={() => onSelect("notice")}><Bell size={17} /><span>Announcements</span></button>
           </div>
         </nav>
         <div className="admin-sidebar-footer"><a href="/"><Globe size={17} /> Public website</a>{signedIn && <button type="button" onClick={signOut}><LogOut size={17} /> Sign out</button>}</div>
