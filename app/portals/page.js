@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import AdminQueue from "./admin-queue";
+import AdminNavigation, { adminSections } from "./admin-navigation";
 import { AdminEditFields, OutreachFields } from "./admin-item-fields";
 import { CardPreview, defaultCard } from "./id-card";
 import { supabaseProjectUrl } from "../../lib/supabase-url";
@@ -74,6 +75,8 @@ export default function Home() {
   const [records, setRecords] = useState([]);
   const [recordsLoading, setRecordsLoading] = useState(Boolean(db));
   const [adminSection, setAdminSection] = useState("queue");
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const adminHeading = useRef(null);
   const [queueVersion, setQueueVersion] = useState(0);
   const [cardDesign, setCardDesign] = useState(defaultCard);
   const [demo, setDemo] = useState(initialDemo);
@@ -127,7 +130,10 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const requested = new URLSearchParams(window.location.search).get("role");
+    const params = new URLSearchParams(window.location.search);
+    const requested = params.get("role");
+    const section = params.get("section");
+    if (Object.hasOwn(adminSections, section)) setAdminSection(section);
     if (requested && Object.hasOwn(portals, requested)) setRole(requested);
   }, []);
 
@@ -214,6 +220,8 @@ export default function Home() {
   }, [modal]);
 
   const portal = portals[role];
+  const section = adminSections[adminSection];
+  const isAdmin = role === "admin";
   const RoleIcon = roleIcons[role];
   const name = profile?.display_name || portal.identity;
   const recordsForRole = (db ? records : demo[role]).filter((item) =>
@@ -230,6 +238,29 @@ export default function Home() {
     (item) => item.kind === "due" && item.status === "Pending",
   );
   const upiId = process.env.NEXT_PUBLIC_UPI_ID;
+
+  function navigateAdmin(section) {
+    setAdminSection(section);
+    setFilter("all");
+    setAdminMenuOpen(false);
+    const url = new URL(window.location.href);
+    if (section === "queue") url.searchParams.delete("section");
+    else url.searchParams.set("section", section);
+    window.history.replaceState(window.history.state, "", url);
+    if (adminMenuOpen)
+      requestAnimationFrame(() => adminHeading.current?.focus());
+  }
+
+  async function signOut() {
+    const result = await db.auth.signOut();
+    if (result.error) setNotice(result.error.message);
+    else {
+      setProfile(null);
+      setRecords([]);
+      setNotice("");
+      setAdminMenuOpen(false);
+    }
+  }
 
   function selectRole(value) {
     setRole(value);
@@ -553,50 +584,54 @@ export default function Home() {
     );
 
   return (
-    <div className="shell">
-      <aside className="rail" aria-label="Portal navigation">
-        <a className="mark" href="/" aria-label="NUS’HA home">
-          <span className="nusha-mark" aria-hidden="true" />
-        </a>
-        <div className="rail-links">
-          {Object.entries(portals)
-            .filter(([id]) => !db || id === role)
-            .map(([id, entry]) => {
-              const Icon = roleIcons[id];
-              return (
-                <button
-                  className={id === role ? "rail-active" : ""}
-                  key={id}
-                  title={entry.name}
-                  aria-label={entry.name + " portal"}
-                  aria-current={id === role ? "page" : undefined}
-                  onClick={() => selectRole(id)}
-                >
-                  <Icon size={19} />
-                  <span>{entry.name}</span>
-                </button>
-              );
-            })}
-        </div>
-        {db && (
-          <button
-            className="signout"
-            title="Sign out"
-            aria-label="Sign out"
-            onClick={async () => {
-              const result = await db.auth.signOut();
-              if (result.error) setNotice(result.error.message);
-              else {
-                setProfile(null);
-                setRecords([]);
-                setNotice("");
-              }
-            }}
-          >
-            <LogOut size={19} />
-          </button>
-        )}
-      </aside>
+    <div className={"shell" + (isAdmin ? " admin-shell" : "")}>
+      {isAdmin ? (
+        <AdminNavigation
+          section={adminSection}
+          navigate={navigateAdmin}
+          signedIn={Boolean(db)}
+          signOut={signOut}
+          onRoleChange={selectRole}
+          menuOpen={adminMenuOpen}
+          setMenuOpen={setAdminMenuOpen}
+        />
+      ) : (
+        <aside className="rail" aria-label="Portal navigation">
+          <a className="mark" href="/" aria-label="NUS’HA home">
+            <span className="nusha-mark" aria-hidden="true" />
+          </a>
+          <div className="rail-links">
+            {Object.entries(portals)
+              .filter(([id]) => !db || id === role)
+              .map(([id, entry]) => {
+                const Icon = roleIcons[id];
+                return (
+                  <button
+                    className={id === role ? "rail-active" : ""}
+                    key={id}
+                    title={entry.name}
+                    aria-label={entry.name + " portal"}
+                    aria-current={id === role ? "page" : undefined}
+                    onClick={() => selectRole(id)}
+                  >
+                    <Icon size={19} />
+                    <span>{entry.name}</span>
+                  </button>
+                );
+              })}
+          </div>
+          {db && (
+            <button
+              className="signout"
+              title="Sign out"
+              aria-label="Sign out"
+              onClick={signOut}
+            >
+              <LogOut size={19} />
+            </button>
+          )}
+        </aside>
+      )}
       <main className="workspace">
         <header className="topbar">
           <div className="crumb">
@@ -610,10 +645,11 @@ export default function Home() {
               title="Announcements"
               aria-label="Announcements"
               onClick={() => {
-                setAdminSection("queue");
-                setFilter("notice");
-                setQueueVersion((value) => value + 1);
-                setSearch("");
+                if (isAdmin) navigateAdmin("announcements");
+                else {
+                  setFilter("notice");
+                  setSearch("");
+                }
               }}
             >
               <Bell size={18} />
@@ -634,37 +670,51 @@ export default function Home() {
 
         {role === "admin" ? (
           <section className="admin-intro">
-            <h1>Admin Portal</h1>
-            <p>
-              Review requests, create accounts, and update the public website.
-            </p>
+            <div className="admin-intro-content">
+              <div>
+                <h1 ref={adminHeading} tabIndex={-1}>
+                  {section.label}
+                </h1>
+                <p>{section.description}</p>
+              </div>
+              <div className="admin-intro-actions">
+                {section.action && (
+                  <button
+                    className="primary"
+                    onClick={() =>
+                      open({ type: "create", kind: section.action })
+                    }
+                  >
+                    <Plus size={16} /> {kinds[section.action].action}
+                  </button>
+                )}
+                {adminSection === "bookings" && (
+                  <a className="secondary" href="/calendar.php">
+                    Official calendar
+                  </a>
+                )}
+                {["bookings", "results"].includes(adminSection) && (
+                  <button
+                    className="primary"
+                    onClick={() =>
+                      open({
+                        type: "report",
+                        reportType:
+                          adminSection === "bookings" ? "calendar" : "results",
+                      })
+                    }
+                  >
+                    <ArrowDownToLine size={16} /> Download report
+                  </button>
+                )}
+              </div>
+            </div>
             {db && profile && !Object.hasOwn(profile, "active") && (
-              <p role="status">
+              <p className="admin-migration-notice" role="status">
                 Apply the Admin Tools migration in Supabase to enable the new
                 database actions.
               </p>
             )}
-            <nav className="admin-nav" aria-label="Admin sections">
-              {[
-                ["queue", "Work queue"],
-                ["accounts", "Accounts"],
-                ["website", "Website"],
-                ["tools", "Tools"],
-              ].map(([value, label]) => (
-                <button
-                  key={value}
-                  type="button"
-                  aria-pressed={adminSection === value}
-                  onClick={() => {
-                    if (value === "queue" && adminSection !== value)
-                      setFilter("all");
-                    setAdminSection(value);
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
-            </nav>
           </section>
         ) : (
           <section className="hero">
@@ -747,14 +797,38 @@ export default function Home() {
 
         {role === "admin" ? (
           <div className="admin-body">
-            {adminSection === "queue" && (
+            {(adminSection === "fees" || adminSection === "submissions") && (
+              <AdminTools
+                key={adminSection}
+                db={db}
+                refresh={refresh}
+                section={adminSection}
+              />
+            )}
+            {(adminSection === "queue" || section.kinds) && (
               <AdminQueue
-                key={queueVersion}
-                records={recordsForRole}
-                initialFilter={filter}
+                key={adminSection + ":" + queueVersion}
+                records={
+                  section.kinds
+                    ? recordsForRole.filter((item) =>
+                        section.kinds.includes(item.kind),
+                      )
+                    : recordsForRole
+                }
+                initialFilter={adminSection === "queue" ? filter : "all"}
+                availableKinds={section.kinds}
+                overview={adminSection === "queue"}
+                title={
+                  adminSection === "queue"
+                    ? "Pending and recent items"
+                    : section.label + " records"
+                }
                 open={open}
                 loading={recordsLoading}
               />
+            )}
+            {adminSection === "results" && (
+              <ProgrammeStandings db={db} role="admin" />
             )}
             {adminSection === "accounts" &&
               (db ? (
@@ -764,21 +838,19 @@ export default function Home() {
                   Account creation uses a connected Supabase project.
                 </p>
               ))}
-            {adminSection === "website" &&
+            {(adminSection === "website" || adminSection === "outreach") &&
               (db ? (
-                <SiteContent db={db} />
+                <SiteContent
+                  key={adminSection}
+                  db={db}
+                  outreachOnly={adminSection === "outreach"}
+                />
               ) : (
                 <p className="panel">
                   Website editing uses a connected Supabase project.
                 </p>
               ))}
-            {adminSection === "tools" && (
-              <div className="admin-tools-stack">
-                <AdminTools db={db} refresh={refresh} open={open} />
-                <ProgrammeStandings db={db} role="admin" />
-                <CardDesigner db={db} />
-              </div>
-            )}
+            {adminSection === "cards" && <CardDesigner db={db} />}
           </div>
         ) : (
           <section className="work" aria-labelledby="work-title">
@@ -997,7 +1069,10 @@ export default function Home() {
                 <form onSubmit={exportReport}>
                   <label>
                     Report
-                    <select name="reportType">
+                    <select
+                      name="reportType"
+                      defaultValue={modal.reportType || "results"}
+                    >
                       <option value="results">Programme results</option>
                       <option value="calendar">Official calendar</option>
                     </select>

@@ -3,21 +3,21 @@
 import { useEffect, useState } from "react";
 import { csvRows } from "./admin-client";
 
-export default function AdminTools({ db, refresh, open }) {
+export default function AdminTools({ db, refresh, section }) {
   const [uploads, setUploads] = useState(null);
   const [notice, setNotice] = useState("");
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     let live = true;
-    if (db)
+    if (db && section === "submissions")
       db.rpc("portal_upload_enabled").then(({ data, error }) => {
         if (live && !error) setUploads(data);
       });
     return () => {
       live = false;
     };
-  }, [db]);
+  }, [db, section]);
 
   async function run(action) {
     setBusy(true);
@@ -69,107 +69,102 @@ export default function AdminTools({ db, refresh, open }) {
 
   return (
     <div className="panel site-content">
-      <h2>Fees, reports and settings</h2>
+      <h2>
+        {section === "fees"
+          ? "Assign student fees"
+          : "Programme submission access"}
+      </h2>
       {!db ? (
-        <p>Connect Supabase to save fees and submission settings.</p>
+        <p>Connect Supabase to manage this setting.</p>
       ) : (
         <>
-          <details className="admin-disclosure">
-            <summary>Assign student fees</summary>
-            <form
-              className="account-form"
-              onSubmit={(event) => assign(event, false)}
-            >
-              <label>
-                Admission number
-                <input name="admission" required />
-              </label>
-              <label>
-                Fee description
-                <input name="title" required maxLength={160} />
-              </label>
-              <label>
-                Category
-                <input name="category" maxLength={100} />
-              </label>
-              <label>
-                Amount (₹)
-                <input
-                  name="amount"
-                  type="number"
-                  min=".01"
-                  step=".01"
-                  required
-                />
-              </label>
-              <button className="primary" disabled={busy}>
-                Assign fee
-              </button>
-            </form>
-            <form onSubmit={(event) => assign(event, true)}>
-              <p>
-                CSV columns in order: Admission number, Description, Category,
-                Amount. Include a header row.
-              </p>
-              <label>
-                Fees CSV
-                <input name="csv" type="file" accept=".csv,text/csv" required />
-              </label>
-              <button className="secondary" disabled={busy}>
-                Import fees
-              </button>
-            </form>
-          </details>
-          <details className="admin-disclosure">
-            <summary>Programme submission access</summary>
-            <p>
-              {uploads === null
-                ? "Submission setting unavailable. Apply the Admin Tools migration."
-                : uploads
-                  ? "Submissions are open."
-                  : "Submissions are closed."}
-            </p>
-            {uploads !== null && (
-              <button
-                className="secondary"
-                disabled={busy}
-                onClick={() =>
-                  run(async () => {
-                    const { error } = await db.rpc("admin_set_option", {
-                      option_name: "upload_status",
-                      value: uploads ? "closed" : "open",
-                    });
-                    if (error) throw error;
-                    setUploads(!uploads);
-                    setNotice("Submission access updated.");
-                  })
-                }
+          {section === "fees" && (
+            <>
+              <form
+                className="account-form"
+                onSubmit={(event) => assign(event, false)}
               >
-                {uploads ? "Close submissions" : "Open submissions"}
-              </button>
-            )}
-          </details>
+                <label>
+                  Admission number
+                  <input name="admission" required />
+                </label>
+                <label>
+                  Fee description
+                  <input name="title" required maxLength={160} />
+                </label>
+                <label>
+                  Category
+                  <input name="category" maxLength={100} />
+                </label>
+                <label>
+                  Amount (₹)
+                  <input
+                    name="amount"
+                    type="number"
+                    min=".01"
+                    step=".01"
+                    required
+                  />
+                </label>
+                <button className="primary" disabled={busy}>
+                  Assign fee
+                </button>
+              </form>
+              <details className="admin-disclosure">
+                <summary>Import fees from CSV</summary>
+                <form onSubmit={(event) => assign(event, true)}>
+                  <p>
+                    CSV columns in order: Admission number, Description,
+                    Category, Amount. Include a header row.
+                  </p>
+                  <label>
+                    Fees CSV
+                    <input
+                      name="csv"
+                      type="file"
+                      accept=".csv,text/csv"
+                      required
+                    />
+                  </label>
+                  <button className="secondary" disabled={busy}>
+                    Import fees
+                  </button>
+                </form>
+              </details>
+            </>
+          )}
+          {section === "submissions" && (
+            <>
+              <p>
+                {uploads === null
+                  ? "Submission setting unavailable. Apply the Admin Tools migration."
+                  : uploads
+                    ? "Submissions are open."
+                    : "Submissions are closed."}
+              </p>
+              {uploads !== null && (
+                <button
+                  className="secondary"
+                  disabled={busy}
+                  onClick={() =>
+                    run(async () => {
+                      const { error } = await db.rpc("admin_set_option", {
+                        option_name: "upload_status",
+                        value: uploads ? "closed" : "open",
+                      });
+                      if (error) throw error;
+                      setUploads(!uploads);
+                      setNotice("Submission access updated.");
+                    })
+                  }
+                >
+                  {uploads ? "Close submissions" : "Open submissions"}
+                </button>
+              )}
+            </>
+          )}
         </>
       )}
-      <details className="admin-disclosure">
-        <summary>PDF reports</summary>
-        <div className="dialog-actions">
-          <a className="secondary" href="/calendar.php">
-            Official calendar and PDF
-          </a>
-          <button
-            className="secondary"
-            disabled={busy}
-            onClick={() =>
-              run(async () => {
-                open({ type: "report" });
-              })
-            }
-          >
-            Download calendar or results PDF
-          </button>
-        </div>
-      </details>
       <p role="status">{notice}</p>
     </div>
   );

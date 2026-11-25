@@ -20,7 +20,7 @@ export function standingsDetail(row) {
 }
 
 export default function ProgrammeStandings({ db, role }) {
-  const [opened, setOpened] = useState(false);
+  const [opened, setOpened] = useState(role === "admin");
   const [items, setItems] = useState([]);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -75,6 +75,7 @@ export default function ProgrammeStandings({ db, role }) {
   return (
     <section className="panel site-content">
       <details
+        open={opened}
         className="admin-disclosure"
         onToggle={(event) => setOpened(event.currentTarget.open)}
       >

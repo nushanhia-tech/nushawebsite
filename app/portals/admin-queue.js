@@ -4,10 +4,18 @@ import { kinds, portals } from "../data";
 
 const PAGE_SIZE = 12;
 
-export default function AdminQueue({ records, initialFilter, open, loading }) {
+export default function AdminQueue({
+  records,
+  initialFilter,
+  open,
+  loading,
+  title = "Work queue",
+  availableKinds = portals.admin.kinds,
+  overview = true,
+}) {
   const [kind, setKind] = useState(initialFilter);
   const [scope, setScope] = useState(
-    initialFilter === "all" ? "pending" : "all",
+    overview && initialFilter === "all" ? "pending" : "all",
   );
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
@@ -15,11 +23,11 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
 
   useEffect(() => {
     setKind(initialFilter);
-    setScope(initialFilter === "all" ? "pending" : "all");
+    setScope(overview && initialFilter === "all" ? "pending" : "all");
     setQuery("");
     setMonth("");
     setPage(1);
-  }, [initialFilter]);
+  }, [initialFilter, overview]);
 
   const shown = records.filter((item) => {
     const term = query.trim().toLowerCase();
@@ -57,29 +65,36 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
     >
       <div className="admin-section-head">
         <div>
-          <h2 id="queue-heading">Work queue</h2>
+          <h2 id="queue-heading">{title}</h2>
           <p>{loading ? "Loading items…" : pendingCount + " pending"}</p>
         </div>
-        <label className="admin-control">
-          <span>New item</span>
-          <select
-            value=""
-            onChange={(event) => {
-              if (event.target.value)
-                open({ type: "create", kind: event.target.value });
-            }}
-          >
-            <option value="">Choose an action</option>
-            {portals.admin.create.map((value) => (
-              <option key={value} value={value}>
-                {kinds[value].action}
-              </option>
-            ))}
-          </select>
-        </label>
+        {overview && (
+          <label className="admin-control">
+            <span>New item</span>
+            <select
+              value=""
+              onChange={(event) => {
+                if (event.target.value)
+                  open({ type: "create", kind: event.target.value });
+              }}
+            >
+              <option value="">Choose an action</option>
+              {portals.admin.create.map((value) => (
+                <option key={value} value={value}>
+                  {kinds[value].action}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
-      <div className="admin-queue-filters">
+      <div
+        className={
+          "admin-queue-filters" +
+          (availableKinds.length === 1 ? " admin-filters-compact" : "")
+        }
+      >
         <label className="admin-control">
           Status
           <select
@@ -93,23 +108,25 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
             <option value="all">All statuses</option>
           </select>
         </label>
-        <label className="admin-control">
-          Type
-          <select
-            value={kind}
-            onChange={(event) => {
-              setKind(event.target.value);
-              setPage(1);
-            }}
-          >
-            <option value="all">All types</option>
-            {portals.admin.kinds.map((value) => (
-              <option key={value} value={value}>
-                {kinds[value].label}
-              </option>
-            ))}
-          </select>
-        </label>
+        {availableKinds.length > 1 && (
+          <label className="admin-control">
+            Type
+            <select
+              value={kind}
+              onChange={(event) => {
+                setKind(event.target.value);
+                setPage(1);
+              }}
+            >
+              <option value="all">All types</option>
+              {availableKinds.map((value) => (
+                <option key={value} value={value}>
+                  {kinds[value].label}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="admin-control">
           Search
           <input
@@ -122,19 +139,18 @@ export default function AdminQueue({ records, initialFilter, open, loading }) {
             }}
           />
         </label>
+        <label className="admin-control">
+          Month
+          <input
+            type="month"
+            value={month}
+            onChange={(event) => {
+              setMonth(event.target.value);
+              setPage(1);
+            }}
+          />
+        </label>
       </div>
-
-      <label className="admin-control" style={{ maxWidth: 190 }}>
-        Month
-        <input
-          type="month"
-          value={month}
-          onChange={(event) => {
-            setMonth(event.target.value);
-            setPage(1);
-          }}
-        />
-      </label>
       {shown.length > 0 ? (
         <ul className="admin-queue-list">
           {shown

@@ -27,9 +27,9 @@ const fields = {
   settings: [["outreach_status", "Outreach access"]],
 };
 
-export default function SiteContent({ db }) {
+export default function SiteContent({ db, outreachOnly = false }) {
   const [rows, setRows] = useState([]);
-  const [section, setSection] = useState("events");
+  const [section, setSection] = useState(outreachOnly ? "settings" : "events");
   const [draft, setDraft] = useState(null);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -93,30 +93,36 @@ export default function SiteContent({ db }) {
   const current = rows;
   return (
     <section className="panel site-content">
-      <h2>Public website content</h2>
-      <label>
-        Section{" "}
-        <select
-          value={section}
-          disabled={busy}
-          onChange={(event) => {
-            setRows([]);
-            setLoading(true);
-            setSection(event.target.value);
-            setDraft(null);
-            setMessage("");
-          }}
-        >
-          {Object.keys(fields).map((name) => (
-            <option key={name} value={name}>
-              {name[0].toUpperCase() + name.slice(1)}
-            </option>
-          ))}
-        </select>
-      </label>
+      <h2>{outreachOnly ? "Outreach visibility" : "Public website content"}</h2>
+      {!outreachOnly && (
+        <label>
+          Section{" "}
+          <select
+            value={section}
+            disabled={busy}
+            onChange={(event) => {
+              setRows([]);
+              setLoading(true);
+              setSection(event.target.value);
+              setDraft(null);
+              setMessage("");
+            }}
+          >
+            {Object.keys(fields).map((name) => (
+              <option key={name} value={name}>
+                {name[0].toUpperCase() + name.slice(1)}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       {current.map((row) => (
         <div className="content-row" key={row.id}>
-          <span>{row.content[fields[section][0][0]]}</span>
+          <span>
+            {section === "settings"
+              ? "Outreach is " + row.content.outreach_status
+              : row.content[fields[section][0][0]]}
+          </span>
           <button
             className="secondary"
             disabled={busy}

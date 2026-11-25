@@ -34,9 +34,9 @@ The shared logo is an SVG trace of the supplied NUS’HA logo image. It uses the
 
 Apply all SQL migrations in filename order. On an existing deployment, apply `202611250001_admin_tools.sql` after the first two migrations. It adds announcement audiences, access and submission controls, fee imports, programme standings, and the saved card design. The account directory and account management use the server-side `SUPABASE_SERVICE_ROLE_KEY` already required for provisioning.
 
-- **Work queue** covers editing and scoring submissions, booking approvals, outreach moderation and editing, announcements, results, fees, and feedback. Search by title, name, or admission number, and optionally filter by month.
+- **Work queue** shows pending and recent items. The sidebar also opens dedicated views for Bookings, Evaluations, Results, Print jobs, Announcements, Outreach, and Feedback. Search by title, name, or admission number, and optionally filter by month.
 - **Accounts** includes administrator accounts, student CSV import, password reset, photo URLs, and submission access. Removing access deactivates the account and preserves linked history.
-- **Website** manages programmes, highlights, updates, the leadership roster, and outreach visibility.
-- **Tools** covers fee assignment and imports, global submission access, programme calendars and reports, and membership card layouts and PDFs. Wings can publish placements and grades from the Wing dashboard.
+- **Website** manages programmes, highlights, updates, and the leadership roster. Outreach visibility is also available in **Outreach**.
+- **Fees & payments** covers dues assignment and CSV imports. Use **Submission access** for the global upload setting and **ID cards** for card layouts and PDFs. Booking and results reports are available from their respective sidebar views. Wings can publish placements and grades from the Wing dashboard.
 
 Student-account CSV columns are Name, Admission number, Password. Fee CSV columns are Admission number, Description, Category, Amount. Both use a header row. Student account import reports failed rows individually. A fee import either saves all rows or saves none. Keep student CSV files private. Photos in the bulk card PDF require the image host to permit browser cross-origin access; the exporter uses initials when a photo cannot be loaded.
