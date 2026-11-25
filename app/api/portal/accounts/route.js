@@ -135,21 +135,16 @@ export async function POST(request) {
     const email = usernameEmail(input?.username);
     const profile = details(input);
     const role = input?.role;
-    if (
-      !["student", "class", "wing", "printer", "admin"].includes(role) ||
-      !email ||
-      email.startsWith("admin@") ||
-      !profile ||
-      !validPassword(input?.password)
-    ) {
-      return portalResponse(
-        {
-          error:
-            "Check the account details and use an initial password of at least 8 characters.",
-        },
-        400,
-      );
-    }
+    if (!["student", "class", "wing", "printer", "admin"].includes(role))
+      return portalResponse({ error: "Choose a valid portal type." }, 400);
+    if (!email)
+      return portalResponse({ error: "Username must be 2–40 characters and use only letters, numbers, dots, underscores or hyphens. It must start with a letter or number; spaces and email addresses are not accepted." }, 400);
+    if (email.startsWith("admin@"))
+      return portalResponse({ error: "The username admin is reserved. Choose another username." }, 400);
+    if (!profile)
+      return portalResponse({ error: "Enter a name and check that the admission number and photo are valid." }, 400);
+    if (!validPassword(input?.password))
+      return portalResponse({ error: "Password must be at least 8 characters and no more than 72 UTF-8 bytes." }, 400);
     const username = email.split("@")[0];
     const created = await db.auth.admin.createUser({
       email,

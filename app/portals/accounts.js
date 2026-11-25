@@ -166,7 +166,10 @@ export default function Accounts({ db, activeId }) {
               minLength={2}
               maxLength={40}
               autoComplete="off"
+              pattern="[A-Za-z0-9][A-Za-z0-9._-]{1,39}"
+              title="Use 2–40 letters, numbers, dots, underscores or hyphens. Start with a letter or number."
             />
+            <small>Use 2–40 letters, numbers, dots, underscores or hyphens; no spaces or email address.</small>
           </label>
           {role === "student" && (
             <label>
