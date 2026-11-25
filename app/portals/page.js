@@ -6,6 +6,7 @@ import AdminQueue from "./admin-queue";
 import AdminNavigation, { PortalNavigation, adminSections } from "./admin-navigation";
 import { AdminEditFields, OutreachFields } from "./admin-item-fields";
 import { CardPreview, defaultCard } from "./id-card";
+import PhotoUpload from "./photo-upload";
 import { supabaseProjectUrl } from "../../lib/supabase-url";
 
 const SiteContent = dynamic(() => import("./site-content"), {
@@ -378,6 +379,9 @@ export default function Home() {
     setError("");
     const values = Object.fromEntries(new FormData(event.currentTarget));
     delete values.kind;
+    const programmeFields = ["programme_photo", "programme_poster", "programme_time", "programme_stage", "programme_month", "programme_category"];
+    const programmeDetails = Object.fromEntries(programmeFields.map((key) => [key, values[key] || ""]));
+    programmeFields.forEach((key) => delete values[key]);
     const {
       target_role,
       category,
@@ -404,6 +408,11 @@ export default function Home() {
       amount: values.amount ? Number(values.amount) : null,
     };
     if (target_role) item.target_role = target_role;
+    if (modal.kind === "activity" && ["class", "wing"].includes(role)) {
+      item.admin_details = { photo: programmeDetails.programme_photo, poster: programmeDetails.programme_poster,
+        time: programmeDetails.programme_time, stage: programmeDetails.programme_stage,
+        month: programmeDetails.programme_month, category: programmeDetails.programme_category };
+    }
     if (
       modal.kind === "outreach" &&
       (category !== "Article" ||
@@ -1138,6 +1147,17 @@ export default function Home() {
                         <option value="admin">Admins</option>
                       </select>
                     </label>
+                  )}
+                  {modal.kind === "activity" && ["class", "wing"].includes(role) && (
+                    <>
+                      <label>Programme date<input type="date" name="scheduled_on" required /></label>
+                      <label>Time<input type="time" name="programme_time" required /></label>
+                      <label>Category<input name="programme_category" maxLength={120} /></label>
+                      <label>Stage<select name="programme_stage"><option>Stage</option><option>Non-Stage</option></select></label>
+                      <label>Submission month<input type="month" name="programme_month" required /></label>
+                      <PhotoUpload db={db} ownerId={userId} name="programme_photo" label="Programme photo" />
+                      <PhotoUpload db={db} ownerId={userId} name="programme_poster" label="Programme poster" />
+                    </>
                   )}
                   {role === "admin" && modal.kind === "outreach" && (
                     <OutreachFields create db={db} />

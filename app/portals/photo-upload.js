@@ -21,7 +21,7 @@ async function optimize(file) {
   return optimized;
 }
 
-export default function PhotoUpload({ db, name, label = "Photo", value = "" }) {
+export default function PhotoUpload({ db, name, label = "Photo", value = "", ownerId }) {
   const [url, setUrl] = useState(value);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
@@ -33,7 +33,7 @@ export default function PhotoUpload({ db, name, label = "Photo", value = "" }) {
     setMessage("");
     try {
       const image = await optimize(file);
-      const path = `${crypto.randomUUID()}.webp`;
+      const path = `${ownerId ? ownerId + "/" : ""}${crypto.randomUUID()}.webp`;
       const { error } = await db.storage.from("portal-photos").upload(path, image, {
         contentType: "image/webp",
         cacheControl: "31536000",
